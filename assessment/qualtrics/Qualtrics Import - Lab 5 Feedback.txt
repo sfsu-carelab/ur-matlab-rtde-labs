@@ -1,0 +1,136 @@
+[[AdvancedFormat]]
+
+[[Block:A - Background]]
+
+[[Question:DB]]
+[[ID:INTRO]]
+Lab 5 - Vision-Guided Pick-and-Place: Student Feedback. Your responses are anonymous and participation is voluntary. This survey takes about 5 minutes.
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:MODEL]]
+Which robot model did you use?
+[[Choices]]
+UR3e
+UR5e
+UR10e
+UR16e
+Other
+
+[[Question:Matrix]]
+[[ID:PRIOR]]
+Before this lab, my prior experience with each of the following was:
+[[Choices]]
+MATLAB
+Robots or automation hardware
+[[Answers]]
+1 - None at all
+2
+3 - Some
+4
+5 - Extensive
+
+[[PageBreak]]
+
+[[Block:B - Learning objectives]]
+
+[[Question:Matrix]]
+[[ID:LO]]
+As a result of this lab, rate your agreement with each statement.
+[[Choices]]
+I can bring up the RealSense camera in MATLAB and capture an image from code.
+I can tune HSV thresholds to segment a colored block and explain what each channel controls.
+I can perform the pixel-to-base calibration and judge from the residuals whether it is good enough to use.
+I can explain why the calibration is valid only from the fixed imaging pose and for objects on the table plane.
+I can command the robot to a computed Cartesian target and run a full vision-guided pick safely.
+Given a detection failure or a bad pick, I can tell whether the problem is the thresholds, the calibration, or the reference pose.
+[[Answers]]
+1 - Strongly disagree
+2 - Disagree
+3 - Neutral
+4 - Agree
+5 - Strongly agree
+
+[[Question:Matrix]]
+[[ID:LO_OVERALL]]
+Overall:
+[[Choices]]
+I achieved the learning objectives stated at the start of the lab manual.
+[[Answers]]
+1 - Strongly disagree
+2 - Disagree
+3 - Neutral
+4 - Agree
+5 - Strongly agree
+
+[[PageBreak]]
+
+[[Block:C - Difficulty, time, and clarity]]
+
+[[Question:Matrix]]
+[[ID:DIFF]]
+Rate the difficulty of this lab.
+[[Choices]]
+Overall, the difficulty of this lab was:
+The conceptual difficulty (theory, math) was:
+The hands-on difficulty (pendant, wiring, software setup) was:
+[[Answers]]
+1 - Much too easy
+2
+3 - About right
+4
+5 - Much too difficult
+
+[[Question:Matrix]]
+[[ID:TIME]]
+Rate the time allotted.
+[[Choices]]
+The time allotted for this lab was:
+[[Answers]]
+1 - Far too little time
+2
+3 - Right amount
+4
+5 - Far more than needed
+
+[[Question:TE:SingleLine]]
+[[ID:MINUTES]]
+About how many minutes did the lab actually take you? (numbers only)
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:FINISHED]]
+Did you finish everything?
+[[Choices]]
+Yes
+No
+
+[[Question:TE:SingleLine]]
+[[ID:FINISHED_WHERE]]
+If you did not finish, how far did you get?
+
+[[Question:Matrix]]
+[[ID:CLARITY]]
+Rate your agreement with each statement.
+[[Choices]]
+The written instructions were clear enough to follow without outside help.
+When I got stuck, the manual (or its code and error messages) helped me get unstuck.
+I am confident I could apply these skills again without step-by-step instructions.
+This lab held my interest.
+[[Answers]]
+1 - Strongly disagree
+2 - Disagree
+3 - Neutral
+4 - Agree
+5 - Strongly agree
+
+[[PageBreak]]
+
+[[Block:D - Open feedback]]
+
+[[Question:TE:Essay]]
+[[ID:STUCK]]
+Where did you get stuck the longest, and what finally got you unstuck?
+
+[[Question:TE:Essay]]
+[[ID:IMPROVE]]
+What one change would most improve this lab?
+

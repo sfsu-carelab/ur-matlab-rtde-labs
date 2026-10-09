@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use these lab materials, please cite them as below."
+title: "UR MATLAB RTDE Labs: A Hands-On Curriculum for Industrial Robot Education"
+authors:
+  - family-names: Cullen
+    given-names: Ryan
+    affiliation: "San Francisco State University"
+type: software
+year: 2026
+url: "https://github.com/ryantcullen/ur-matlab-rtde-labs"

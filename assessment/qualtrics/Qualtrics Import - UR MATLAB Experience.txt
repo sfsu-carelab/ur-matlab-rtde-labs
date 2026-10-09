@@ -1,0 +1,211 @@
+[[AdvancedFormat]]
+
+[[Block:A - Background]]
+
+[[Question:DB]]
+[[ID:INTRO]]
+UR MATLAB Experience Survey. You have completed the UR robot lab series; this survey asks about the experience as a whole. Your responses are anonymous and participation is voluntary. It takes about 8 minutes.
+
+[[Question:MC:SingleAnswer:Vertical]]
+[[ID:STANDING]]
+What is your academic standing?
+[[Choices]]
+Sophomore
+Junior
+Senior
+Graduate student
+Other
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:MODEL]]
+Which robot model did you primarily use?
+[[Choices]]
+UR3e
+UR5e
+UR10e
+UR16e
+Other
+
+[[Question:MC:MultipleAnswer:Vertical]]
+[[ID:LABSDONE]]
+Which lab modules did you complete? (select all that apply)
+[[Choices]]
+Lab 1 - UR Teach Pendant & Safety
+Lab 2 - MATLAB + RTDE Setup
+Lab 3 - Forward Kinematics
+Lab 4 - Pick-and-Place
+Lab 5 - Vision-Guided Pick-and-Place
+
+[[Question:Matrix]]
+[[ID:PRIOR]]
+Before this lab series, my prior experience with each of the following was:
+[[Choices]]
+MATLAB
+Robots or automation hardware
+[[Answers]]
+1 - None at all
+2
+3 - Some
+4
+5 - Extensive
+
+[[PageBreak]]
+
+[[Block:B - Skills, before and after]]
+
+[[Question:Matrix]]
+[[ID:RETRO_BEFORE]]
+Thinking back to BEFORE the lab series, rate your ability to do each of the following at that time.
+[[Choices]]
+Operate a UR robot from the Teach Pendant
+Work safely around a collaborative robot
+Connect a PC to a robot and troubleshoot the connection
+Control a robot from MATLAB over RTDE
+Relate kinematics theory (frames, forward kinematics) to a physical robot
+Build an automated pick-and-place task (including vision, if you did Lab 5)
+[[Answers]]
+1 - Very low
+2
+3 - Moderate
+4
+5 - Very high
+
+[[Question:Matrix]]
+[[ID:RETRO_NOW]]
+NOW, after the lab series, rate your ability to do each of the following.
+[[Choices]]
+Operate a UR robot from the Teach Pendant
+Work safely around a collaborative robot
+Connect a PC to a robot and troubleshoot the connection
+Control a robot from MATLAB over RTDE
+Relate kinematics theory (frames, forward kinematics) to a physical robot
+Build an automated pick-and-place task (including vision, if you did Lab 5)
+[[Answers]]
+1 - Very low
+2
+3 - Moderate
+4
+5 - Very high
+
+[[PageBreak]]
+
+[[Block:C - The MATLAB experience]]
+
+[[Question:Matrix]]
+[[ID:EXP]]
+Rate your agreement with each statement about the series.
+[[Choices]]
+MATLAB with the RTDE toolbox was an effective way to learn robot control.
+The lab manuals let me work independently most of the time.
+The provided code, self-tests, and error messages helped me fix my own mistakes.
+The difficulty increased at a reasonable rate from lab to lab.
+The hands-on time with the robot was worth the setup effort.
+The lab series increased my interest in robotics or mechatronics.
+I would recommend this lab series to other students.
+[[Answers]]
+1 - Strongly disagree
+2 - Disagree
+3 - Neutral
+4 - Agree
+5 - Strongly agree
+
+[[Question:MC:SingleAnswer:Vertical]]
+[[ID:TOOLPREF]]
+If this series were offered with a different software environment, which would you have preferred?
+[[Choices]]
+MATLAB was the right choice
+Python
+ROS 2
+A vendor GUI tool (for example PolyScope only)
+No preference
+
+[[Question:TE:SingleLine]]
+[[ID:TOOLPREF_WHY]]
+Briefly, why?
+
+[[PageBreak]]
+
+[[Block:D - Series structure]]
+
+[[Question:MC:SingleAnswer:Vertical]]
+[[ID:MOSTVAL]]
+Which lab was the MOST valuable to you?
+[[Choices]]
+Lab 1 - UR Teach Pendant & Safety
+Lab 2 - MATLAB + RTDE Setup
+Lab 3 - Forward Kinematics
+Lab 4 - Pick-and-Place
+Lab 5 - Vision-Guided Pick-and-Place
+
+[[Question:MC:SingleAnswer:Vertical]]
+[[ID:LEASTVAL]]
+Which lab was the LEAST valuable to you?
+[[Choices]]
+Lab 1 - UR Teach Pendant & Safety
+Lab 2 - MATLAB + RTDE Setup
+Lab 3 - Forward Kinematics
+Lab 4 - Pick-and-Place
+Lab 5 - Vision-Guided Pick-and-Place
+
+[[Question:Matrix]]
+[[ID:ORDER]]
+Rate your agreement with each statement.
+[[Choices]]
+The labs built on each other in a sensible order.
+Earlier labs prepared me adequately for later ones.
+[[Answers]]
+1 - Strongly disagree
+2 - Disagree
+3 - Neutral
+4 - Agree
+5 - Strongly agree
+
+[[Question:Matrix]]
+[[ID:PACE]]
+Rate the pace of the series.
+[[Choices]]
+Across the whole series, the pace was:
+[[Answers]]
+1 - Much too slow
+2
+3 - About right
+4
+5 - Much too fast
+
+[[PageBreak]]
+
+[[Block:E - Looking forward]]
+
+[[Question:Matrix]]
+[[ID:FUTURE]]
+Rate your agreement with each statement.
+[[Choices]]
+I am more likely to take another robotics or mechatronics course.
+I am more likely to seek robotics-related research, projects, or work.
+[[Answers]]
+1 - Strongly disagree
+2 - Disagree
+3 - Neutral
+4 - Agree
+5 - Strongly agree
+
+[[PageBreak]]
+
+[[Block:F - Open feedback]]
+
+[[Question:TE:Essay]]
+[[ID:VALUABLE]]
+What is the most valuable thing you learned in this series?
+
+[[Question:TE:Essay]]
+[[ID:FRUSTRATION]]
+What was your biggest frustration?
+
+[[Question:TE:Essay]]
+[[ID:CHANGE]]
+If you could change one thing about the series, what would it be?
+
+[[Question:TE:Essay]]
+[[ID:OTHER]]
+Anything else you want us to know?
+

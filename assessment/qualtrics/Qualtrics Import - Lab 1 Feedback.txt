@@ -1,0 +1,138 @@
+[[AdvancedFormat]]
+
+[[Block:A - Background]]
+
+[[Question:DB]]
+[[ID:INTRO]]
+Lab 1 - UR Teach Pendant & Safety: Student Feedback. Your responses are anonymous and participation is voluntary. This survey takes about 5 minutes.
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:MODEL]]
+Which robot model did you use?
+[[Choices]]
+UR3e
+UR5e
+UR10e
+UR16e
+Other
+
+[[Question:Matrix]]
+[[ID:PRIOR]]
+Before this lab, my prior experience with each of the following was:
+[[Choices]]
+MATLAB
+Robots or automation hardware
+[[Answers]]
+1 - None at all
+2
+3 - Some
+4
+5 - Extensive
+
+[[PageBreak]]
+
+[[Block:B - Learning objectives]]
+
+[[Question:Matrix]]
+[[ID:LO]]
+As a result of this lab, rate your agreement with each statement.
+[[Choices]]
+I can identify the main hardware components (control box, Teach Pendant, e-stop) and name the six joints of the arm.
+I can power the robot on, unlock it, move it to Home, and power it down safely.
+I can explain the difference between an emergency stop and a protective stop, and the correct recovery procedure for each.
+I can enter a gripper's payload mass, center of gravity, and TCP on the pendant, and explain what goes wrong when those values are inaccurate.
+I can configure a virtual safety plane (position, tilt, rotation) and state which parts of the robot it applies to.
+I can look up my robot's configured speed and force limits on the pendant and judge them against the datasheet maximums for the model.
+I can use FreeDrive to reposition the arm by hand, and explain why the payload setting affects how the arm behaves while I do it.
+Given a new workcell, I could decide where safety planes belong and which limits to tighten before anyone runs a program.
+[[Answers]]
+1 - Strongly disagree
+2 - Disagree
+3 - Neutral
+4 - Agree
+5 - Strongly agree
+
+[[Question:Matrix]]
+[[ID:LO_OVERALL]]
+Overall:
+[[Choices]]
+I achieved the learning objectives stated at the start of the lab manual.
+[[Answers]]
+1 - Strongly disagree
+2 - Disagree
+3 - Neutral
+4 - Agree
+5 - Strongly agree
+
+[[PageBreak]]
+
+[[Block:C - Difficulty, time, and clarity]]
+
+[[Question:Matrix]]
+[[ID:DIFF]]
+Rate the difficulty of this lab.
+[[Choices]]
+Overall, the difficulty of this lab was:
+The conceptual difficulty (theory, math) was:
+The hands-on difficulty (pendant, wiring, software setup) was:
+[[Answers]]
+1 - Much too easy
+2
+3 - About right
+4
+5 - Much too difficult
+
+[[Question:Matrix]]
+[[ID:TIME]]
+Rate the time allotted.
+[[Choices]]
+The time allotted for this lab was:
+[[Answers]]
+1 - Far too little time
+2
+3 - Right amount
+4
+5 - Far more than needed
+
+[[Question:TE:SingleLine]]
+[[ID:MINUTES]]
+About how many minutes did the lab actually take you? (numbers only)
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:FINISHED]]
+Did you finish everything?
+[[Choices]]
+Yes
+No
+
+[[Question:TE:SingleLine]]
+[[ID:FINISHED_WHERE]]
+If you did not finish, how far did you get?
+
+[[Question:Matrix]]
+[[ID:CLARITY]]
+Rate your agreement with each statement.
+[[Choices]]
+The written instructions were clear enough to follow without outside help.
+When I got stuck, the manual (or its code and error messages) helped me get unstuck.
+I am confident I could apply these skills again without step-by-step instructions.
+This lab held my interest.
+[[Answers]]
+1 - Strongly disagree
+2 - Disagree
+3 - Neutral
+4 - Agree
+5 - Strongly agree
+
+[[PageBreak]]
+
+[[Block:D - Open feedback]]
+
+[[Question:TE:Essay]]
+[[ID:STUCK]]
+Where did you get stuck the longest, and what finally got you unstuck?
+
+[[Question:TE:Essay]]
+[[ID:IMPROVE]]
+What one change would most improve this lab?
+

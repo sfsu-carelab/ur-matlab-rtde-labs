@@ -1,0 +1,392 @@
+[[AdvancedFormat]]
+
+[[Block:A - Background]]
+
+[[Question:DB]]
+[[ID:INTRO]]
+UR MATLAB Experience Survey. You have completed the UR robot lab series; this survey asks about the experience as a whole. Your responses are anonymous and participation is voluntary. It takes about 8 minutes.
+
+[[Question:MC:SingleAnswer:Vertical]]
+[[ID:STANDING]]
+What is your academic standing?
+[[Choices]]
+Sophomore
+Junior
+Senior
+Graduate student
+Other
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:MODEL]]
+Which robot model did you primarily use?
+[[Choices]]
+UR3e
+UR5e
+UR10e
+UR16e
+Other
+
+[[Question:MC:MultipleAnswer:Vertical]]
+[[ID:LABSDONE]]
+Which lab modules did you complete? (select all that apply)
+[[Choices]]
+Lab 1 - UR Teach Pendant & Safety
+Lab 2 - MATLAB + RTDE Setup
+Lab 3 - Forward Kinematics
+Lab 4 - Pick-and-Place
+Lab 5 - Vision-Guided Pick-and-Place
+
+[[Question:DB]]
+[[ID:PRIOR_INTRO]]
+Before this lab series, rate your prior experience with each of the following. (scale: 1 - None at all; 2; 3 - Some; 4; 5 - Extensive)
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:PRIOR_1]]
+MATLAB
+[[Choices]]
+1 - None at all
+2
+3 - Some
+4
+5 - Extensive
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:PRIOR_2]]
+Robots or automation hardware
+[[Choices]]
+1 - None at all
+2
+3 - Some
+4
+5 - Extensive
+
+[[PageBreak]]
+
+[[Block:B - Skills before the series]]
+
+[[Question:DB]]
+[[ID:RETRO_BEFORE_INTRO]]
+Thinking back to BEFORE the lab series, rate your ability to do each of the following at that time. (scale: 1 - Very low; 2; 3 - Moderate; 4; 5 - Very high)
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:RETRO_BEFORE_1]]
+Operate a UR robot from the Teach Pendant
+[[Choices]]
+1 - Very low
+2
+3 - Moderate
+4
+5 - Very high
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:RETRO_BEFORE_2]]
+Work safely around a collaborative robot
+[[Choices]]
+1 - Very low
+2
+3 - Moderate
+4
+5 - Very high
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:RETRO_BEFORE_3]]
+Connect a PC to a robot and troubleshoot the connection
+[[Choices]]
+1 - Very low
+2
+3 - Moderate
+4
+5 - Very high
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:RETRO_BEFORE_4]]
+Control a robot from MATLAB over RTDE
+[[Choices]]
+1 - Very low
+2
+3 - Moderate
+4
+5 - Very high
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:RETRO_BEFORE_5]]
+Relate kinematics theory (frames, forward kinematics) to a physical robot
+[[Choices]]
+1 - Very low
+2
+3 - Moderate
+4
+5 - Very high
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:RETRO_BEFORE_6]]
+Build an automated pick-and-place task (including vision, if you did Lab 5)
+[[Choices]]
+1 - Very low
+2
+3 - Moderate
+4
+5 - Very high
+
+[[PageBreak]]
+
+[[Block:C - Skills after the series]]
+
+[[Question:DB]]
+[[ID:RETRO_NOW_INTRO]]
+NOW, after the lab series, rate your ability to do each of the following. (scale: 1 - Very low; 2; 3 - Moderate; 4; 5 - Very high)
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:RETRO_NOW_1]]
+Operate a UR robot from the Teach Pendant
+[[Choices]]
+1 - Very low
+2
+3 - Moderate
+4
+5 - Very high
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:RETRO_NOW_2]]
+Work safely around a collaborative robot
+[[Choices]]
+1 - Very low
+2
+3 - Moderate
+4
+5 - Very high
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:RETRO_NOW_3]]
+Connect a PC to a robot and troubleshoot the connection
+[[Choices]]
+1 - Very low
+2
+3 - Moderate
+4
+5 - Very high
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:RETRO_NOW_4]]
+Control a robot from MATLAB over RTDE
+[[Choices]]
+1 - Very low
+2
+3 - Moderate
+4
+5 - Very high
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:RETRO_NOW_5]]
+Relate kinematics theory (frames, forward kinematics) to a physical robot
+[[Choices]]
+1 - Very low
+2
+3 - Moderate
+4
+5 - Very high
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:RETRO_NOW_6]]
+Build an automated pick-and-place task (including vision, if you did Lab 5)
+[[Choices]]
+1 - Very low
+2
+3 - Moderate
+4
+5 - Very high
+
+[[PageBreak]]
+
+[[Block:D - The MATLAB experience]]
+
+[[Question:DB]]
+[[ID:EXP_INTRO]]
+Rate your agreement with each statement about the series. (scale: 1 - Strongly disagree; 2 - Disagree; 3 - Neutral; 4 - Agree; 5 - Strongly agree)
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:EXP_1]]
+MATLAB with the RTDE toolbox was an effective way to learn robot control.
+[[Choices]]
+1 - Strongly disagree
+2 - Disagree
+3 - Neutral
+4 - Agree
+5 - Strongly agree
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:EXP_2]]
+The lab manuals let me work independently most of the time.
+[[Choices]]
+1 - Strongly disagree
+2 - Disagree
+3 - Neutral
+4 - Agree
+5 - Strongly agree
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:EXP_3]]
+The provided code, self-tests, and error messages helped me fix my own mistakes.
+[[Choices]]
+1 - Strongly disagree
+2 - Disagree
+3 - Neutral
+4 - Agree
+5 - Strongly agree
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:EXP_4]]
+The difficulty increased at a reasonable rate from lab to lab.
+[[Choices]]
+1 - Strongly disagree
+2 - Disagree
+3 - Neutral
+4 - Agree
+5 - Strongly agree
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:EXP_5]]
+The hands-on time with the robot was worth the setup effort.
+[[Choices]]
+1 - Strongly disagree
+2 - Disagree
+3 - Neutral
+4 - Agree
+5 - Strongly agree
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:EXP_6]]
+The lab series increased my interest in robotics or mechatronics.
+[[Choices]]
+1 - Strongly disagree
+2 - Disagree
+3 - Neutral
+4 - Agree
+5 - Strongly agree
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:EXP_7]]
+I would recommend this lab series to other students.
+[[Choices]]
+1 - Strongly disagree
+2 - Disagree
+3 - Neutral
+4 - Agree
+5 - Strongly agree
+
+[[Question:MC:SingleAnswer:Vertical]]
+[[ID:TOOLPREF]]
+If this series were offered with a different software environment, which would you have preferred?
+[[Choices]]
+MATLAB was the right choice
+Python
+ROS 2
+A vendor GUI tool (for example PolyScope only)
+No preference
+
+[[Question:TE:SingleLine]]
+[[ID:TOOLPREF_WHY]]
+Briefly, why?
+
+[[PageBreak]]
+
+[[Block:E - Series structure]]
+
+[[Question:MC:SingleAnswer:Vertical]]
+[[ID:MOSTVAL]]
+Which lab was the MOST valuable to you?
+[[Choices]]
+Lab 1 - UR Teach Pendant & Safety
+Lab 2 - MATLAB + RTDE Setup
+Lab 3 - Forward Kinematics
+Lab 4 - Pick-and-Place
+Lab 5 - Vision-Guided Pick-and-Place
+
+[[Question:MC:SingleAnswer:Vertical]]
+[[ID:LEASTVAL]]
+Which lab was the LEAST valuable to you?
+[[Choices]]
+Lab 1 - UR Teach Pendant & Safety
+Lab 2 - MATLAB + RTDE Setup
+Lab 3 - Forward Kinematics
+Lab 4 - Pick-and-Place
+Lab 5 - Vision-Guided Pick-and-Place
+
+[[Question:DB]]
+[[ID:ORDER_INTRO]]
+Rate your agreement with each statement. (scale: 1 - Strongly disagree; 2 - Disagree; 3 - Neutral; 4 - Agree; 5 - Strongly agree)
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:ORDER_1]]
+The labs built on each other in a sensible order.
+[[Choices]]
+1 - Strongly disagree
+2 - Disagree
+3 - Neutral
+4 - Agree
+5 - Strongly agree
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:ORDER_2]]
+Earlier labs prepared me adequately for later ones.
+[[Choices]]
+1 - Strongly disagree
+2 - Disagree
+3 - Neutral
+4 - Agree
+5 - Strongly agree
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:PACE]]
+Across the whole series, the pace was:
+[[Choices]]
+1 - Much too slow
+2
+3 - About right
+4
+5 - Much too fast
+
+[[Question:DB]]
+[[ID:FUTURE_INTRO]]
+Rate your agreement with each statement. (scale: 1 - Strongly disagree; 2 - Disagree; 3 - Neutral; 4 - Agree; 5 - Strongly agree)
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:FUTURE_1]]
+I am more likely to take another robotics or mechatronics course.
+[[Choices]]
+1 - Strongly disagree
+2 - Disagree
+3 - Neutral
+4 - Agree
+5 - Strongly agree
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:FUTURE_2]]
+I am more likely to seek robotics-related research, projects, or work.
+[[Choices]]
+1 - Strongly disagree
+2 - Disagree
+3 - Neutral
+4 - Agree
+5 - Strongly agree
+
+[[PageBreak]]
+
+[[Block:F - Open feedback]]
+
+[[Question:TE:Essay]]
+[[ID:VALUABLE]]
+What is the most valuable thing you learned in this series?
+
+[[Question:TE:Essay]]
+[[ID:FRUSTRATION]]
+What was your biggest frustration?
+
+[[Question:TE:Essay]]
+[[ID:CHANGE]]
+If you could change one thing about the series, what would it be?
+
+[[Question:TE:Essay]]
+[[ID:OTHER]]
+Anything else you want us to know?
+

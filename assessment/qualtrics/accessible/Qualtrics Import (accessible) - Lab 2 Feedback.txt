@@ -1,0 +1,229 @@
+[[AdvancedFormat]]
+
+[[Block:A - Background]]
+
+[[Question:DB]]
+[[ID:INTRO]]
+Lab 2 - MATLAB + RTDE Setup: Student Feedback. Your responses are anonymous and participation is voluntary. This survey takes about 5 minutes.
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:MODEL]]
+Which robot model did you use?
+[[Choices]]
+UR3e
+UR5e
+UR10e
+UR16e
+Other
+
+[[Question:DB]]
+[[ID:PRIOR_INTRO]]
+Before this lab, rate your prior experience with each of the following. (scale: 1 - None at all; 2; 3 - Some; 4; 5 - Extensive)
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:PRIOR_1]]
+MATLAB
+[[Choices]]
+1 - None at all
+2
+3 - Some
+4
+5 - Extensive
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:PRIOR_2]]
+Robots or automation hardware
+[[Choices]]
+1 - None at all
+2
+3 - Some
+4
+5 - Extensive
+
+[[PageBreak]]
+
+[[Block:B - Learning objectives]]
+
+[[Question:DB]]
+[[ID:LO_INTRO]]
+As a result of this lab, rate your agreement with each statement. (scale: 1 - Strongly disagree; 2 - Disagree; 3 - Neutral; 4 - Agree; 5 - Strongly agree)
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:LO_1]]
+I can explain what the URCap and the URServerScript program each do in letting MATLAB talk to the robot.
+[[Choices]]
+1 - Strongly disagree
+2 - Disagree
+3 - Neutral
+4 - Agree
+5 - Strongly agree
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:LO_2]]
+I can configure static IP addresses on both the robot and the PC so they share a subnet, and verify the link with ping.
+[[Choices]]
+1 - Strongly disagree
+2 - Disagree
+3 - Neutral
+4 - Agree
+5 - Strongly agree
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:LO_3]]
+I can start the server program on the pendant and open a connection from MATLAB with urRTDEClient.
+[[Choices]]
+1 - Strongly disagree
+2 - Disagree
+3 - Neutral
+4 - Agree
+5 - Strongly agree
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:LO_4]]
+I can read the robot's live joint angles in MATLAB and command a small joint move, handling the degrees/radians conversion correctly.
+[[Choices]]
+1 - Strongly disagree
+2 - Disagree
+3 - Neutral
+4 - Agree
+5 - Strongly agree
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:LO_5]]
+If MATLAB failed to connect tomorrow, I would know what to check, in order: cable and IP settings, RTDE enabled, server script running (green).
+[[Choices]]
+1 - Strongly disagree
+2 - Disagree
+3 - Neutral
+4 - Agree
+5 - Strongly agree
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:LO_OVERALL]]
+Overall: I achieved the learning objectives stated at the start of the lab manual.
+[[Choices]]
+1 - Strongly disagree
+2 - Disagree
+3 - Neutral
+4 - Agree
+5 - Strongly agree
+
+[[PageBreak]]
+
+[[Block:C - Difficulty, time, and clarity]]
+
+[[Question:DB]]
+[[ID:DIFF_INTRO]]
+Rate the difficulty of this lab. (scale: 1 - Much too easy; 2; 3 - About right; 4; 5 - Much too difficult)
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:DIFF_1]]
+Overall, the difficulty of this lab was:
+[[Choices]]
+1 - Much too easy
+2
+3 - About right
+4
+5 - Much too difficult
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:DIFF_2]]
+The conceptual difficulty (theory, math) was:
+[[Choices]]
+1 - Much too easy
+2
+3 - About right
+4
+5 - Much too difficult
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:DIFF_3]]
+The hands-on difficulty (pendant, wiring, software setup) was:
+[[Choices]]
+1 - Much too easy
+2
+3 - About right
+4
+5 - Much too difficult
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:TIME]]
+The time allotted for this lab was:
+[[Choices]]
+1 - Far too little time
+2
+3 - Right amount
+4
+5 - Far more than needed
+
+[[Question:TE:SingleLine]]
+[[ID:MINUTES]]
+About how many minutes did the lab actually take you? (numbers only)
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:FINISHED]]
+Did you finish everything?
+[[Choices]]
+Yes
+No
+
+[[Question:TE:SingleLine]]
+[[ID:FINISHED_WHERE]]
+If you did not finish, how far did you get?
+
+[[Question:DB]]
+[[ID:CLARITY_INTRO]]
+Rate your agreement with each statement. (scale: 1 - Strongly disagree; 2 - Disagree; 3 - Neutral; 4 - Agree; 5 - Strongly agree)
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:CLARITY_1]]
+The written instructions were clear enough to follow without outside help.
+[[Choices]]
+1 - Strongly disagree
+2 - Disagree
+3 - Neutral
+4 - Agree
+5 - Strongly agree
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:CLARITY_2]]
+When I got stuck, the manual (or its code and error messages) helped me get unstuck.
+[[Choices]]
+1 - Strongly disagree
+2 - Disagree
+3 - Neutral
+4 - Agree
+5 - Strongly agree
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:CLARITY_3]]
+I am confident I could apply these skills again without step-by-step instructions.
+[[Choices]]
+1 - Strongly disagree
+2 - Disagree
+3 - Neutral
+4 - Agree
+5 - Strongly agree
+
+[[Question:MC:SingleAnswer:Horizontal]]
+[[ID:CLARITY_4]]
+This lab held my interest.
+[[Choices]]
+1 - Strongly disagree
+2 - Disagree
+3 - Neutral
+4 - Agree
+5 - Strongly agree
+
+[[PageBreak]]
+
+[[Block:D - Open feedback]]
+
+[[Question:TE:Essay]]
+[[ID:STUCK]]
+Where did you get stuck the longest, and what finally got you unstuck?
+
+[[Question:TE:Essay]]
+[[ID:IMPROVE]]
+What one change would most improve this lab?
+
