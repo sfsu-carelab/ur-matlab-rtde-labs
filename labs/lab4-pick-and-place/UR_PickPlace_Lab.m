@@ -32,7 +32,9 @@ function UR_PickPlace_Lab()
 
     robotIP = "192.168.0.20";        % TODO: your robot's IP address
 
-    ur = urRTDEClient(robotIP);
+    % CobotName must match the arm: the default is universalUR5e, and readCartesianPose /
+    % sendCartesianPoseAndWait use that model's kinematics (seen on hardware 2026-10-28).
+    ur = urRTDEClient(robotIP, 'CobotName', 'universalUR3e');
 
     % --- Verify the connection by reading the current state ---
     % readJointConfiguration returns a 1x6 vector of joint angles in RADIANS.

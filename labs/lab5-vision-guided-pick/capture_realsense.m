@@ -3,35 +3,44 @@ function img = capture_realsense()
 %
 %   img = capture_realsense()  ->  H x W x 3 uint8 RGB image
 %
-%   Requires the RealSense MATLAB wrapper on the path (see the guide
-%   "RealSense Set Up With MATLAB" in 1. UR Docs / UR Low-Cost Camera
-%   Setup; MATLAB must be started in, or have added, the SDK's matlab
-%   folder containing +realsense).
+%   Uses the "MATLAB Support Package for USB Webcams" (Add-Ons > Get
+%   Hardware Support Packages; installs to your user folder, no admin
+%   rights needed). The RealSense RGB sensor is a standard UVC camera, so
+%   the Intel RealSense SDK is NOT required. These labs use color only;
+%   the depth stream is not read.
 %
-%   NOTE FOR INSTRUCTORS: this function follows the wrapper API from the
-%   RealSense SOP and the librealsense MATLAB examples. Run it once on
-%   the lab PC with the camera attached before class.
+%   The resolution is pinned to 1280x720 when the camera offers it, so the
+%   pixel-to-base calibration from Part 4 stays valid between sessions.
+%
+%   2026-11-04: changed from the RealSense SDK MATLAB wrapper to the USB
+%   Webcams package because the lab PCs have no admin rights for the SDK
+%   installer (Ryan's decision, see the hardware-validation notes).
 
-    if isempty(which('realsense.pipeline'))
-        error('capture_realsense:noWrapper', ...
-            ['The RealSense MATLAB wrapper is not on the path. Follow the ' ...
-             '"RealSense Set Up With MATLAB" guide, then run MATLAB from the ' ...
-             'SDK matlab folder (the one containing +realsense) or addpath it.']);
+    if isempty(which('webcam'))
+        error('capture_realsense:noPackage', ...
+            ['The USB Webcams support package is not installed. In MATLAB go to ' ...
+             'Add-Ons > Get Hardware Support Packages and install ' ...
+             '"MATLAB Support Package for USB Webcams" (Lab 5, Part 1).']);
     end
 
-    pipe = realsense.pipeline();
-    cleaner = onCleanup(@() pipe.stop());
-    pipe.start();
+    names = webcamlist;
+    k = find(contains(names, 'RealSense', 'IgnoreCase', true) & ...
+             contains(names, 'RGB',       'IgnoreCase', true), 1);
+    if isempty(k), k = find(contains(names, 'RealSense', 'IgnoreCase', true), 1); end
+    if isempty(k)
+        error('capture_realsense:noCamera', ...
+            ['No RealSense camera found. Check the USB cable, then run webcamlist. ' ...
+             'It returned: %s'], strjoin(names, ', '));
+    end
+
+    cam = webcam(names{k});
+    if any(strcmp(cam.AvailableResolutions, '1280x720'))
+        cam.Resolution = '1280x720';
+    end
 
     % Let auto-exposure settle so colors are stable for thresholding.
-    fs = pipe.wait_for_frames();
-    for k = 1:15
-        fs = pipe.wait_for_frames();
+    for n = 1:15
+        img = snapshot(cam);
     end
-
-    cf = fs.get_color_frame();
-    w  = cf.get_width();
-    h  = cf.get_height();
-    data = cf.get_data();                              % uint8 vector, RGB interleaved
-    img  = permute(reshape(data', [3, w, h]), [3 2 1]); % -> H x W x 3
+    clear cam                                          % release the camera
 end

@@ -29,7 +29,9 @@ function UR_VisionPick_Lab()
     %  CONNECTION (as in Lab 2 / Lab 4)
     %  ====================================================================
     robotIP = "192.168.0.20";      % TODO: your robot's IP address
-    ur = urRTDEClient(robotIP);
+    % CobotName must match the arm: the default is universalUR5e, and readCartesianPose /
+    % sendCartesianPoseAndWait use that model's kinematics (seen on hardware 2026-10-28).
+    ur = urRTDEClient(robotIP, 'CobotName', 'universalUR3e');
     fprintf('\n  Connected to %s.\n', robotIP);
 
     %% ====================================================================

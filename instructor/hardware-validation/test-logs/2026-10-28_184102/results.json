@@ -1,0 +1,122 @@
+[
+  {
+    "section": 0,
+    "name": "MATLAB release",
+    "status": "INFO",
+    "detail": "24.2.0.2863752 (R2024b) Update 5"
+  },
+  {
+    "section": 0,
+    "name": "Computer",
+    "status": "INFO",
+    "detail": "PCWIN64  (COSE-SEC414-21)"
+  },
+  {
+    "section": 0,
+    "name": "Robotics System Toolbox",
+    "status": "PASS",
+    "detail": "installed"
+  },
+  {
+    "section": 0,
+    "name": "Image Processing Toolbox",
+    "status": "PASS",
+    "detail": "installed"
+  },
+  {
+    "section": 0,
+    "name": "UR Series support package",
+    "status": "PASS",
+    "detail": "Robotics System Toolbox Support Package for Universal Robots UR Series Manipulators"
+  },
+  {
+    "section": 0,
+    "name": "urRTDEClient on path",
+    "status": "PASS",
+    "detail": "C:\\ProgramData\\MATLAB\\SupportPackages\\R2024b\\toolbox\\robotics\\supportpackages\\urseries\\@urRTDEClient\\urRTDEClient.p"
+  },
+  {
+    "section": 0,
+    "name": "Lab 3 folder",
+    "status": "PASS",
+    "detail": "C:\\Users\\924414657\\MATLAB + RTDE\\Lab 03 - Forward Kinematics"
+  },
+  {
+    "section": 0,
+    "name": "Lab 5 code folder",
+    "status": "PASS",
+    "detail": "C:\\Users\\924414657\\MATLAB + RTDE\\Lab 05 - Intro to CV for Pick & Place with Camera Setup\\Code\\."
+  },
+  {
+    "section": 0,
+    "name": "Lab 6 code folder",
+    "status": "PASS",
+    "detail": "C:\\Users\\924414657\\MATLAB + RTDE\\Lab 06 - Intro MATLAB GenAI + Visual+LLM Servoing Pick and Place\\Code\\."
+  },
+  {
+    "section": 0,
+    "name": "ping 192.168.1.10",
+    "status": "PASS",
+    "detail": "Minimum = 0ms, Maximum = 0ms, Average = 0ms"
+  },
+  {
+    "section": 0,
+    "name": "RealSense MATLAB wrapper",
+    "status": "WARN",
+    "detail": "realsense.pipeline not on path (Lab 5 SOP)"
+  },
+  {
+    "section": 1,
+    "name": "urRTDEClient connect",
+    "status": "PASS",
+    "detail": "1.57 s"
+  },
+  {
+    "section": 1,
+    "name": "readJointConfiguration",
+    "status": "PASS",
+    "detail": "deg = [-0.74, -51.6, -109.11, -108.68, 88.42, 175.66]"
+  },
+  {
+    "section": 1,
+    "name": "readCartesianPose",
+    "status": "PASS",
+    "detail": "[1.6334, 0.0284, 3.1331, 0.1346, -0.1353, 0.322]  (expect [thetaz thetay thetax x y z])"
+  },
+  {
+    "section": 2,
+    "name": "FK position vs reported",
+    "status": "PASS",
+    "detail": "0.0 mm (same base frame)"
+  },
+  {
+    "section": 3,
+    "name": "sendJointConfigurationAndWait",
+    "status": "SKIP",
+    "detail": "motion not enabled"
+  },
+  {
+    "section": 4,
+    "name": "actuateGripper grip/release",
+    "status": "SKIP",
+    "detail": "motion not enabled"
+  },
+  {
+    "section": 5,
+    "name": "sendCartesianPoseAndWait",
+    "status": "SKIP",
+    "detail": "motion not enabled"
+  },
+  {
+    "section": 6,
+    "name": "capture_realsense",
+    "status": "SKIP",
+    "detail": "SkipCamera"
+  },
+  {
+    "section": 7,
+    "name": "Gemini API",
+    "status": "SKIP",
+    "detail": "SkipGenAI"
+  }
+]

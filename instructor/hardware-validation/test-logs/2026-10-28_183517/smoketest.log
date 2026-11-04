@@ -1,0 +1,107 @@
+
+============================================================
+  UR HARDWARE SMOKE TEST   2026-10-28_183517
+============================================================
+  Options: IP=192.168.1.10  Model=UR3e  TCPOffset=[0 0 0]  DryRun=1
+  Log folder: C:\Users\924414657\MATLAB + RTDE\Instructor - Hardware Validation\test-logs\2026-10-28_183517
+
+
+============================================================
+  0  ENVIRONMENT
+============================================================
+  [INFO] MATLAB release                           24.2.0.2863752 (R2024b) Update 5
+  [INFO] Computer                                 PCWIN64  (COSE-SEC414-21)
+  [PASS] Robotics System Toolbox                  installed
+  [PASS] Image Processing Toolbox                 installed
+  [PASS] UR Series support package                Robotics System Toolbox Support Package for Universal Robots UR Series Manipulators
+  [PASS] urRTDEClient on path                     C:\ProgramData\MATLAB\SupportPackages\R2024b\toolbox\robotics\supportpackages\urseries\@urRTDEClient\urRTDEClient.p
+  [PASS] Lab 3 folder                             C:\Users\924414657\MATLAB + RTDE\Lab 03 - Forward Kinematics
+  [PASS] Lab 5 code folder                        C:\Users\924414657\MATLAB + RTDE\Lab 05 - Intro to CV for Pick & Place with Camera Setup\Code\.
+  [PASS] Lab 6 code folder                        C:\Users\924414657\MATLAB + RTDE\Lab 06 - Intro MATLAB GenAI + Visual+LLM Servoing Pick and Place\Code\.
+  [PASS] ping 192.168.1.10                        Minimum = 0ms, Maximum = 0ms, Average = 0ms
+  [WARN] RealSense MATLAB wrapper                 realsense.pipeline not on path (Lab 5 SOP)
+
+
+============================================================
+  1  LAB 2 - RTDE CONNECT / READ
+============================================================
+  [PASS] urRTDEClient connect                     3.20 s
+  [PASS] readJointConfiguration                   deg = [-0.74, -51.6, -109.11, -108.68, 88.42, 175.66]
+  [PASS] readCartesianPose                        [1.6334, 0.0284, 3.1331, 0.2052, -0.1387, 0.5266]  (expect [thetaz thetay thetax x y z])
+
+
+============================================================
+  2  LAB 3 - SCREW-THEORY FK AT THE LIVE JOINT ANGLES
+============================================================
+  Joint angles (deg):      [-0.74, -51.6, -109.11, -108.68, 88.42, 175.66]
+  FK flange position (m):  [0.1346 -0.1353 0.3220]
+  FK TCP position (m):     [0.1346 -0.1353 0.3220]   (TCPOffset = [0 0 0])
+  Reported TCP (m):        [0.2052 -0.1387 0.5266]
+  Position error: 216.5 mm as-is, 482.1 mm with 180 deg base yaw
+  Orientation, three conventions of the FK rotation for comparison
+    reported pose(1:3)            = [1.6334 0.0284 3.1331]
+    ZYX Euler [z y x] (rad)       = [1.6334 0.0284 3.1331]
+    rotation vector (rad)         = [2.1325 2.2706 -0.0206]
+    with 180 deg base yaw: Euler  = [-1.5082 0.0284 3.1331]   rotvec = [-2.2802 2.1414 0.0414]
+  [FAIL] FK position vs reported                  216.5 mm. If this is close to |TCPOffset| of the gripper, rerun with TCPOffset set from the pendant.
+
+
+============================================================
+  3  LAB 2 / LAB 4 - JOINT MOVE (elbow +5 deg and back)
+============================================================
+  [SKIP] sendJointConfigurationAndWait            motion not enabled
+
+
+============================================================
+  4  LAB 4 - GRIPPER (actuateGripper)
+============================================================
+  [SKIP] actuateGripper grip/release              motion not enabled
+
+
+============================================================
+  5  LAB 5 - CARTESIAN MOVE (+2 cm up in base Z and back)
+============================================================
+  [SKIP] sendCartesianPoseAndWait                 motion not enabled
+
+
+============================================================
+  6  LAB 5 - CAMERA (capture_realsense + detect_block)
+============================================================
+  [SKIP] capture_realsense                        SkipCamera
+
+
+============================================================
+  7  LAB 6 - GEMINI API PRE-FLIGHT
+============================================================
+  [SKIP] Gemini API                               SkipGenAI
+
+
+============================================================
+  SUMMARY
+============================================================
+  [INFO] MATLAB release                           24.2.0.2863752 (R2024b) Update 5
+  [INFO] Computer                                 PCWIN64  (COSE-SEC414-21)
+  [PASS] Robotics System Toolbox                  installed
+  [PASS] Image Processing Toolbox                 installed
+  [PASS] UR Series support package                Robotics System Toolbox Support Package for Universal Robots UR Series Manipulators
+  [PASS] urRTDEClient on path                     C:\ProgramData\MATLAB\SupportPackages\R2024b\toolbox\robotics\supportpackages\urseries\@urRTDEClient\urRTDEClient.p
+  [PASS] Lab 3 folder                             C:\Users\924414657\MATLAB + RTDE\Lab 03 - Forward Kinematics
+  [PASS] Lab 5 code folder                        C:\Users\924414657\MATLAB + RTDE\Lab 05 - Intro to CV for Pick & Place with Camera Setup\Code\.
+  [PASS] Lab 6 code folder                        C:\Users\924414657\MATLAB + RTDE\Lab 06 - Intro MATLAB GenAI + Visual+LLM Servoing Pick and Place\Code\.
+  [PASS] ping 192.168.1.10                        Minimum = 0ms, Maximum = 0ms, Average = 0ms
+  [WARN] RealSense MATLAB wrapper                 realsense.pipeline not on path (Lab 5 SOP)
+  [PASS] urRTDEClient connect                     3.20 s
+  [PASS] readJointConfiguration                   deg = [-0.74, -51.6, -109.11, -108.68, 88.42, 175.66]
+  [PASS] readCartesianPose                        [1.6334, 0.0284, 3.1331, 0.2052, -0.1387, 0.5266]  (expect [thetaz thetay thetax x y z])
+  [FAIL] FK position vs reported                  216.5 mm. If this is close to |TCPOffset| of the gripper, rerun with TCPOffset set from the pendant.
+  [SKIP] sendJointConfigurationAndWait            motion not enabled
+  [SKIP] actuateGripper grip/release              motion not enabled
+  [SKIP] sendCartesianPoseAndWait                 motion not enabled
+  [SKIP] capture_realsense                        SkipCamera
+  [SKIP] Gemini API                               SkipGenAI
+
+
+  1 FAIL, 1 WARN, 5 SKIP out of 20 checks.
+  Log, results.json and images are in:
+  C:\Users\924414657\MATLAB + RTDE\Instructor - Hardware Validation\test-logs\2026-10-28_183517
+
