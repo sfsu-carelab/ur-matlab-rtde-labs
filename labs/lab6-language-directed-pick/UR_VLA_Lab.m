@@ -29,7 +29,7 @@ function UR_VLA_Lab()
     %% ====================================================================
     %  CONNECTION
     %  ====================================================================
-    robotIP = "192.168.0.20";      % TODO: your robot's IP address
+    robotIP = "192.168.1.10";      % TODO: your robot's IP address
     % CobotName must match the arm: the default is universalUR5e, and readCartesianPose /
     % sendCartesianPoseAndWait use that model's kinematics (seen on hardware 2026-10-28).
     ur = urRTDEClient(robotIP, 'CobotName', 'universalUR3e');
@@ -208,22 +208,110 @@ function [plan, pickXY, placeXY, ok] = planAndCheck(img, instruction, A, XY, mar
 end
 
 function moveToJ(ur, q_deg, endTime)
-    ok = sendJointConfigurationAndWait(ur, deg2rad(q_deg), EndTime = endTime);
+    q = deg2rad(q_deg);
+    sendJointConfigurationAndWait(ur, q, EndTime = endTime);
+    % 2026-11-04 hardware: the pendant speed slider scales the move but not the library's
+    % wait (EndTime + 5 s), so at a low slider the call returns false while the robot is
+    % still travelling, and a late "done" from one move can be read as the next move's
+    % result. So we always confirm arrival ourselves before going on.
+    ok = waitForArrival(ur, @() readJointConfiguration(ur), q, 1:6, deg2rad(0.5));
     if ~ok
-        error('UR_VLA_Lab:moveFailed', 'Joint move to [%s] deg did not complete.', join(string(q_deg), ', '));
+        error('UR_VLA_Lab:moveFailed', 'Joint move to [%s] deg did not complete within 60 s.', join(string(q_deg), ', '));
     end
 end
 
 function moveToC(ur, pose, endTime)
-    ok = sendCartesianPoseAndWait(ur, pose, EndTime = endTime);
+    % 2026-11-04 hardware (Lab 5): the toolbox's Cartesian moves cut the path into 5 cm
+    % pieces and run each as its own joint move, so the arm stops and starts along the way.
+    % IK on the toolbox's own robot model plus one joint move gives one smooth motion.
+    q0 = readJointConfiguration(ur);
+    q  = poseToJoints(ur, pose, q0);
+    sendJointConfigurationAndWait(ur, q, EndTime = endTime);
+    ok = waitForArrival(ur, @() readCartesianPose(ur), pose, 4:6, 0.002);   % position within 2 mm
     if ~ok
-        error('UR_VLA_Lab:moveFailed', 'Cartesian move to (%.3f, %.3f, %.3f) did not complete.', pose(4:6));
+        error('UR_VLA_Lab:moveFailed', 'Cartesian move to (%.3f, %.3f, %.3f) did not complete within 60 s.', pose(4:6));
+    end
+end
+
+function q = poseToJoints(ur, pose, q0)
+%POSETOJOINTS  Joint angles for pose on the toolbox's own model (ur.RigidBodyTree, the one
+%   readCartesianPose uses; a plain loadrobot model is in a frame rotated 180 deg about Z).
+%   Solved in 5 cm steps along the line from the current pose so the arm keeps its current
+%   elbow and wrist configuration; only the final joint angles are returned, for one move.
+    robot = ur.RigidBodyTree;
+    ee    = robot.BodyNames{end};
+    ik    = inverseKinematics(RigidBodyTree = robot);
+    ik.SolverParameters.AllowRandomRestart = false;
+    T0 = getTransform(robot, q0, ee);
+    T1 = trvec2tform(pose(4:6)) * eul2tform(pose(1:3));            % toolbox pose convention
+    n  = max(1, ceil(norm(tform2trvec(T1) - tform2trvec(T0)) / 0.05));
+    q  = q0;
+    for k = 1:n
+        Tk = transformtraj(T0, T1, [0 1], k / n);
+        [q, info] = ik(ee, Tk, [1 1 1 1 1 1], q);
+    end
+    if info.PoseErrorNorm > 1e-3
+        error('UR_VLA_Lab:ikFailed', 'No joint solution near the current pose for (%.3f, %.3f, %.3f); pose error %.2g.', pose(4:6), info.PoseErrorNorm);
+    end
+end
+
+function ok = waitForArrival(ur, readFcn, target, idx, tol)
+%WAITFORARRIVAL  Poll readFcn until elements idx are within tol of target, no longer
+%   changing between reads, AND the server script reports its last motion command
+%   finished; then pause briefly so the server is ready for the next command. Gives up
+%   after 60 s (a 5 s EndTime move at a 10 percent slider takes 50 s).
+%
+%   2026-11-04 hardware (Lab 5): the server script runs a Cartesian move as a chain of
+%   movej segments and cannot read a new command until the last segment has returned.
+%   At a 25 percent slider the next command was sent while the server was still inside
+%   the last segment and was silently dropped. readMotionStatus reads the done flag.
+    maxWait = 60;
+    t0 = tic; prev = readFcn();
+    while toc(t0) < maxWait
+        pause(0.2);
+        cur = readFcn();
+        arrived = max(abs(cur(idx) - target(idx))) < tol && max(abs(cur(idx) - prev(idx))) < tol;
+        if arrived && serverIdle(ur)
+            pause(0.3);
+            ok = true; return
+        end
+        prev = cur;
+    end
+    ok = false;
+end
+
+function idle = serverIdle(ur)
+%SERVERIDLE  True unless the server script is still executing a motion command.
+    try
+        [~, state] = readMotionStatus(ur);
+        idle = ~strcmpi(state, 'Executing');
+    catch
+        idle = false;
     end
 end
 
 function grip(ur, action, settleTime)
     actuateGripper(ur, action);
+    waitForGripper(ur);
     pause(settleTime);
+end
+
+function waitForGripper(ur)
+%WAITFORGRIPPER  Wait for the server script to finish the gripper action.
+%   2026-11-04 hardware (Lab 5): actuateGripper returns at once, but the server script
+%   blocks inside the gripper call for about a second and drops any motion command sent
+%   meanwhile. With URServerScript_Robotiq2F_PolyScopeX.script the gripper action is
+%   reported through the same done flag as the moves, so wait for it to start, then to
+%   finish. With a server script that does not report it, this is a plain 1.3 s wait.
+    t0 = tic; started = false;
+    while toc(t0) < 1.0 && ~started
+        pause(0.05); started = ~serverIdle(ur);
+    end
+    t0 = tic;
+    while toc(t0) < 10 && ~serverIdle(ur)
+        pause(0.05);
+    end
+    pause(0.3);
 end
 
 function out = ternary(c, a, b)

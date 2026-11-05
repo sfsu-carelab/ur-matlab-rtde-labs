@@ -1,0 +1,97 @@
+
+============================================================
+  UR HARDWARE SMOKE TEST   2026-11-04_153627
+============================================================
+  Options: IP=192.168.1.10  Model=UR3e  TCPOffset=[0 0 0]  DryRun=1
+  Log folder: C:\Users\924414657\2026 Thesis\matlab-rtde\instructor\hardware-validation\test-logs\2026-11-04_153627
+
+
+============================================================
+  0  ENVIRONMENT
+============================================================
+  [INFO] MATLAB release                           24.2.0.2863752 (R2024b) Update 5
+  [INFO] Computer                                 PCWIN64  (COSE-SEC414-17)
+  [PASS] Robotics System Toolbox                  installed
+  [PASS] Image Processing Toolbox                 installed
+  [PASS] UR Series support package                Robotics System Toolbox Support Package for Universal Robots UR Series Manipulators
+  [PASS] urRTDEClient on path                     C:\ProgramData\MATLAB\SupportPackages\R2024b\toolbox\robotics\supportpackages\urseries\@urRTDEClient\urRTDEClient.p
+  [FAIL] Lab 3 folder                             
+  [FAIL] Lab 5 code folder                        
+  [FAIL] Lab 6 code folder                        
+  [PASS] ping 192.168.1.10                        Minimum = 0ms, Maximum = 0ms, Average = 0ms
+  [WARN] USB Webcams support package              webcam not on path - install "MATLAB Support Package for USB Webcams" from Add-Ons (Lab 5 Part 1)
+
+
+============================================================
+  1  LAB 2 - RTDE CONNECT / READ
+============================================================
+  [PASS] urRTDEClient connect                     2.75 s
+  [PASS] readJointConfiguration                   deg = [0.22, -91.22, -66.34, -94.57, 86.9, 176.02]
+  [PASS] readCartesianPose                        [1.6244, 0.0727, 2.8335, 0.3122, -0.1348, 0.4154]  (expect [thetaz thetay thetax x y z])
+
+
+============================================================
+  2  LAB 3 - SCREW-THEORY FK AT THE LIVE JOINT ANGLES
+============================================================
+  [SKIP] FK vs reported pose                      needs joint read, pose read and Lab 3 folder
+
+
+============================================================
+  3  LAB 2 / LAB 4 - JOINT MOVE (elbow +5 deg and back)
+============================================================
+  [SKIP] sendJointConfigurationAndWait            motion not enabled
+
+
+============================================================
+  4  LAB 4 - GRIPPER (actuateGripper)
+============================================================
+  [SKIP] actuateGripper grip/release              motion not enabled
+
+
+============================================================
+  5  LAB 5 - CARTESIAN MOVE (+2 cm up in base Z and back)
+============================================================
+  [SKIP] sendCartesianPoseAndWait                 motion not enabled
+
+
+============================================================
+  6  LAB 5 - CAMERA (capture_realsense + detect_block)
+============================================================
+  [SKIP] capture_realsense                        SkipCamera
+
+
+============================================================
+  7  LAB 6 - GEMINI API PRE-FLIGHT
+============================================================
+  [SKIP] Gemini API                               SkipGenAI
+
+
+============================================================
+  SUMMARY
+============================================================
+  [INFO] MATLAB release                           24.2.0.2863752 (R2024b) Update 5
+  [INFO] Computer                                 PCWIN64  (COSE-SEC414-17)
+  [PASS] Robotics System Toolbox                  installed
+  [PASS] Image Processing Toolbox                 installed
+  [PASS] UR Series support package                Robotics System Toolbox Support Package for Universal Robots UR Series Manipulators
+  [PASS] urRTDEClient on path                     C:\ProgramData\MATLAB\SupportPackages\R2024b\toolbox\robotics\supportpackages\urseries\@urRTDEClient\urRTDEClient.p
+  [FAIL] Lab 3 folder                             
+  [FAIL] Lab 5 code folder                        
+  [FAIL] Lab 6 code folder                        
+  [PASS] ping 192.168.1.10                        Minimum = 0ms, Maximum = 0ms, Average = 0ms
+  [WARN] USB Webcams support package              webcam not on path - install "MATLAB Support Package for USB Webcams" from Add-Ons (Lab 5 Part 1)
+  [PASS] urRTDEClient connect                     2.75 s
+  [PASS] readJointConfiguration                   deg = [0.22, -91.22, -66.34, -94.57, 86.9, 176.02]
+  [PASS] readCartesianPose                        [1.6244, 0.0727, 2.8335, 0.3122, -0.1348, 0.4154]  (expect [thetaz thetay thetax x y z])
+  [SKIP] FK vs reported pose                      needs joint read, pose read and Lab 3 folder
+  [SKIP] sendJointConfigurationAndWait            motion not enabled
+  [SKIP] actuateGripper grip/release              motion not enabled
+  [SKIP] sendCartesianPoseAndWait                 motion not enabled
+  [SKIP] capture_realsense                        SkipCamera
+  [SKIP] Gemini API                               SkipGenAI
+
+
+  3 FAIL, 1 WARN, 6 SKIP out of 20 checks.
+  Log, results.json and images are in:
+  C:\Users\924414657\2026 Thesis\matlab-rtde\instructor\hardware-validation\test-logs\2026-11-04_153627
+

@@ -27,10 +27,10 @@ function UR_PickPlace_Lab()
     %  TASK 4 - ESTABLISH THE RTDE CONNECTION
     %  ====================================================================
     %  TODO: enter the IP address of your robot (Lab 2, Part 4 set this to
-    %  192.168.0.20; your instructor will confirm).
+    %  192.168.1.10; your instructor will confirm).
     % ---------------------------------------------------------------------
 
-    robotIP = "192.168.0.20";        % TODO: your robot's IP address
+    robotIP = "192.168.1.10";        % TODO: your robot's IP address
 
     % CobotName must match the arm: the default is universalUR5e, and readCartesianPose /
     % sendCartesianPoseAndWait use that model's kinematics (seen on hardware 2026-10-28).
@@ -158,15 +158,57 @@ end
 function moveTo(ur, q_deg, endTime)
 %MOVETO  Send one joint-space waypoint and block until the robot arrives.
 %   Waypoints are entered in degrees; the RTDE API expects radians.
-    ok = sendJointConfigurationAndWait(ur, deg2rad(q_deg), EndTime = endTime);
+    q = deg2rad(q_deg);
+    sendJointConfigurationAndWait(ur, q, EndTime = endTime);
+    % 2026-11-04 hardware: the pendant speed slider scales the move but not the library's
+    % wait (EndTime + 5 s), so at a low slider the call returns false while the robot is
+    % still travelling, and a late "done" from one move can be read as the next move's
+    % result. So we always confirm arrival ourselves before going on.
+    ok = waitForArrival(ur, @() readJointConfiguration(ur), q, 1:6, deg2rad(0.5));
     if ~ok
         error('UR_PickPlace_Lab:moveFailed', ...
-              ['Robot did not reach [%s] deg. Check that the server script ' ...
-               'node is running (green) on the pendant, that the speed ' ...
+              ['Robot did not reach [%s] deg within 60 s. Check that the server ' ...
+               'script node is running (green) on the pendant, that the speed ' ...
                'slider is not near zero, and that no protective stop is ' ...
                'active. If the robot stopped mid-sequence while holding ' ...
                'the cube, release it from the pendant before re-running.'], ...
               join(string(q_deg), ', '));
+    end
+end
+
+% -------------------------------------------------------------------------
+function ok = waitForArrival(ur, readFcn, target, idx, tol)
+%WAITFORARRIVAL  Poll readFcn until elements idx are within tol of target, no longer
+%   changing between reads, AND the server script reports its last motion command
+%   finished; then pause briefly so the server is ready for the next command. Gives up
+%   after 60 s (a 5 s EndTime move at a 10 percent slider takes 50 s).
+%
+%   2026-11-04 hardware (Lab 5): the server script cannot read a new command until its
+%   current movej has returned. At a 25 percent slider the next command was sent while
+%   the server was still inside the previous move and was silently dropped.
+%   readMotionStatus reads the server's done flag.
+    maxWait = 60;
+    t0 = tic; prev = readFcn();
+    while toc(t0) < maxWait
+        pause(0.2);
+        cur = readFcn();
+        arrived = max(abs(cur(idx) - target(idx))) < tol && max(abs(cur(idx) - prev(idx))) < tol;
+        if arrived && serverIdle(ur)
+            pause(0.3);
+            ok = true; return
+        end
+        prev = cur;
+    end
+    ok = false;
+end
+
+function idle = serverIdle(ur)
+%SERVERIDLE  True unless the server script is still executing a motion command.
+    try
+        [~, state] = readMotionStatus(ur);
+        idle = ~strcmpi(state, 'Executing');
+    catch
+        idle = false;
     end
 end
 
@@ -187,5 +229,25 @@ function grip(ur, action, settleTime)
 %   output 0 is:
 %       executeURScriptCommand(ur, "set_digital_out(0, True)")
     actuateGripper(ur, action);
+    waitForGripper(ur);
     pause(settleTime);
+end
+
+% -------------------------------------------------------------------------
+function waitForGripper(ur)
+%WAITFORGRIPPER  Wait for the server script to finish the gripper action.
+%   2026-11-04 hardware (Lab 5): actuateGripper returns at once, but the server script
+%   blocks inside the gripper call for about a second and drops any motion command sent
+%   meanwhile. With URServerScript_Robotiq2F_PolyScopeX.script the gripper action is
+%   reported through the same done flag as the moves, so wait for it to start, then to
+%   finish. With a server script that does not report it, this is a plain 1.3 s wait.
+    t0 = tic; started = false;
+    while toc(t0) < 1.0 && ~started
+        pause(0.05); started = ~serverIdle(ur);
+    end
+    t0 = tic;
+    while toc(t0) < 10 && ~serverIdle(ur)
+        pause(0.05);
+    end
+    pause(0.3);
 end

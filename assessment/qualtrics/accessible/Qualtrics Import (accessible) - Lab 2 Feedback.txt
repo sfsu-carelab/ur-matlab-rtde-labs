@@ -50,7 +50,7 @@ As a result of this lab, rate your agreement with each statement. (scale: 1 - St
 
 [[Question:MC:SingleAnswer:Horizontal]]
 [[ID:LO_1]]
-I can explain what the URCap and the URServerScript program each do in letting MATLAB talk to the robot.
+I can explain what a URCap, the URServerScript program, and RTDE each do in letting MATLAB talk to the robot.
 [[Choices]]
 1 - Strongly disagree
 2 - Disagree
@@ -60,16 +60,6 @@ I can explain what the URCap and the URServerScript program each do in letting M
 
 [[Question:MC:SingleAnswer:Horizontal]]
 [[ID:LO_2]]
-I can configure static IP addresses on both the robot and the PC so they share a subnet, and verify the link with ping.
-[[Choices]]
-1 - Strongly disagree
-2 - Disagree
-3 - Neutral
-4 - Agree
-5 - Strongly agree
-
-[[Question:MC:SingleAnswer:Horizontal]]
-[[ID:LO_3]]
 I can start the server program on the pendant and open a connection from MATLAB with urRTDEClient.
 [[Choices]]
 1 - Strongly disagree
@@ -79,8 +69,8 @@ I can start the server program on the pendant and open a connection from MATLAB 
 5 - Strongly agree
 
 [[Question:MC:SingleAnswer:Horizontal]]
-[[ID:LO_4]]
-I can read the robot's live joint angles in MATLAB and command a small joint move, handling the degrees/radians conversion correctly.
+[[ID:LO_3]]
+I can read the robot's live joint angles in MATLAB and command a small joint move, using the MathWorks documentation for each function and handling degrees/radians correctly.
 [[Choices]]
 1 - Strongly disagree
 2 - Disagree
@@ -89,7 +79,7 @@ I can read the robot's live joint angles in MATLAB and command a small joint mov
 5 - Strongly agree
 
 [[Question:MC:SingleAnswer:Horizontal]]
-[[ID:LO_5]]
+[[ID:LO_4]]
 If MATLAB failed to connect tomorrow, I would know what to check, in order: cable and IP settings, RTDE enabled, server script running (green).
 [[Choices]]
 1 - Strongly disagree

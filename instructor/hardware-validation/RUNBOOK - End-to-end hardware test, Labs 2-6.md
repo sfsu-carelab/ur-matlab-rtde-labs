@@ -18,7 +18,7 @@ Bring:
   a ruler, a "bowl" or marked square for Lab 6 place targets
 - The Gemini API key (create at https://aistudio.google.com/apikey; restrict it to the
   Generative Language API or the API returns 403)
-- Pendant admin password, robot IP (192.168.0.20), model (UR3e / UR5e)
+- Pendant admin password, robot IP (192.168.1.10), model (UR3e / UR5e)
 
 Lab PC checklist (Windows 11, MATLAB):
 - [ ] Box Drive signed in and the `Robot Hardware Education` folder visible (if not: copy the
@@ -34,7 +34,7 @@ Lab PC checklist (Windows 11, MATLAB):
 - [ ] In MATLAB: `setenv('GEMINI_API_KEY', '...')` or `gemini_api_key.txt` in `Lab 06/Code`
 
 Robot checklist (PolyScope X):
-- [ ] Static IP 192.168.0.20 / 255.255.255.0, RTDE enabled (Lab 2 Part 4)
+- [ ] Static IP 192.168.1.10 / 255.255.255.0, RTDE enabled (Lab 2 Part 4)
 - [ ] URServerScript node in the program tree and PLAYING (green) (Lab 2 Parts 2-3)
 - [ ] Payload and TCP set for gripper + camera (Lab 1 Section 3.2).
       WRITE DOWN the TCP offset from the pendant: [x y z] = [____ ____ ____] m

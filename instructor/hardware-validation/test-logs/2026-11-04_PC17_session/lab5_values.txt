@@ -1,0 +1,43 @@
+Lab 5 values - PC COSE-SEC414-17, 2026-11-04 (fill in as the session goes)
+
+Camera: Intel RealSense D435i RGB via the USB Webcams package, pinned to 1280x720.
+Fixed bird's-eye mount (arm out of view; only the robot base shows at the top of the frame).
+Room lights ON (with only the LED strip the frame is dark and cyan-cast; thresholds fail).
+
+TASK 3 - HSV thresholds (verified with detect_block; final camera position, settled exposure,
+         frame exp_probe_30.png in this folder)
+  red block   : hsvLow = [0.95 0.50 0.30]   hsvHigh = [0.05 1.00 1.00]   (hue wrap)
+                -> exactly 1 blob, 4410 px at (538.1, 635.7)
+  teal block  : hsvLow = [0.47 0.55 0.35]   hsvHigh = [0.54 1.00 1.00]
+                -> exactly 1 blob, 4417 px at (283.2, 502.3)
+  (earlier camera position, 16:16 frame: red 4598 px at (699.4, 538.0) with the red pouch as
+   a stray; teal 2952 px at (817.3, 371.2) with a blue object behind the base as a stray)
+  measured medians: red H 0.033 S 0.81 V 0.65; teal H 0.478 S 0.95 V 0.51; table H 0.436 S 0.58 V 0.25
+  minAreaPx = 200 is fine. Keep red/blue clutter out of the frame.
+
+TASK 2 - imaging_pose (deg)      : [0.95 -71.2 -33.84 -142.19 89.36 180.96]   (Ryan, pendant, 16:23; arm out of view)
+TASK 4 - UV (px) / XY (m)        : placement 1: [615.5 360.8] / [0.4421  0.0167]   (17:50-18:20; XY from readCartesianPose
+                                   placement 2: [489.2 270.6] / [0.3779 -0.1335]    at the touch, i.e. model FK of the
+                                   placement 3: [467.4 444.3] / [0.5493 -0.1112]    flange, same frame the picks use;
+                                   placement 4: [662.6 382.7] / [0.4573  0.0655]    overlays cal_placement_N.png)
+                                   placement 5: [396.8 318.3] / [0.4288 -0.2102]   (added: points 1-4 were all in the right half)
+          RMS (mm)               : 4 points 1.44 (res 2.3 0.5 0.1 1.7); the 4-point map predicted point 5 11 mm off,
+                                   so the fit uses all 5: RMS 3.47 (res 2.5 4.7 2.8 1.4 4.7). Scale 1.00 mm/px both axes.
+                                   Touch Z ranged 0.101-0.110 m (flange). Point 3 (X 0.55) is at the reach limit,
+                                   elbow 2 deg: fine for calibration, do not pick there.
+TASK 5 - ref_pick_pose (rad, m)  : [1.9184 0.0115 3.1140 0.4421 0.0167 0.1092]   (placement 1 touch pose)
+          place_pos (deg)        : [17.61 -119.12 -96.06 -54.27 87.78 196.05]   (flange X 0.402 Y -0.014 Z 0.151, 4 cm above pick height, middle of the calibrated area)
+cal placement 1: u=537.7 v=635.7 (area 4488 px)
+  (placement 1 above VOID: both blocks were out of reach; blocks moved, recapturing)
+cal placement 1: u=615.5 v=360.8 (area 4081 px)
+cal placement 1: touch pose [1.9184 0.0115 3.1140 0.4421 0.0167 0.1092] (rad, m); joints deg [19.53 -133.03 -84.9 -50.49 89.35 179.6]
+cal placement 2: u=489.2 v=270.6 (area 4147 px)
+cal placement 2: touch pose [1.7905 0.0170 -3.1245 0.3779 -0.1335 0.1051] (rad, m); joints deg [-0.08 -125.98 -98.96 -45.8 88.83 167.34]
+cal placement 3: u=467.4 v=444.3 (area 4426 px)
+cal placement 3: touch pose [1.5308 0.0737 3.1050 0.5493 -0.1112 0.1010] (rad, m); joints deg [2.83 -174.1 -2.29 -91.89 85.61 184.98]
+cal placement 4: u=662.6 v=382.7 (area 3916 px)
+cal placement 4: touch pose [1.3858 0.0376 3.1192 0.4573 0.0655 0.1016] (rad, m); joints deg [25.15 -138.03 -76.48 -55.71 87.5 215.74]
+cal placement 5: u=396.8 v=318.3 (area 4593 px)
+cal placement 5: touch pose [1.5804 -0.0038 3.1243 0.4288 -0.2102 0.1095] (rad, m); joints deg [-10.26 -140.49 -69.51 -59.08 90.4 169.19]
+cal placement 99: touch pose [1.5975 0.0345 3.1215 0.4020 -0.0136 0.1506] (rad, m); joints deg [17.61 -119.12 -96.06 -54.27 87.78 196.05]
+cal placement 0: touch pose [1.9184 0.0115 3.1140 0.4277 -0.1064 0.2092] (rad, m); joints deg [3.37 -121.74 -74.68 -71.88 89.82 163.44]

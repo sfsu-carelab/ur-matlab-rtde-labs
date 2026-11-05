@@ -39,7 +39,9 @@ function img = capture_realsense()
     end
 
     % Let auto-exposure settle so colors are stable for thresholding.
-    for n = 1:15
+    % 2026-11-04 hardware: the D435i RGB auto-exposure needs about 25-30 frames (1.5 s) to
+    % settle; at frame 15 the image was still only half as bright as at frame 30.
+    for n = 1:30
         img = snapshot(cam);
     end
     clear cam                                          % release the camera

@@ -37,10 +37,9 @@ Robots or automation hardware
 [[ID:LO]]
 As a result of this lab, rate your agreement with each statement.
 [[Choices]]
-I can explain what the URCap and the URServerScript program each do in letting MATLAB talk to the robot.
-I can configure static IP addresses on both the robot and the PC so they share a subnet, and verify the link with ping.
+I can explain what a URCap, the URServerScript program, and RTDE each do in letting MATLAB talk to the robot.
 I can start the server program on the pendant and open a connection from MATLAB with urRTDEClient.
-I can read the robot's live joint angles in MATLAB and command a small joint move, handling the degrees/radians conversion correctly.
+I can read the robot's live joint angles in MATLAB and command a small joint move, using the MathWorks documentation for each function and handling degrees/radians correctly.
 If MATLAB failed to connect tomorrow, I would know what to check, in order: cable and IP settings, RTDE enabled, server script running (green).
 [[Answers]]
 1 - Strongly disagree

@@ -27,7 +27,7 @@ function results = UR_HardwareSmokeTest(opts)
 %     7  Lab 6  GenAI   API key, model list, one pointing call on the frame
 %
 %   Options (name=value)
-%     RobotIP      "192.168.0.20"
+%     RobotIP      "192.168.1.10"
 %     Model        "UR3e"            any model in ur_link_lengths
 %     TCPOffset    [0 0 0]           active TCP offset in the TOOL frame (m),
 %                                    from the pendant TCP settings; needed for
@@ -46,7 +46,7 @@ function results = UR_HardwareSmokeTest(opts)
 %   before the first motion.
 
     arguments
-        opts.RobotIP     (1,1) string  = "192.168.0.20"
+        opts.RobotIP     (1,1) string  = "192.168.1.10"
         opts.Model       (1,1) string  = "UR3e"
         opts.TCPOffset   (1,3) double  = [0 0 0]
         opts.DryRun      (1,1) logical = false
@@ -58,7 +58,12 @@ function results = UR_HardwareSmokeTest(opts)
     end
 
     here = fileparts(mfilename('fullpath'));
-    root = fileparts(here);                       % "MATLAB + RTDE" (Box) or repo root
+    root = fileparts(here);                       % "MATLAB + RTDE" (Box layout)
+    % GitHub layout: this file is instructor/hardware-validation/, so the repo root with
+    % labs/ is two levels up (seen 2026-11-04 on PC 17: all three lab folders reported FAIL).
+    if isempty(dir(fullfile(root, 'Lab 0*'))) && isfolder(fullfile(fileparts(root), 'labs'))
+        root = fileparts(root);
+    end
 
     % ---- log folder -----------------------------------------------------
     stamp = char(datetime('now', 'Format', 'yyyy-MM-dd_HHmmss'));
@@ -235,15 +240,19 @@ function results = UR_HardwareSmokeTest(opts)
         try
             target = q0; target(3) = target(3) + deg2rad(5);
             t = tic;
+            % 2026-11-04: the library's wait ignores the pendant speed slider (see the labs'
+            % waitForArrival); the library return is reported, the PASS is on actual arrival.
             ok1 = sendJointConfigurationAndWait(ur, target, EndTime = opts.MoveEndTime);
+            arr1 = waitForArrival(ur, @() readJointConfiguration(ur), target, 1:6, deg2rad(0.5));
             qa  = readJointConfiguration(ur);
             ok2 = sendJointConfigurationAndWait(ur, q0, EndTime = opts.MoveEndTime);
+            arr2 = waitForArrival(ur, @() readJointConfiguration(ur), q0, 1:6, deg2rad(0.5));
             qb  = readJointConfiguration(ur);
             dt  = toc(t);
             errA = max(abs(rad2deg(qa - target)));
             errB = max(abs(rad2deg(qb - q0)));
-            R(end+1) = row(3, 'sendJointConfigurationAndWait', pf(ok1 && ok2), ...
-                sprintf('returned [%d %d]', ok1, ok2));
+            R(end+1) = row(3, 'sendJointConfigurationAndWait', pf(arr1 && arr2), ...
+                sprintf('library returned [%d %d], arrived [%d %d] (false library return = slider below ~50%%)', ok1, ok2, arr1, arr2));
             R(end+1) = row(3, 'arrival accuracy', pf(errA < 0.5 && errB < 0.5), ...
                 sprintf('max joint error %.3f deg out, %.3f deg back', errA, errB));
             R(end+1) = row(3, 'timing of the two moves', 'INFO', ...
@@ -286,8 +295,10 @@ function results = UR_HardwareSmokeTest(opts)
             p1 = readCartesianPose(ur);          % fresh, after the joint moves
             up = p1; up(6) = up(6) + dz;
             ok1 = sendCartesianPoseAndWait(ur, up, EndTime = opts.MoveEndTime);
+            arr1 = waitForArrival(ur, @() readCartesianPose(ur), up, 4:6, 0.002);
             pa  = readCartesianPose(ur);
             ok2 = sendCartesianPoseAndWait(ur, p1, EndTime = opts.MoveEndTime);
+            arr2 = waitForArrival(ur, @() readCartesianPose(ur), p1, 4:6, 0.002);
             pb  = readCartesianPose(ur);
 
             dzMeas  = pa(6) - p1(6);
@@ -297,7 +308,8 @@ function results = UR_HardwareSmokeTest(opts)
             fprintf('  Commanded +%.0f mm in element 6. Measured: dZ = %+.1f mm, dXY = %.1f mm, dRot = %.3f rad, return error %.1f mm\n', ...
                 dz*1000, dzMeas*1000, dxyMeas, dRot, back);
             layoutOK = abs(dzMeas - dz) < 0.003 && dxyMeas < 3 && dRot < 0.02;
-            R(end+1) = row(5, 'sendCartesianPoseAndWait', pf(ok1 && ok2), sprintf('returned [%d %d]', ok1, ok2));
+            R(end+1) = row(5, 'sendCartesianPoseAndWait', pf(arr1 && arr2), ...
+                sprintf('library returned [%d %d], arrived [%d %d]', ok1, ok2, arr1, arr2));
             R(end+1) = row(5, 'pose layout [rot(3) xyz(3)], Z = element 6', pf(layoutOK), ...
                 sprintf('dZ %+.1f mm (want +%.0f), dXY %.1f mm, dRot %.3f rad', dzMeas*1000, dz*1000, dxyMeas, dRot));
         catch e
@@ -427,13 +439,47 @@ function s = lastLine(txt)
     s = lines{end};
 end
 
+function ok = waitForArrival(ur, readFcn, target, idx, tol)
+%WAITFORARRIVAL  Same helper as in the lab scripts: poll until elements idx are within
+%   tol of target, no longer changing, and the server script reports its last motion
+%   command finished (2026-11-04: without that check the next command can be sent while
+%   the server is still inside the previous move and is dropped); then pause briefly.
+%   Gives up after 60 s.
+    maxWait = 60;
+    t0 = tic; prev = readFcn();
+    while toc(t0) < maxWait
+        pause(0.2);
+        cur = readFcn();
+        arrived = max(abs(cur(idx) - target(idx))) < tol && max(abs(cur(idx) - prev(idx))) < tol;
+        if arrived && serverIdle(ur)
+            pause(0.3);
+            ok = true; return
+        end
+        prev = cur;
+    end
+    ok = false;
+end
+
+function idle = serverIdle(ur)
+    try
+        [~, state] = readMotionStatus(ur);
+        idle = ~strcmpi(state, 'Executing');
+    catch
+        idle = false;
+    end
+end
+
 function d = findLab(root, patterns)
     d = '';
     for k = 1:numel(patterns)
         hits = dir(fullfile(root, patterns{k}));
         hits = hits([hits.isdir]);
         if ~isempty(hits)
-            d = fullfile(hits(1).folder, hits(1).name);
+            if strcmp(hits(1).name, '.')      % pattern named the folder itself (e.g. Lab 05*/Code)
+                d = hits(1).folder;
+            else
+                d = fullfile(hits(1).folder, hits(1).name);
+            end
             return
         end
     end

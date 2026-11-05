@@ -1,0 +1,122 @@
+[
+  {
+    "section": 0,
+    "name": "MATLAB release",
+    "status": "INFO",
+    "detail": "24.2.0.2863752 (R2024b) Update 5"
+  },
+  {
+    "section": 0,
+    "name": "Computer",
+    "status": "INFO",
+    "detail": "PCWIN64  (COSE-SEC414-17)"
+  },
+  {
+    "section": 0,
+    "name": "Robotics System Toolbox",
+    "status": "PASS",
+    "detail": "installed"
+  },
+  {
+    "section": 0,
+    "name": "Image Processing Toolbox",
+    "status": "PASS",
+    "detail": "installed"
+  },
+  {
+    "section": 0,
+    "name": "UR Series support package",
+    "status": "PASS",
+    "detail": "Robotics System Toolbox Support Package for Universal Robots UR Series Manipulators"
+  },
+  {
+    "section": 0,
+    "name": "urRTDEClient on path",
+    "status": "PASS",
+    "detail": "C:\\ProgramData\\MATLAB\\SupportPackages\\R2024b\\toolbox\\robotics\\supportpackages\\urseries\\@urRTDEClient\\urRTDEClient.p"
+  },
+  {
+    "section": 0,
+    "name": "Lab 3 folder",
+    "status": "FAIL",
+    "detail": ""
+  },
+  {
+    "section": 0,
+    "name": "Lab 5 code folder",
+    "status": "FAIL",
+    "detail": ""
+  },
+  {
+    "section": 0,
+    "name": "Lab 6 code folder",
+    "status": "FAIL",
+    "detail": ""
+  },
+  {
+    "section": 0,
+    "name": "ping 192.168.1.10",
+    "status": "PASS",
+    "detail": "Minimum = 0ms, Maximum = 0ms, Average = 0ms"
+  },
+  {
+    "section": 0,
+    "name": "USB Webcams support package",
+    "status": "WARN",
+    "detail": "webcam not on path - install \"MATLAB Support Package for USB Webcams\" from Add-Ons (Lab 5 Part 1)"
+  },
+  {
+    "section": 1,
+    "name": "urRTDEClient connect",
+    "status": "PASS",
+    "detail": "2.75 s"
+  },
+  {
+    "section": 1,
+    "name": "readJointConfiguration",
+    "status": "PASS",
+    "detail": "deg = [0.22, -91.22, -66.34, -94.57, 86.9, 176.02]"
+  },
+  {
+    "section": 1,
+    "name": "readCartesianPose",
+    "status": "PASS",
+    "detail": "[1.6244, 0.0727, 2.8335, 0.3122, -0.1348, 0.4154]  (expect [thetaz thetay thetax x y z])"
+  },
+  {
+    "section": 2,
+    "name": "FK vs reported pose",
+    "status": "SKIP",
+    "detail": "needs joint read, pose read and Lab 3 folder"
+  },
+  {
+    "section": 3,
+    "name": "sendJointConfigurationAndWait",
+    "status": "SKIP",
+    "detail": "motion not enabled"
+  },
+  {
+    "section": 4,
+    "name": "actuateGripper grip/release",
+    "status": "SKIP",
+    "detail": "motion not enabled"
+  },
+  {
+    "section": 5,
+    "name": "sendCartesianPoseAndWait",
+    "status": "SKIP",
+    "detail": "motion not enabled"
+  },
+  {
+    "section": 6,
+    "name": "capture_realsense",
+    "status": "SKIP",
+    "detail": "SkipCamera"
+  },
+  {
+    "section": 7,
+    "name": "Gemini API",
+    "status": "SKIP",
+    "detail": "SkipGenAI"
+  }
+]

@@ -1,10 +1,17 @@
 # UR e-series MATLAB + RTDE teaching labs - project handoff
 
 You are picking up work that earlier Claude Code sessions did with Ryan: on his Mac
-(2026-10-28), then on lab PC COSE-SEC414-21 (2026-10-28 and 2026-11-04). The next session
-runs on a different lab PC (one with two USB-C ports) plugged into the robot. Read this file
-fully, then read the two handoff notes files listed under "Current state", before touching
-anything.
+(2026-10-28), on lab PC COSE-SEC414-21 (2026-10-28 and 2026-11-04), then on lab PC
+COSE-SEC414-17 (2026-11-04 afternoon, two USB-C ports, plugged into the robot). Read this
+file fully, then read the three handoff notes files listed under "Current state", before
+touching anything.
+
+THE WORKING FOLDER IS `C:\Users\924414657\2026 Thesis\Labs` (Box layout). On 2026-11-04 it was
+consolidated from the Box download (newer manuals, surveys, IP 192.168.1.10) plus the GitHub
+clone (newer code: CobotName fix, USB Webcams capture, smoke test, Robotiq server script,
+test-logs). The clone and the zips were deleted afterwards. GitHub-only files (README.md,
+LICENSE, CITATION.cff, .gitignore, resources/camera-setup CAD) are parked in
+`C:\Users\924414657\2026 Thesis\github-mirror-extras` for the next push.
 
 ## What this is
 Six teaching labs for a UR e-series cobot (UR3e in the lab) driven from MATLAB over RTDE,
@@ -39,6 +46,9 @@ Read, in order:
    the stock URServerScript, speed slider vs EndTime timeout).
 2. `Instructor - Hardware Validation/test-logs/2026-11-04_session/HANDOFF-NOTES.md`
    (camera decision and the USB 2 cable finding, what is still open).
+3. `Instructor - Hardware Validation/test-logs/2026-11-04_PC17_session/HANDOFF-NOTES.md`
+   (PC 17: network OK, smoke test layout fix, folder consolidation, webcam package install
+   state, Lab 5 progress).
 
 Ryan's working order, agreed 2026-11-04: make Lab 5 work end to end on hardware, THEN update
 its manual; make Lab 6 work, THEN update its docs. No manual edits before the code runs.
@@ -46,16 +56,24 @@ Do one step at a time and report; do not fan out into side edits (runbook, smoke
 manuals) without asking first.
 
 Next PC checklist, before anything else:
-- Static IP on the robot NIC (IT sets it; robot was 192.168.1.10, PC 192.168.1.11 in SEC414).
-  Check `ping` and TCP 30004. The manuals still say 192.168.0.20; that is a doc fix for later.
+- Static IP on the robot NIC (IT sets it; robot 192.168.1.10, PC 192.168.1.11 on PC 21,
+  192.168.1.20 on PC 17). Check `ping` and TCP 30004. The code and runbook now say
+  192.168.1.10; the manuals may still say 192.168.0.20 (doc fix for later).
 - UR support package installed (Add-Ons, no admin). CobotName must be `universalUR3e`.
-- "MATLAB Support Package for USB Webcams" installed (Add-Ons, no admin).
+- "MATLAB Support Package for USB Webcams" installed (Add-Ons, no admin) BY THE ACCOUNT THAT
+  OWNS `C:\ProgramData\MATLAB\SupportPackages\R2024b\appdata\*.json` (on PC 17 that is the
+  account that installed the UR package on 2026-11-03). From any other account the installer
+  lays the files down but cannot update those read-only registry files, so the package stays
+  invisible to MATLAB and to the Add-On Manager (found 2026-11-04 on PC 17, see the PC17
+  notes). Session-only workaround: `addpath(<...>\toolbox\matlab\webcam\supportpackages)`.
 - Camera on a USB 3 cable/port: `webcamlist` shows "...435i RGB", `snapshot` returns a frame.
   On a USB 2 cable the camera enumerates, lists modes, and never delivers a frame (both in
   MATLAB and in Windows' own capture path). That was the 2026-11-04 blocker.
 - Gemini key as the only line of `Lab 06 - .../Code/gemini_api_key.txt`, then
   `test_vlm_offline` Part 2 from batch.
-- Pendant: `URServerScript_Robotiq2F.script` (gripper calls enabled) loaded and playing.
+- Pendant: `URServerScript_Robotiq2F_PolyScopeX.script` (gripper calls enabled, PolyScope X
+  names rq_close_and_wait / rq_open_and_wait) loaded and playing. The plain
+  `URServerScript_Robotiq2F.script` uses PolyScope 5 names and does not compile on PolyScope X.
   Speed slider at 100 percent, or at least 50, and left alone during timed moves.
 
 ## Hard rules
@@ -92,7 +110,8 @@ Next PC checklist, before anything else:
 ## Facts you need
 - Robot: UR3e, PolyScope X, RTDE enabled, `URServerScript` loaded as a Script Code node and
   PLAYING (green) before MATLAB can command it (Lab 2 manual). The stock script's gripper
-  functions are stubs; use `Instructor - Hardware Validation/URServerScript_Robotiq2F.script`.
+  functions are stubs; use `Instructor - Hardware Validation/URServerScript_Robotiq2F_PolyScopeX.script`
+  (the non-PolyScopeX file keeps the PolyScope 5 names and fails to compile on this robot).
   Internet (campus wired NIC or Wi-Fi) and the robot link must be up at the same time for Lab 6.
 - Lab 3 conventions: PoE screw model with `jointSignConvention() = [1 -1 -1 -1 -1 -1]`,
   `theta_home = [0 -90 0 -90 0 0]`, `hw2screw`/`screw2hw` convert pendant degrees to model

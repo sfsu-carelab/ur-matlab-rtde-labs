@@ -28,7 +28,7 @@ function UR_VisionPick_Lab()
     %% ====================================================================
     %  CONNECTION (as in Lab 2 / Lab 4)
     %  ====================================================================
-    robotIP = "192.168.0.20";      % TODO: your robot's IP address
+    robotIP = "192.168.1.10";      % TODO: your robot's IP address
     % CobotName must match the arm: the default is universalUR5e, and readCartesianPose /
     % sendCartesianPoseAndWait use that model's kinematics (seen on hardware 2026-10-28).
     ur = urRTDEClient(robotIP, 'CobotName', 'universalUR3e');
@@ -37,8 +37,8 @@ function UR_VisionPick_Lab()
     %% ====================================================================
     %  TASK 2 - IMAGING POSE (joint angles, degrees)
     %  ====================================================================
-    %  Jog the robot so the camera looks straight down at the workspace
-    %  with every block position visible, then record the joint angles.
+    %  The camera is fixed above the table. Jog the robot to a parking pose
+    %  that is completely out of the camera's view, then record the joint angles.
     imaging_pose = nan(1,6);       % TODO: [J1 J2 J3 J4 J5 J6] in degrees
 
     %% ====================================================================
@@ -46,15 +46,16 @@ function UR_VisionPick_Lab()
     %  ====================================================================
     %  Tune these until the overlay shows one clean blob on your block.
     %  Red blocks need a wrap-around hue band, e.g. low h=0.95, high h=0.05.
-    hsvLow    = [0.25 0.35 0.25]; % TODO: tune (defaults roughly green)
-    hsvHigh   = [0.45 1.00 1.00]; % TODO: tune
+    hsvLow    = [0.25 0.35 0.25];
+    hsvHigh   = [0.45 1.00 1.00];
     minAreaPx = 200;
 
     %% ====================================================================
-    %  TASK 4 - PIXEL-TO-BASE CALIBRATION (from Part 4, Table 3)
+    %  TASK 4 - PIXEL-TO-BASE CALIBRATION (from Part 4, Table 4)
     %  ====================================================================
     %  One row per calibration placement: pixel centroid and the base-frame
-    %  X,Y you measured by touching the same spot with the TCP.
+    %  X,Y of the TCP touching the same spot. UR_CalibrateCamera walks you
+    %  through the placements and prints these two lines ready to paste.
     UV = [ nan nan ;               % TODO: [u v] placement 1
            nan nan ;               % TODO: placement 2
            nan nan ;               % TODO: placement 3
@@ -67,12 +68,12 @@ function UR_VisionPick_Lab()
     %% ====================================================================
     %  TASK 5 - PICK REFERENCE AND PLACE WAYPOINT (from Part 5)
     %  ====================================================================
-    %  ref_pick_pose: with the TCP touched down on a block ready to grasp,
-    %  run readCartesianPose(ur) and paste the six numbers here. It supplies
-    %  the gripper orientation and the pick height; the script replaces only
-    %  X and Y with the detected block position.
-    ref_pick_pose = nan(1,6);      % TODO: [thetaz thetay thetax x y z] rad/m
-    place_pos     = nan(1,6);      % TODO: place waypoint, joint angles in degrees
+    %  ref_pick_pose: UR_CalibrateCamera prints it from your placement 1 touch
+    %  (or touch down on a block ready to grasp and run readCartesianPose(ur)).
+    %  It supplies the gripper orientation and the pick height; the script
+    %  replaces only X and Y with the detected block position.
+    ref_pick_pose = nan(1,6);      % TODO: [thetaz thetay thetax x y z] from readCartesianPose
+    place_pos     = nan(1,6);      % TODO: [J1 J2 J3 J4 J5 J6] in degrees, drop-off waypoint
 
     approach_dz   = 0.10;          % approach height above the pick (m)
     moveEndTime   = 5;             % seconds scheduled per move (see Lab 4)
@@ -150,7 +151,13 @@ end
 % -------------------------------------------------------------------------
 function moveToJ(ur, q_deg, endTime)
 %MOVETOJ  Joint-space move (degrees in), blocking; see Lab 4.
-    ok = sendJointConfigurationAndWait(ur, deg2rad(q_deg), EndTime = endTime);
+    q = deg2rad(q_deg);
+    sendJointConfigurationAndWait(ur, q, EndTime = endTime);
+    % 2026-11-04 hardware: the pendant speed slider scales the move but not the library's
+    % wait (EndTime + 5 s), so at a low slider the call returns false while the robot is
+    % still travelling, and a late "done" from one move can be read as the next move's
+    % result. So we always confirm arrival ourselves before going on.
+    ok = waitForArrival(ur, @() readJointConfiguration(ur), q, 1:6, deg2rad(0.5));
     if ~ok
         error('UR_VisionPick_Lab:moveFailed', ...
             ['Joint move to [%s] deg did not complete. Check that the server ' ...
@@ -161,8 +168,20 @@ end
 
 % -------------------------------------------------------------------------
 function moveToC(ur, pose, endTime)
-%MOVETOC  Cartesian move: pose = [thetaz thetay thetax x y z] (rad, m).
-    ok = sendCartesianPoseAndWait(ur, pose, EndTime = endTime);
+%MOVETOC  Move the TCP to a Cartesian pose with ONE smooth joint move.
+%   pose = [thetaz thetay thetax x y z] (rad, m), the convention of readCartesianPose.
+    % 2026-11-04 hardware: the toolbox's Cartesian moves (sendCartesianPoseAndWait and
+    % followCartesianWaypoints) cut the path into 5 cm pieces and run each piece as its own
+    % joint move, so the arm visibly stops and starts along the way, and giving a blend
+    % radius makes the library ignore the move time. Solving the pose to joint angles with
+    % the same robot model the toolbox uses and sending one joint move gives one smooth,
+    % time-parameterized motion. The path between the two points is joint-interpolated
+    % rather than a straight line; over the 10 cm descent and lift the TCP bows sideways by
+    % about 4 mm at mid-stroke and lands exactly on the target (checked offline 2026-11-04).
+    q0 = readJointConfiguration(ur);
+    q  = poseToJoints(ur, pose, q0);
+    sendJointConfigurationAndWait(ur, q, EndTime = endTime);
+    ok = waitForArrival(ur, @() readCartesianPose(ur), pose, 4:6, 0.002);   % position within 2 mm
     if ~ok
         error('UR_VisionPick_Lab:moveFailed', ...
             ['Cartesian move to x = %.3f, y = %.3f, z = %.3f did not complete. ' ...
@@ -172,10 +191,97 @@ function moveToC(ur, pose, endTime)
 end
 
 % -------------------------------------------------------------------------
+function q = poseToJoints(ur, pose, q0)
+%POSETOJOINTS  Joint angles that put the TCP at pose, found on the toolbox's own model.
+%   Uses ur.RigidBodyTree, the model readCartesianPose is computed from (a plain
+%   loadrobot('universalUR3e') sits in a frame rotated 180 degrees about Z and gives
+%   X and Y with the wrong sign). The IK is solved in 5 cm steps along the straight
+%   line from the current pose, each step seeded with the previous answer, so the
+%   solution stays in the arm's current elbow and wrist configuration; only the final
+%   joint angles are returned, for one move.
+    robot = ur.RigidBodyTree;
+    ee    = robot.BodyNames{end};
+    ik    = inverseKinematics(RigidBodyTree = robot);
+    ik.SolverParameters.AllowRandomRestart = false;
+    T0 = getTransform(robot, q0, ee);
+    T1 = trvec2tform(pose(4:6)) * eul2tform(pose(1:3));            % toolbox pose convention
+    n  = max(1, ceil(norm(tform2trvec(T1) - tform2trvec(T0)) / 0.05));
+    q  = q0;
+    for k = 1:n
+        Tk = transformtraj(T0, T1, [0 1], k / n);
+        [q, info] = ik(ee, Tk, [1 1 1 1 1 1], q);
+    end
+    if info.PoseErrorNorm > 1e-3
+        error('UR_VisionPick_Lab:ikFailed', ...
+            ['No joint solution near the current pose for x = %.3f, y = %.3f, z = %.3f ' ...
+             '(pose error %.2g). Is the target within reach and inside the calibrated area?'], ...
+            pose(4), pose(5), pose(6), info.PoseErrorNorm);
+    end
+end
+
+% -------------------------------------------------------------------------
+function ok = waitForArrival(ur, readFcn, target, idx, tol)
+%WAITFORARRIVAL  Poll readFcn until elements idx are within tol of target, no longer
+%   changing between reads, AND the server script reports its last motion command
+%   finished; then pause briefly so the server is ready for the next command. Gives up
+%   after 60 s (a 5 s EndTime move at a 10 percent slider takes 50 s).
+%
+%   2026-11-04 hardware: the server script runs a Cartesian move as a chain of movej
+%   segments and cannot read a new command until the last segment has returned. Being
+%   at the target is not enough: at a 25 percent slider the next command was sent while
+%   the server was still inside the last segment and was silently dropped (the pick
+%   descent, step 2/7, never started). readMotionStatus reads the server's done flag.
+    maxWait = 60;
+    t0 = tic; prev = readFcn();
+    while toc(t0) < maxWait
+        pause(0.2);
+        cur = readFcn();
+        arrived = max(abs(cur(idx) - target(idx))) < tol && max(abs(cur(idx) - prev(idx))) < tol;
+        if arrived && serverIdle(ur)
+            pause(0.3);
+            ok = true; return
+        end
+        prev = cur;
+    end
+    ok = false;
+end
+
+function idle = serverIdle(ur)
+%SERVERIDLE  True unless the server script is still executing a motion command.
+    try
+        [~, state] = readMotionStatus(ur);
+        idle = ~strcmpi(state, 'Executing');
+    catch
+        idle = false;
+    end
+end
+
+% -------------------------------------------------------------------------
 function grip(ur, action, settleTime)
 %GRIP  Robotiq gripper via the URCap; see Lab 4 for the digital-output note.
     actuateGripper(ur, action);
+    waitForGripper(ur);
     pause(settleTime);
+end
+
+% -------------------------------------------------------------------------
+function waitForGripper(ur)
+%WAITFORGRIPPER  Wait for the server script to finish the gripper action.
+%   2026-11-04 hardware: actuateGripper returns at once, but the server script blocks
+%   inside the gripper call for about a second and drops any motion command sent
+%   meanwhile (the lift after the first pick never started). With
+%   URServerScript_Robotiq2F_PolyScopeX.script the gripper action is reported through
+%   the same done flag as the moves, so wait for it to start, then to finish. With a
+%   server script that does not report it, this is a plain 1.3 s wait.
+    t0 = tic; started = false;
+    while toc(t0) < 1.0 && ~started
+        pause(0.05); started = ~serverIdle(ur);
+    end
+    t0 = tic;
+    while toc(t0) < 10 && ~serverIdle(ur)
+        pause(0.05);
+    end
+    pause(0.3);
 end
 
 % -------------------------------------------------------------------------
