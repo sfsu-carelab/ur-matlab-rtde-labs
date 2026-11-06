@@ -4,3 +4,12 @@
 ~$*.docx
 slprj/
 gemini_api_key.txt
+
+# Kept on the lab PC and in Box, never on GitHub (old manual revisions, answer key, QArm material)
+archive/
+*_Rev[0-9]*.docx
+*_Rev[0-9]*.pdf
+instructor/UR_FK_Lab_KEY.m
+instructor/test_all_models.m
+QArm*/
+calibration_results.txt

@@ -6,12 +6,16 @@ COSE-SEC414-17 (2026-11-04 afternoon, two USB-C ports, plugged into the robot). 
 file fully, then read the three handoff notes files listed under "Current state", before
 touching anything.
 
-THE WORKING FOLDER IS `C:\Users\924414657\2026 Thesis\Labs` (Box layout). On 2026-11-04 it was
-consolidated from the Box download (newer manuals, surveys, IP 192.168.1.10) plus the GitHub
-clone (newer code: CobotName fix, USB Webcams capture, smoke test, Robotiq server script,
-test-logs). The clone and the zips were deleted afterwards. GitHub-only files (README.md,
-LICENSE, CITATION.cff, .gitignore, resources/camera-setup CAD) are parked in
-`C:\Users\924414657\2026 Thesis\github-mirror-extras` for the next push.
+THE WORKING FOLDER IS the git clone `C:\Users\924414657\2026 Thesis\ur-matlab-rtde-labs`
+(origin = the GitHub mirror below, branch main). It is the ONLY copy on the lab PC; the old
+Box-layout `Labs` folder was retired on 2026-11-06. Sync flow agreed with Ryan that day:
+push from the lab PC to GitHub; Ryan pulls on his Mac; Ryan rsyncs the working tree (minus
+`.git`) into Box from the Mac. GitHub, this clone and Box share one folder layout.
+
+Git on this PC: portable MinGit at `C:\Users\924414657\AppData\Local\Programs\MinGit\cmd` and
+gh at `C:\Users\924414657\AppData\Local\Programs\gh\bin`, both on the user PATH (a shell
+opened before 2026-11-06 needs the full paths). gh is logged in as ryantcullen over HTTPS and
+is git's credential helper, so `git push` just works.
 
 ## What this is
 Six teaching labs for a UR e-series cobot (UR3e in the lab) driven from MATLAB over RTDE,
@@ -19,34 +23,36 @@ for Ryan's SFSU MSME thesis and an ASEE 2026 paper. Students run the `.m` script
 MATLAB desktop; the manuals are the `.docx` files in each lab folder. Public mirror:
 https://github.com/sfsu-carelab/ur-matlab-rtde-labs
 
-Two folder layouts exist and the smoke test finds either:
-- Box layout (this folder): `Lab 03 - Forward Kinematics/`, `Lab 05 - .../Code/`,
-  `Lab 06 - .../Code/`, `Instructor - Hardware Validation/`.
-- GitHub layout: `labs/lab3-forward-kinematics/`, `labs/lab5-vision-guided-pick/`,
-  `labs/lab6-language-directed-pick/`, `instructor/hardware-validation/`.
-The GitHub mirror deliberately omits the Lab 3 answer key (`instructor/UR_FK_Lab_KEY.m`),
-the `archive/` folders and the Quanser QArm material inside the Lab 06 folder. Never push those.
+One folder layout: `labs/lab1-teach-pendant-and-safety/` ... `labs/lab6-language-directed-pick/`,
+`instructor/hardware-validation/`, `assessment/`, `resources/`. (The smoke test still also
+recognises the old Box names, which is harmless.) Some material lives in the working tree on
+the lab PC and in Box but is gitignored so it never reaches the public mirror: every
+`archive/` folder, `*_Rev<n>.docx` and `.pdf` old manual revisions, the Lab 3 answer key
+`instructor/UR_FK_Lab_KEY.m` and `instructor/test_all_models.m`, the Quanser
+`QArm Lab 11 - Visual Servoing/` folder inside lab6, `gemini_api_key.txt` and
+`calibration_results.txt`. Ignored files do not travel through git: they were copied to Box
+once by hand and only change if someone edits them. Never force-add them.
 
 | Lab | Folder | Code | Status (2026-11-04) |
 |---|---|---|---|
-| 1 Teach pendant and safety | `Lab 01 - ...` | none | taught before |
-| 2 MATLAB + RTDE setup | `Lab 02 - ...` | snippet in the manual | connect/read verified on hardware 2026-10-28 |
-| 3 Forward kinematics (PoE) | `Lab 03 - ...` | `UR_FK_Lab.m` + helpers, key in `instructor/` | verified on hardware: FK matches the reported pose to 0.0 mm, no base yaw |
-| 4 Pick and place | `Lab 04 - ...` | `UR_PickPlace_Lab.m` | joint move and Cartesian move verified; gripper needs the Robotiq server script; full script not yet run |
-| 5 Vision-guided pick | `Lab 05 - .../Code` | `UR_VisionPick_Lab.m` + helpers | camera path switched to USB Webcams package; NO frame captured yet (USB 2 cable); calibration not done |
-| 6 Language-directed pick (VLM) | `Lab 06 - .../Code` | `UR_VLA_Lab.m` + Gemini client | 11 offline tests pass; live API never called (no key yet); never run on hardware; manual is an outline |
+| 1 Teach pendant and safety | `labs/lab1-teach-pendant-and-safety` | none | taught before |
+| 2 MATLAB + RTDE setup | `labs/lab2-matlab-rtde-setup` | snippet in the manual | connect/read verified on hardware 2026-10-28 |
+| 3 Forward kinematics (PoE) | `labs/lab3-forward-kinematics` | `UR_FK_Lab.m` + helpers, key in `instructor/` (ignored) | verified on hardware: FK matches the reported pose to 0.0 mm, no base yaw |
+| 4 Pick and place | `labs/lab4-pick-and-place` | `UR_PickPlace_Lab.m` | joint move and Cartesian move verified; gripper needs the Robotiq server script; full script not yet run |
+| 5 Vision-guided pick | `labs/lab5-vision-guided-pick` | `UR_VisionPick_Lab.m` + helpers | camera path switched to USB Webcams package; NO frame captured yet (USB 2 cable); calibration not done |
+| 6 Language-directed pick (VLM) | `labs/lab6-language-directed-pick` | `UR_VLA_Lab.m` + Gemini client | 11 offline tests pass; live API never called (no key yet); never run on hardware; manual is an outline |
 
-Instructor tooling: `Instructor - Hardware Validation/UR_HardwareSmokeTest.m` plus the
+Instructor tooling: `instructor/hardware-validation/UR_HardwareSmokeTest.m` plus the
 `RUNBOOK - End-to-end hardware test, Labs 2-6.md` in the same folder.
 
 ## Current state and next steps
 Read, in order:
-1. `Instructor - Hardware Validation/test-logs/2026-10-28_183517/HANDOFF-NOTES.md`
+1. `instructor/hardware-validation/test-logs/2026-10-28_183517/HANDOFF-NOTES.md`
    (CobotName fix, readCartesianPose is the MODEL's FK not the pendant TCP, gripper stubs in
    the stock URServerScript, speed slider vs EndTime timeout).
-2. `Instructor - Hardware Validation/test-logs/2026-11-04_session/HANDOFF-NOTES.md`
+2. `instructor/hardware-validation/test-logs/2026-11-04_session/HANDOFF-NOTES.md`
    (camera decision and the USB 2 cable finding, what is still open).
-3. `Instructor - Hardware Validation/test-logs/2026-11-04_PC17_session/HANDOFF-NOTES.md`
+3. `instructor/hardware-validation/test-logs/2026-11-04_PC17_session/HANDOFF-NOTES.md`
    (PC 17: network OK, smoke test layout fix, folder consolidation, webcam package install
    state, Lab 5 progress).
 
@@ -69,7 +75,7 @@ Next PC checklist, before anything else:
 - Camera on a USB 3 cable/port: `webcamlist` shows "...435i RGB", `snapshot` returns a frame.
   On a USB 2 cable the camera enumerates, lists modes, and never delivers a frame (both in
   MATLAB and in Windows' own capture path). That was the 2026-11-04 blocker.
-- Gemini key as the only line of `Lab 06 - .../Code/gemini_api_key.txt`, then
+- Gemini key as the only line of `labs/lab6-language-directed-pick/gemini_api_key.txt`, then
   `test_vlm_offline` Part 2 from batch.
 - Pendant: `URServerScript_Robotiq2F_PolyScopeX.script` (gripper calls enabled, PolyScope X
   names rq_close_and_wait / rq_open_and_wait) loaded and playing. The plain
@@ -99,18 +105,18 @@ Next PC checklist, before anything else:
    go in as the smallest change that works, with a one-line comment saying what was observed,
    and the same note in the handoff file. No silent fallbacks or workarounds in student code:
    if a lab needs a package, the lab requires it openly.
-5. **Never put the Gemini API key in any file other than `Lab 06 - .../Code/gemini_api_key.txt`**,
+5. **Never put the Gemini API key in any file other than `labs/lab6-language-directed-pick/gemini_api_key.txt`**,
    and never upload that file anywhere (it is in the mirror's `.gitignore`).
    `setenv('GEMINI_API_KEY', ...)` in MATLAB is the alternative.
 6. No em dashes in any text you write for the manuals or questionnaires (Ryan's rule).
-7. Git: never add a Co-Authored-By line. The lab PCs have no git; portable Git for Windows
-   (user folder, no admin) or GitHub Desktop are the options. The 2026-11-04 session staged
-   the push from a zip of the mirror because of that.
+7. Git: never add a Co-Authored-By line. Commit as ryantcullen (already in `.git/config`).
+   PC 17 has MinGit and gh on the user PATH (see top of this file); other lab PCs may not,
+   in which case install the same way (user folder, no admin) rather than staging zips.
 
 ## Facts you need
 - Robot: UR3e, PolyScope X, RTDE enabled, `URServerScript` loaded as a Script Code node and
   PLAYING (green) before MATLAB can command it (Lab 2 manual). The stock script's gripper
-  functions are stubs; use `Instructor - Hardware Validation/URServerScript_Robotiq2F_PolyScopeX.script`
+  functions are stubs; use `instructor/hardware-validation/URServerScript_Robotiq2F_PolyScopeX.script`
   (the non-PolyScopeX file keeps the PolyScope 5 names and fails to compile on this robot).
   Internet (campus wired NIC or Wi-Fi) and the robot link must be up at the same time for Lab 6.
 - Lab 3 conventions: PoE screw model with `jointSignConvention() = [1 -1 -1 -1 -1 -1]`,
@@ -136,11 +142,11 @@ Next PC checklist, before anything else:
   Quanser QUARC `startup.m` error block. Python is NOT installed on the lab PCs.
 
 ## Evidence and handoff
-Everything goes in `Instructor - Hardware Validation/test-logs/<timestamp>/`: the smoke test
+Everything goes in `instructor/hardware-validation/test-logs/<timestamp>/`: the smoke test
 writes `smoketest.log`, `results.json`, `camera.png`, `vlm_point.png` there on its own. You add
 `HANDOFF-NOTES.md` (what was run, what passed, every error verbatim, every code change with
 file, line and why, the Lab 5 numbers, Lab 6 instructions tried and what the model returned,
 open questions) and `lab5_values.txt`. Changed `.m` files stay in place in their lab folders.
-At the end of a session: push code, instructor tooling and test-logs to the GitHub mirror
-(GitHub layout above), and remind Ryan to upload the folder back to Box through the browser.
-Keep the Box folder names exactly as they are; the Mac side depends on them.
+At the end of a session: commit and `git push origin main` from the clone, then remind Ryan
+to pull on his Mac and rsync the working tree into Box. Never commit the ignored material
+listed under "What this is".
