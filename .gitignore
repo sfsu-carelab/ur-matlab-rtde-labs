@@ -9,7 +9,7 @@ gemini_api_key.txt
 archive/
 *_Rev[0-9]*.docx
 *_Rev[0-9]*.pdf
-instructor/UR_FK_Lab_KEY.m
-instructor/test_all_models.m
+**/instructor/UR_FK_Lab_KEY.m
+**/instructor/test_all_models.m
 QArm*/
 calibration_results.txt
