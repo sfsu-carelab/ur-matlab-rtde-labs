@@ -45,7 +45,8 @@ box (see section 3).
 | 6 | [-45 30 -30 -30 -60 90] | [-45 -120 30 -60 60 -90] | [-0.0205 -0.2300 0.6898] | [-0.0210 -0.2299 0.6896] | 0.59 | 0.251 | 152626 |
 
 Measured joints matched the commanded pendant angles to 0.000 deg at every pose. Every
-joint was exercised. Worst: 1.19 mm, 0.38 deg.
+joint was exercised. Worst: 1.19 mm, 0.38 deg. Ryan repeated poses 4 to 6 at 15:29
+(folder 152939): identical to 0.01 mm and 0.002 deg, so the numbers are repeatable.
 
 Interpretation of the residual: it is about 1 mm and 0.3 deg at every pose, including
 home, so it is not a sign or offset error. It is the robot's factory kinematic calibration
