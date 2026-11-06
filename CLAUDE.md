@@ -28,7 +28,8 @@ One folder layout: `labs/lab1-teach-pendant-and-safety/` ... `labs/lab6-language
 recognises the old Box names, which is harmless.) Some material lives in the working tree on
 the lab PC and in Box but is gitignored so it never reaches the public mirror: every
 `archive/` folder, `*_Rev<n>.docx` and `.pdf` old manual revisions, the Lab 3 answer key
-`instructor/UR_FK_Lab_KEY.m` and `instructor/test_all_models.m`, the Quanser
+`UR_FK_Lab_KEY.m` and `test_all_models.m` inside any `instructor/` folder (on the lab PC
+the root `instructor/`), the Quanser
 `QArm Lab 11 - Visual Servoing/` folder inside lab6, `gemini_api_key.txt` and
 `calibration_results.txt`. Ignored files do not travel through git: they were copied to Box
 once by hand and only change if someone edits them. Never force-add them.
