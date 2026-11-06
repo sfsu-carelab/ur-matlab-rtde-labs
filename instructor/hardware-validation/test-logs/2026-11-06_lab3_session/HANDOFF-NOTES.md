@@ -93,6 +93,21 @@ in Word: Ryan to open it once on the Mac). Full extracted text: `manual_rev2_tex
 Pendant screen names ("Move screen, joint panel / TCP panel, feature Base",
 "Installation section (TCP)") are written generically: RYAN TO CONFIRM against PolyScope X.
 
+Re-test of Rev2 with the weakest simulated student (persona C): derived all six screw axes
+and M from Figure 1 and the text with NO guesses, ALL TESTS PASS on the first run (and on
+UR5e). It found one real bug in my Rev2 text: Task 4 wrote `p_robot = [X Y Z] / 1000` (a
+row) while `p_fk = T(1:3,4)` is a column, so `norm(p_fk - p_robot)` silently expanded to
+3x3 and reported 1162 mm for a pose that was 0.47 mm off. Fixed in the second build:
+`p_robot = [X; Y; Z] / 1000`, plus a sentence saying both must be 3x1 and that an answer
+near 1000 mm means a row/column mix-up. Also from that pass: Figure 1 legend now covers
+joint 6 (drawn off the base axis), the R paragraph warns that x_tool is marked "out of
+page" while base +x is "into page", Task 1 says symbolic entries are fine in Tables 2
+and 3, and Part 2 writes S_i = [wx, wy, wz, vx, vy, vz] instead of numbered subscripts.
+The student also noted that `run_self_tests.m` (in the student folder) contains Rhome and
+the comment "joints 2, 3, 4 and 6 turn about +y, joint 5 about -z" in plain text, i.e.
+the answer for R and every omega. NOT changed (student code, needs Ryan's call): options
+are to leave it, to ship it as a p-file, or to move the expected values elsewhere.
+
 ## 3. Safety event and room geometry
 
 Run 2 (folder 151343) was e-stopped by Ryan at pose 4 of the first plan,

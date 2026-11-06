@@ -1,13 +1,19 @@
 ﻿# Build "Lab 3 - Forward Kinematics.docx" Rev2 from Rev1 by editing document.xml directly.
-# Run:  powershell -NoProfile -ExecutionPolicy Bypass -File build_rev2.ps1
+# Run:  powershell -NoProfile -ExecutionPolicy Bypass -File build_manual_rev2.ps1
+# Source is the Rev1 manual (kept in the ignored archive/ folder on the lab PC and in Box).
+# Output lands in %TEMP%\lab3rev2build; copy it over labs\lab3-forward-kinematics\Lab 3 - Forward Kinematics.docx.
+# History: first build 2026-11-06 evening; second build the same evening added the column-vector fix in
+# Task 4 (a simulated student found that a 1x3 p_robot made norm() return about 1 m), the x_tool clause,
+# the symbolic-tables note and the [wx,wy,wz,vx,vy,vz] notation.
 $ErrorActionPreference = 'Stop'
-$repo   = 'C:\Users\924414657\2026 Thesis\ur-matlab-rtde-labs'
+$repo   = (Resolve-Path (Join-Path $PSScriptRoot '..\..\..\..')).Path
 $lab3   = Join-Path $repo 'labs\lab3-forward-kinematics'
-$srcDoc = Join-Path $lab3 'Lab 3 - Forward Kinematics.docx'
-$scr    = 'C:\Users\924414~1\AppData\Local\Temp\claude\b6d4761755c08687\a6c64996-18aa-463a-bbc6-09b441da97f1\scratchpad'
-$work   = Join-Path $scr 'lab3docx\build'
-$newFig = Join-Path $scr 'lab3fig\figure1_poe.png'
+$srcDoc = Join-Path $lab3 'archive\Lab 3 - Forward Kinematics_Rev1.docx'
+$work   = Join-Path $env:TEMP 'lab3rev2build'
+$newFig = Join-Path $repo 'resources\lab3-figure1\figure1_poe.png'
 $outDoc = Join-Path $work 'Lab 3 - Forward Kinematics.docx'
+if (-not (Test-Path $srcDoc)) { throw "Rev1 source not found: $srcDoc" }
+if (-not (Test-Path $newFig)) { throw "Figure 1 png not found: $newFig (run resources\lab3-figure1\make_lab3_figure1.m)" }
 
 if (Test-Path $work) { Remove-Item $work -Recurse -Force }
 New-Item -ItemType Directory -Force $work | Out-Null
@@ -137,8 +143,8 @@ ReplacePara 'Notice that the angles are not all zero.*' (Para ('Notice that the 
 ReplacePara 'Convert from screw angles to hardware angles*' (Para ('Convert the screw angles to pendant angles with the formula above or with the helper `theta_hw = screw2hw(theta_screw, theta_home)`, where theta_home is the six numbers you recorded in Task 3 (all angles in degrees). For Pose 2, `screw2hw([0 -45 45 0 0 0], [0 -90 0 -90 0 0])` returns [0, −45, −45, −90, 0, 0].') 'ListNumber')
 ReplacePara 'Command the robot to the resultant hardware angles*' (Para ('Check that the pose is clear of walls, the table and the camera (Pose 2 leans the upper arm 45 degrees toward −x), then command the robot to the pendant angles: Move screen, joint panel, type the six values and let the move finish. Speed slider at 25 percent, e-stop in hand.') 'ListNumber')
 ReplacePara 'In MATLAB, run fk_space() with the original screw angles*' (Para ('In MATLAB, with S_list and M in the workspace from Part 3, run the FK on the ORIGINAL screw angles, not the pendant angles: `T = fk_space(S_list, M, [0 -45 45 0 0 0])`. The position is the last column, `p_fk = T(1:3,4)`, in metres. For Pose 2 on a UR3e this is (−0.172, −0.223, 0.623) m.') 'ListNumber')
-ReplacePara 'Record the FK output and the TCP position*' (Para ('Read the TCP position from the pendant (Move screen, TCP panel, with the feature set to Base) and convert millimetres to metres: `p_robot = [X Y Z] / 1000`. Record both positions in Table 6.') 'ListNumber')
-ReplacePara 'Compute the position error between the two*' (Para ('Compute the error in millimetres: `err_mm = norm(p_fk - p_robot) * 1000`. Under 3 mm is excellent and a few millimetres is success (the robot''s own calibration differs slightly from the nominal link lengths). A large, roughly constant offset at every pose usually means a TCP mismatch, see the warning at the start of Part 4. The right size with the wrong sign in one coordinate means a sign error in one ω.') 'ListNumber')
+ReplacePara 'Record the FK output and the TCP position*' (Para ('Read the TCP position from the pendant (Move screen, TCP panel, with the feature set to Base) and convert millimetres to metres as a COLUMN vector, the same shape as p_fk: `p_robot = [X; Y; Z] / 1000` (note the semicolons). Record both positions in Table 6.') 'ListNumber')
+ReplacePara 'Compute the position error between the two*' (Para ('Compute the error in millimetres: `err_mm = norm(p_fk - p_robot) * 1000`. Both vectors must be 3x1 columns; if the result is around 1000 mm, one of them is a row and MATLAB silently made a 3x3 matrix. Under 3 mm is excellent and a few millimetres is success (the robot''s own calibration differs slightly from the nominal link lengths). A large, roughly constant offset at every pose usually means a TCP mismatch, see the warning at the start of Part 4. The right size with the wrong sign in one coordinate means a sign error in one ω.') 'ListNumber')
 
 # ---------------------------------------------------------------- E10 Q1, Q2 without the answers
 ReplacePara 'Q1.*' (Para ('**Q1.  **Four of the six joints share the same rotation axis direction ω. Which four, and what does that tell you about the robot''s kinematic structure?'))
@@ -153,6 +159,25 @@ $em = [string][char]0x2014
 $nEm = ([regex]::Matches($xml, $em)).Count
 $xml = $xml.Replace(" $em ", ' - ').Replace($em, ' - ')
 $log += "em dashes replaced: $nEm"
+
+# ---------------------------------------------------------------- E13 second-pass fixes (simulated student on Rev2)
+# x_tool sign clause in the R paragraph
+$old = 'Determine x_tool and y_tool from the figure the same way, then check your result:'
+if ($xml.IndexOf($old) -lt 0) { throw 'R paragraph sentence not found' }
+$xml = $xml.Replace($old, 'Determine x_tool and y_tool from the figure the same way. Take care with x_tool: Figure 1 marks it as pointing OUT of the page, while the base +x points INTO the page. Then check your result:')
+$log += 'R paragraph: x_tool sign clause'
+# Tables 2 and 3 may be symbolic
+$old = ' for each joint. Fill in the table below.</w:t>'
+if ($xml.IndexOf($old) -lt 0) { throw 'Task 1 sentence not found' }
+$xml = $xml.Replace($old, ' for each joint. Fill in the table below. Symbolic entries in L1 to L6 are fine in Tables 2 and 3 (that is the form you will type into MATLAB); numbers are optional.</w:t>')
+$log += 'Task 1: symbolic entries note'
+# S_i = [w1,w2,w3,v1,v2,v3] -> [wx,wy,wz,vx,vy,vz] (component subscripts, not joint indices)
+$oldS = '<m:sSub><m:e><m:r><m:t>ω</m:t></m:r></m:e><m:sub><m:r><m:t>1</m:t></m:r></m:sub></m:sSub><m:r><m:t>,</m:t></m:r><m:sSub><m:e><m:r><m:t>ω</m:t></m:r></m:e><m:sub><m:r><m:t>2</m:t></m:r></m:sub></m:sSub><m:r><m:t>,</m:t></m:r><m:sSub><m:e><m:r><m:t>ω</m:t></m:r></m:e><m:sub><m:r><m:t>3</m:t></m:r></m:sub></m:sSub><m:r><m:t>,</m:t></m:r><m:sSub><m:e><m:r><m:t>v</m:t></m:r></m:e><m:sub><m:r><m:t>1</m:t></m:r></m:sub></m:sSub><m:r><m:t>,</m:t></m:r><m:sSub><m:e><m:r><m:t>v</m:t></m:r></m:e><m:sub><m:r><m:t>2</m:t></m:r></m:sub></m:sSub><m:r><m:t>,</m:t></m:r><m:sSub><m:e><m:r><m:t>v</m:t></m:r></m:e><m:sub><m:r><m:t>3</m:t></m:r></m:sub></m:sSub>'
+if ($xml.IndexOf($oldS) -lt 0) { throw 'S_i component list not found' }
+if ($xml.IndexOf($oldS) -ne $xml.LastIndexOf($oldS)) { throw 'S_i component list not unique' }
+$newS = $oldS.Replace('<m:t>1</m:t>', '<m:t>x</m:t>').Replace('<m:t>2</m:t>', '<m:t>y</m:t>').Replace('<m:t>3</m:t>', '<m:t>z</m:t>')
+$xml = $xml.Replace($oldS, $newS)
+$log += 'Part 2: S_i components written x, y, z'
 
 # ---------------------------------------------------------------- write, validate, zip
 [IO.File]::WriteAllText($docPath, $xml, $utf8)
