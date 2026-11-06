@@ -1,0 +1,11 @@
+Lab 3 Task 4 hardware verification - 2026-11-06 15:13:47 - UR3e at 192.168.1.10
+FK = fk_space(S_list, M, screw angles) with the instructor S_list/M; robot TCP from the controller (port 30002, base frame).
+EndTime = 6 s per move. Active TCP offset: [[0 0 0]] m
+
+Pose | screw angles (deg)       | pendant angles (deg)     | measured joints (deg)      | FK position (m)            | robot TCP (m)              | err mm   | ori deg  | jnt deg 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+1    | [0 0 0 0 0 0]            | [0 -90 0 -90 0 0]        | [0 -90 0 -90 0 0]          | [ 0.0000 -0.2232  0.6940] | [-0.0006 -0.2237  0.6934]  |     1.03 |    0.349 |    0.000
+2    | [0 -45 45 0 0 0]         | [0 -45 -45 -90 0 0]      | [0 -45 -45 -90 0 0]        | [-0.1722 -0.2232  0.6226] | [-0.1727 -0.2239  0.6219]  |     1.14 |    0.349 |    0.000
+3    | [30 -30 60 -30 0 0]      | [30 -60 -60 -60 0 0]     | [30 -60 -60 -60 0 0]       | [ 0.0984 -0.2008  0.6328] | [ 0.0983 -0.2016  0.6323]  |     0.92 |    0.303 |    0.000
+
+ABORTED at pose 4: Robot did not reach [[-45 -30 -90 -60 -45 0]] deg within 60 s. Server script playing? Slider near zero? Protective stop?

@@ -1,0 +1,8 @@
+Lab 3 Task 4 hardware verification - 2026-11-06 15:29:43 - UR3e at 192.168.1.10
+FK = fk_space(S_list, M, screw angles) with the instructor S_list/M; robot TCP from the controller (port 30002, base frame).
+EndTime = 6 s per move. Active TCP offset: [[0 0 0]] m
+
+Pose | screw angles (deg)       | pendant angles (deg)     | measured joints (deg)      | FK position (m)            | robot TCP (m)              | err mm   | ori deg  | jnt deg 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+1    | [-30 30 -30 30 0 0]      | [-30 -120 30 -120 0 0]   | [-30 -120 30 -120 0 0]     | [ 0.0308 -0.2755  0.6499] | [ 0.0298 -0.2754  0.6494]  |     1.19 |    0.376 |    0.000
+2    | [-20 20 20 -40 60 0]     | [-20 -110 -20 -50 -60 0] | [-20 -110 -20 -50 -60 0]   | [ 0.0715 -0.2145  0.6294] | [ 0.0709 -0.2146  0.6293]  |     0.63 |    0.274 |    0.000

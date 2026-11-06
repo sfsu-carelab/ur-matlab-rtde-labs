@@ -1,0 +1,133 @@
+{Dot indexing is not supported for variables of this type.
+
+Error in quarc_tip_of_the_day
+
+Error in quarc_tip_of_the_day
+
+Error in gui_mainfcn (line 264)
+        feval(gui_State.gui_OutputFcn, gui_hFigure, [], gui_Handles);
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error in quarc_tip_of_the_day
+
+Error in startup
+} 
+
+  Robot model: UR3e
+  d1=0.15185  a2=0.24355  a3=0.21320  d4=0.13105  d5=0.08535  d6=0.09210  (m)
+
+============================================================
+  UR3e Forward Kinematics - Self Tests
+============================================================
+
+TEST 1: Home (all zeros)
+  Expected:  [0.00000, -0.22315, 0.69395]
+  Computed:  [0.00000, -0.22315, 0.69395]
+  Error:     0.00e+00 m  PASS
+
+TEST 2: Shoulder +90 deg
+  Expected:  [0.54210, -0.22315, 0.15185]
+  Computed:  [0.54210, -0.22315, 0.15185]
+  Error:     5.55e-17 m  PASS
+
+TEST 3: Base +90 deg
+  Expected:  [0.22315, 0.00000, 0.69395]
+  Computed:  [0.22315, -0.00000, 0.69395]
+  Error:     2.48e-17 m  PASS
+
+TEST 4: Shoulder +45, Elbow -90
+  Expected:  [-0.03889, -0.22315, 0.53517]
+  Computed:  [-0.03889, -0.22315, 0.53517]
+  Error:     1.52e-16 m  PASS
+
+TEST 5: Wrist joints and general pose
+  (a) Wrist 1 (theta4 = +90): expected [0.08535, -0.22315, 0.60860], got [0.08535, -0.22315, 0.60860], err 4.16e-17  PASS
+  (b) Wrist 2 (theta5 = +90): expected [-0.09210, -0.13105, 0.69395], got [-0.09210, -0.13105, 0.69395], err 1.39e-17  PASS
+  (c) Wrist 3 (theta6 = +90): position unchanged: expected [0.00000, -0.22315, 0.69395], got [0.00000, -0.22315, 0.69395], err 0.00e+00  PASS
+  (d) General pose [30 45 -60 45 -30 60]: orientation error 7.15e-11  PASS
+  (e) Reach: 0.29031 m (max 0.76525 m)  PASS
+
+============================================================
+  ALL TESTS PASS - your S_list and M are consistent with the
+  robot's geometry on every joint.
+============================================================
+
+S_list and M saved to the base workspace.
+You can now call:  T = fk_space(S_list, M, [t1 t2 t3 t4 t5 t6])
+and convert to pendant angles with:  theta_hw = screw2hw(theta_screw, theta_home)
+
+
+Model      max |PoE-DH| home TCP z (m)
+----------------------------------------
+UR3e          8.377e-16         0.6940
+UR5e          9.598e-16         1.0794
+UR7e          9.666e-16         1.0794
+UR10e         1.129e-15         1.4848
+UR12e         1.275e-15         1.4848
+UR16e         9.876e-16         1.1389
+UR20          1.166e-15         1.9863
+UR30          1.287e-15         1.5363
+----------------------------------------
+worst pose error across all models: 1.287e-15 m
+screw2hw/hw2screw round-trip error: 0.000e+00 deg
+ALL MODELS PASS
+
+--- checkcode ---
+UR_FK_Lab.m: clean
+fk_space.m: clean
+run_self_tests.m: clean
+ur_link_lengths.m: clean
+screw2hw.m: clean
+hw2screw.m: clean
+jointSignConvention.m: clean
+--- student file as shipped (NaN) ---
+
+  Robot model: UR3e
+  d1=0.15185  a2=0.24355  a3=0.21320  d4=0.13105  d5=0.08535  d6=0.09210  (m)
+
+  S_list and/or M still contain NaN - fill in PART 2 first.
+
+--- wrong-model demo ---
+
+  Robot model: UR5e
+  d1=0.16250  a2=0.42500  a3=0.39220  d4=0.13330  d5=0.09970  d6=0.09960  (m)
+
+============================================================
+  UR5e Forward Kinematics - Self Tests
+============================================================
+
+TEST 1: Home (all zeros)
+  Expected:  [0.00000, -0.23290, 1.07940]
+  Computed:  [0.00000, -0.23290, 1.07940]
+  Error:     0.00e+00 m  PASS
+
+TEST 2: Shoulder +90 deg
+  Expected:  [0.91690, -0.23290, 0.16250]
+  Computed:  [0.91690, -0.23290, 0.16250]
+  Error:     8.33e-17 m  PASS
+
+TEST 3: Base +90 deg
+  Expected:  [0.23290, 0.00000, 1.07940]
+  Computed:  [0.23290, -0.00000, 1.07940]
+  Error:     2.59e-17 m  PASS
+
+TEST 4: Shoulder +45, Elbow -90
+  Expected:  [-0.04731, -0.23290, 0.81085]
+  Computed:  [-0.04731, -0.23290, 0.81085]
+  Error:     2.78e-17 m  PASS
+
+TEST 5: Wrist joints and general pose
+  (a) Wrist 1 (theta4 = +90): expected [0.09970, -0.23290, 0.97970], got [0.09970, -0.23290, 0.97970], err 9.71e-17  PASS
+  (b) Wrist 2 (theta5 = +90): expected [-0.09960, -0.13330, 1.07940], got [-0.09960, -0.13330, 1.07940], err 0.00e+00  PASS
+  (c) Wrist 3 (theta6 = +90): position unchanged: expected [0.00000, -0.23290, 1.07940], got [0.00000, -0.23290, 1.07940], err 0.00e+00  PASS
+  (d) General pose [30 45 -60 45 -30 60]: orientation error 7.15e-11  PASS
+  (e) Reach: 0.36533 m (max 1.14980 m)  PASS
+
+============================================================
+  ALL TESTS PASS - your S_list and M are consistent with the
+  robot's geometry on every joint.
+============================================================
+
+S_list and M saved to the base workspace.
+You can now call:  T = fk_space(S_list, M, [t1 t2 t3 t4 t5 t6])
+and convert to pendant angles with:  theta_hw = screw2hw(theta_screw, theta_home)
+

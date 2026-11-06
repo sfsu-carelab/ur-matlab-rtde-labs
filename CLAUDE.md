@@ -38,7 +38,7 @@ once by hand and only change if someone edits them. Never force-add them.
 |---|---|---|---|
 | 1 Teach pendant and safety | `labs/lab1-teach-pendant-and-safety` | none | taught before |
 | 2 MATLAB + RTDE setup | `labs/lab2-matlab-rtde-setup` | snippet in the manual | connect/read verified on hardware 2026-10-28 |
-| 3 Forward kinematics (PoE) | `labs/lab3-forward-kinematics` | `UR_FK_Lab.m` + helpers, key in `instructor/` (ignored) | verified on hardware: FK matches the reported pose to 0.0 mm, no base yaw |
+| 3 Forward kinematics (PoE) | `labs/lab3-forward-kinematics` | `UR_FK_Lab.m` + helpers, key in `instructor/` (ignored) | verified on hardware 2026-11-06: FK vs the robot's own TCP within 1.2 mm / 0.38 deg at 6 Table 6 poses (`UR_FK_Lab3_Verify`); manual review found a Figure 1 sign trap, fixes pending (see test-logs/2026-11-06_lab3_session) |
 | 4 Pick and place | `labs/lab4-pick-and-place` | `UR_PickPlace_Lab.m` | joint move and Cartesian move verified; gripper needs the Robotiq server script; full script not yet run |
 | 5 Vision-guided pick | `labs/lab5-vision-guided-pick` | `UR_VisionPick_Lab.m` + helpers | camera path switched to USB Webcams package; NO frame captured yet (USB 2 cable); calibration not done |
 | 6 Language-directed pick (VLM) | `labs/lab6-language-directed-pick` | `UR_VLA_Lab.m` + Gemini client | 11 offline tests pass; live API never called (no key yet); never run on hardware; manual is an outline |
@@ -56,6 +56,10 @@ Read, in order:
 3. `instructor/hardware-validation/test-logs/2026-11-04_PC17_session/HANDOFF-NOTES.md`
    (PC 17: network OK, smoke test layout fix, folder consolidation, webcam package install
    state, Lab 5 progress).
+4. `instructor/hardware-validation/test-logs/2026-11-06_lab3_session/HANDOFF-NOTES.md`
+   (Lab 3 verified on hardware at 6 poses, robot TCP read from port 30002, ROOM GEOMETRY
+   AND KEEP-OUT BOX after an e-stop, simulated-student review of the manual, proposed
+   fixes).
 
 Ryan's working order, agreed 2026-11-04: make Lab 5 work end to end on hardware, THEN update
 its manual; make Lab 6 work, THEN update its docs. No manual edits before the code runs.

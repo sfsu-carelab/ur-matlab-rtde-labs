@@ -1,0 +1,33 @@
+{Dot indexing is not supported for variables of this type.
+
+Error in quarc_tip_of_the_day
+
+Error in quarc_tip_of_the_day
+
+Error in gui_mainfcn (line 264)
+        feval(gui_State.gui_OutputFcn, gui_hFigure, [], gui_Handles);
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error in quarc_tip_of_the_day
+
+Error in startup
+} 
+
+=== Lab 3 live check, 2026-11-06 15:06:41 ===
+
+[30002] robot TCP pose (base frame):   X Y Z = [0.0928 -0.1316 0.5356] m   Rx Ry Rz = [2.0130 1.9948 0.3919] rad
+[30002] active TCP offset on pendant:  [0.0000 0.0000 0.0000] m   rot [0.0000 0.0000 0.0000]
+
+[RTDE] connected in 1.41 s
+[RTDE] joints (pendant deg):  [0.726, -71.161, -34.208, -142.106, 89.277, 180.773]
+[RTDE] readCartesianPose:     [1.5662, 0.0065, 2.7483, 0.0936, -0.131, 0.5356]
+
+[FK]   screw angles (deg):     [0.726, -18.839, 34.208, 52.106, -89.277, -180.773]
+[FK]   flange position (m):    [0.0936 -0.1310 0.5356]
+[FK]   ZYX Euler (rad):        [1.5662 0.0065 2.7483]
+[FK]   rotation vector (rad):  [2.0061 1.9994 0.3915]
+
+[CMP]  FK flange vs readCartesianPose (model vs model): 0.00 mm, Euler diff 2.07e-10 rad
+[CMP]  FK TCP (flange + pendant TCP offset) vs ROBOT TCP: 1.02 mm, orientation diff 0.338 deg
+[CMP]  FK flange vs ROBOT TCP ignoring the offset:         1.02 mm
+
+RESULT: PASS - Lab 3 FK matches the robot's own TCP readout.
