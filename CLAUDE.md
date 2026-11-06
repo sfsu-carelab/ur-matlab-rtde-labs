@@ -38,7 +38,7 @@ once by hand and only change if someone edits them. Never force-add them.
 |---|---|---|---|
 | 1 Teach pendant and safety | `labs/lab1-teach-pendant-and-safety` | none | taught before |
 | 2 MATLAB + RTDE setup | `labs/lab2-matlab-rtde-setup` | snippet in the manual | connect/read verified on hardware 2026-10-28 |
-| 3 Forward kinematics (PoE) | `labs/lab3-forward-kinematics` | `UR_FK_Lab.m` + helpers, key in `instructor/` (ignored) | verified on hardware 2026-11-06: FK vs the robot's own TCP within 1.2 mm / 0.38 deg at 6 Table 6 poses (`UR_FK_Lab3_Verify`); manual review found a Figure 1 sign trap, fixes pending (see test-logs/2026-11-06_lab3_session) |
+| 3 Forward kinematics (PoE) | `labs/lab3-forward-kinematics` | `UR_FK_Lab.m` + helpers, key in `instructor/` (ignored) | verified on hardware 2026-11-06: FK vs the robot's own TCP within 1.2 mm / 0.38 deg at 6 Table 6 poses (`UR_FK_Lab3_Verify`); manual at Rev2 (new Figure 1 in the lab's convention, full Part 4 walk-through), simulated students pass first run; Ryan to open the docx in Word once and confirm PolyScope X screen names (see test-logs/2026-11-06_lab3_session) |
 | 4 Pick and place | `labs/lab4-pick-and-place` | `UR_PickPlace_Lab.m` | joint move and Cartesian move verified; gripper needs the Robotiq server script; full script not yet run |
 | 5 Vision-guided pick | `labs/lab5-vision-guided-pick` | `UR_VisionPick_Lab.m` + helpers | camera path switched to USB Webcams package; NO frame captured yet (USB 2 cable); calibration not done |
 | 6 Language-directed pick (VLM) | `labs/lab6-language-directed-pick` | `UR_VLA_Lab.m` + Gemini client | 11 offline tests pass; live API never called (no key yet); never run on hardware; manual is an outline |
