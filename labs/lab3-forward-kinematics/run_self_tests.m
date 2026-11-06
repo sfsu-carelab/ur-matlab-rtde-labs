@@ -19,8 +19,11 @@ function run_self_tests(S_list, M, p)
     fprintf('============================================================\n\n');
 
     % TEST 1: home configuration - every exponential is the identity, so T == M.
+    % This is a consistency check of the chain, not a check of M itself: it passes
+    % for whatever M was typed. M's position is checked by tests 2 and 3 and its
+    % rotation by test 5(d).
     T1   = fk_space(S_list, M, [0 0 0 0 0 0]);
-    fails = fails + report(1, 'Home (all zeros)', M(1:3,4), T1(1:3,4), tol);
+    fails = fails + report(1, 'Home (all zeros): T must equal the M you typed', M(1:3,4), T1(1:3,4), tol);
 
     % TEST 2: shoulder +90 deg - arm swings down to horizontal along +x.
     T2   = fk_space(S_list, M, [0 90 0 0 0 0]);
@@ -56,11 +59,15 @@ function run_self_tests(S_list, M, p)
     fc   = subreport('  (c) Wrist 3 (theta6 = +90): position unchanged', M(1:3,4), Tc(1:3,4), tol);
 
     %  (d) general pose: check the ORIENTATION. Rotations do not depend on
-    %      the link lengths, so this matrix is the same for every UR model.
+    %      the link lengths, so the expected matrix is the same for every UR
+    %      model. It is built here from the lab's axis directions directly:
+    %      joints 2, 3, 4 and 6 turn about +y, joint 5 about -z, joint 1 about
+    %      +z, and the tool frame at home is the rotation part of the key M.
+    %      (2026-11-06: was a 10-decimal literal, which left a correct answer
+    %      at 7e-11 against the 1e-10 tolerance.)
     Td = fk_space(S_list, M, [30 45 -60 45 -30 60]);
-    Rexp = [ 0.1752404736  -0.5625000000   0.8080127019;
-            -0.1875000000  -0.8247595264  -0.5334936491;
-             0.9665063509  -0.0580127019  -0.2500000000];
+    Rhome = [-1 0 0; 0 0 -1; 0 -1 0];
+    Rexp = Rz(30) * Ry(45) * Ry(-60) * Ry(45) * Rz(-(-30)) * Ry(60) * Rhome;
     errd = norm(Td(1:3,1:3) - Rexp, 'fro');
     fd   = errd >= tol;
     fprintf('  (d) General pose [30 45 -60 45 -30 60]: orientation error %.2e  %s\n', ...
@@ -81,8 +88,11 @@ function run_self_tests(S_list, M, p)
         fprintf('  ALL TESTS PASS - your S_list and M are consistent with the\n');
         fprintf('  robot''s geometry on every joint.\n');
     else
-        fprintf(2, '  %d CHECK(S) FAILED - the failing test names which joints moved;\n', fails);
-        fprintf(2, '  recheck those rows of S_list (and M for tests 1 and 5d).\n');
+        fprintf(2, '  %d CHECK(S) FAILED - each failing test names the joint(s) it moved;\n', fails);
+        fprintf(2, '  recheck BOTH the omega and the v of those rows of S_list. A mirrored\n');
+        fprintf(2, '  position (right size, wrong sign) usually means that joint''s omega\n');
+        fprintf(2, '  points the wrong way. Test 5(d) depends on every omega and on the\n');
+        fprintf(2, '  rotation part of M; tests 2 and 3 check the position part of M.\n');
     end
     fprintf('============================================================\n\n');
 
@@ -111,4 +121,14 @@ end
 
 function s = pass_fail(err, tol)
     if err < tol, s = 'PASS'; else, s = '*** FAIL ***'; end
+end
+
+function R = Ry(deg)
+    c = cosd(deg); s = sind(deg);
+    R = [c 0 s; 0 1 0; -s 0 c];
+end
+
+function R = Rz(deg)
+    c = cosd(deg); s = sind(deg);
+    R = [c -s 0; s c 0; 0 0 1];
 end
