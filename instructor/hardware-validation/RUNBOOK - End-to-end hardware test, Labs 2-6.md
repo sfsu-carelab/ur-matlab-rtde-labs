@@ -82,12 +82,18 @@ Follow the manual literally, Parts 5-6:
 - [ ] The elbow +5 deg script from Part 6 runs from a new .m file
 - [ ] Note anything in the manual that no longer matches PolyScope X menus (screenshots help)
 
-## 3. Lab 3 (10 min)
+## 3. Lab 3 (15 min)
 
-- [ ] `UR_FK_Lab_KEY("UR3e")` (from `Lab 03/instructor`) prints ALL TESTS PASS offline
-- [ ] Section 2 of the smoke test is the hardware check. Optional extra: at two different
-      arm poses, read the pendant Move screen (TCP position) and compute
-      `T = fk_space(S_list, M, hw2screw(q_deg))` after running the key; record both in notes
+- [ ] `UR_FK_Lab_KEY("UR3e")` (from `instructor/`) prints ALL TESTS PASS offline
+- [ ] Section 2 of the smoke test is the model-vs-model check (FK vs `readCartesianPose`).
+- [ ] The real check is `UR_FK_Lab3_Verify` (this folder), run from the MATLAB desktop with
+      the e-stop in hand: it drives the six Table 6 poses, reads the robot's OWN TCP from
+      the controller (port 30002) and logs FK vs robot into `test-logs/<stamp>_lab3_task4`.
+      Expect about 1 mm and 0.3 deg at every pose (factory calibration vs nominal lengths).
+      `UR_FK_Lab3_Verify(DryRun=true)` prints the poses and the link envelope first.
+      ROOM: the script refuses poses that reach past x = -0.18 m or y = +0.06 m (walls on
+      the robot's -x and +y sides in SEC 414). Do not loosen that without looking at the room.
+      Done 2026-11-06, see `test-logs/2026-11-06_lab3_session/HANDOFF-NOTES.md`.
 
 ## 4. Lab 4 (40 min)
 

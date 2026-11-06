@@ -1,0 +1,210 @@
+﻿[Title] Lab 3
+Forward Kinematics of UR e-series Robots via Screw Theory (Product of Exponentials)
+Accompanying MATLAB file(s):  UR_FK_Lab.m, fk_space.m, ur_link_lengths.m, screw2hw.m, hw2screw.m, jointSignConvention.m, run_self_tests.m
+Author: Ryan Cullen, SFSU MSME 2026
+[Heading1] Overview
+In this lab you will derive the forward kinematics of a Universal Robots e-series 6-DOF manipulator (worked example: UR3e) using the Product of Exponentials (PoE) formulation from screw theory. Forward kinematics relates the values of the joint angles to the pose of the end effector. Your job is to derive the kinematic parameters (the six screw axes and the home pose matrix) from the robot's geometry, enter them into the MATLAB file, and verify the results against the physical robot.
+[Heading1] Learning Objectives
+[ListBullet] Identify the screw axis ωq for every joint of a 6-DOF manipulator from its physical geometry.
+[ListBullet] Compute the 6x1 twist vector S=(ω,v) for each joint using v=−ω×q.
+[ListBullet] Assemble the home pose matrix M from the robot's dimensions.
+[ListBullet] Compute the final forward kinematic matrix T.
+[ListBullet] Verify your FK model against the physical robot.
+[Heading1] Background: The Product of Exponentials Formula
+For a serial manipulator with n revolute joints, the space-frame PoE formula gives the end-effector pose as:
+T(θ)=e[S1]θ1e[S2]θ2⋯e[S6]θ6M
+Each factor e[Si]θi is a 4x4 transformation matrix that represents the effect of rotating joint i by angle θi. When θi is zero, that factor reduces to the 4x4 identity matrix. When all joint angles are zero, every exponential is the identity, so T=M.
+The quantities you need to determine are:
+[ListBullet] M: the 4x4 end-effector pose at the home configuration (all joint angles zero).
+[ListBullet] </w:r><m:oMath><m:sSub><m:e><m:r><m:t>ωi: a 3x1 unit vector along the rotation axis of joint i.
+[ListBullet] </w:r><m:oMath><m:sSub><m:e><m:r><m:t>qi: any point on the rotation axis of joint i.
+[ListBullet] </w:r><m:oMath><m:sSub><m:e><m:r><m:t>vi=−ωi×qi: the linear velocity component, computed from ω and q via a cross product.
+[ListBullet] </w:r><m:oMath><m:sSub><m:e><m:r><m:t>Si=[ωi;vi]: the 6x1 screw axis of joint i in the space frame at the home configuration.
+The math that converts S and θ into a 4x4 matrix (the matrix exponential, using Rodrigues' formula) is provided for you in the MATLAB file. Your job is to figure out the correct Si and M from the robot's geometry.
+[Heading1] Part 1 - Home Configuration
+The default home configuration for UR robots has the robot standing straight upright. Figure 1 is a side view drawn in the base frame {s} that this lab uses: the z axis points up along the joint 1 axis, the y axis points to the LEFT of the page (the side where the cable leaves the base), and the x axis points INTO the page (right-hand rule). The wrist hangs out on the −y side, so every y coordinate of the arm is zero or negative at home. The red arrow at each joint is the positive rotation direction ω_i that this lab uses for that joint: four of them point along +y, joint 1 points along +z and joint 5 points along −z (downward). These directions are a convention, but the self-tests in Part 3 and the helper functions in Part 4 assume exactly these, so use them. Figure 2 shows the same robot as Universal Robots draws it; its arrows follow a different convention, see its caption.
+[IMAGE] 
+Figure 1 - UR e-series schematic at the home pose in the base frame used in this lab: joints numbered 1 to 6, link lengths L1 to L6 with their MATLAB names, and the positive rotation direction ω of every joint (red arrows). +y points left, +z up, +x into the page.
+[IMAGE] 
+Figure 2 - The same robot as drawn by Universal Robots for its DH parameter table (red = x, green = y, blue = z of each DH frame; a circled dot points out of the page, a circled cross into it). The blue arrows are the DH joint axes, which is also the sense the teach pendant counts in. On joints 2 to 6 they point OPPOSITE to the ω arrows of Figure 1. Use this figure to see the real link shapes and offsets; do not read ω from it.
+The link lengths are taken directly from the Universal Robots documentation. Table 1 lists the UR3e values used in the worked example; every other e-series model uses the same structure with different lengths - see the accompanying ur_link_lengths.m. The MATLAB variable name for each length is shown in parentheses.
+Link
+Length (m)
+</w:r><m:oMath><m:sSub><m:e><m:r><m:t>L1   (d1)
+0.15185
+</w:r><m:oMath><m:sSub><m:e><m:r><m:t>L2   (a2)
+0.24355
+</w:r><m:oMath><m:sSub><m:e><m:r><m:t>L3   (a3)
+0.21320
+</w:r><m:oMath><m:sSub><m:e><m:r><m:t>L4   (d4)
+0.13105
+</w:r><m:oMath><m:sSub><m:e><m:r><m:t>L5   (d5)
+0.08535
+</w:r><m:oMath><m:sSub><m:e><m:r><m:t>L6   (d6)
+0.09210
+Table 1 - UR3e link lengths from the Universal Robots documentation (other models: see ur_link_lengths.m).
+[Heading2] Worked Example: The Screw Axis of Joint 2 (Shoulder)
+Before filling in the table, let us derive one screw axis completely. We will use joint 2, the shoulder; every other joint follows the same three steps.
+Step 1 - Find the rotation axis ω2.  In the home configuration (Figure 1), joint 2 rotates about a horizontal axis that points along the +y direction of the base frame. Since ω must be a unit vector: ω2=(0,1,0).
+Step 2 - Pick a point q2 on the axis.  The shoulder axis crosses the base z-axis at height L1 above the origin, so a convenient choice is q2=(0,0,L1)=(0,0,0.15185) m for the UR3e. Any point on the axis will work; a convenient one keeps the arithmetic simple.
+Step 3 - Compute v2=−ω2×q2.  Writing the cross product out component by component:
+ω2×q2=(0,1,0)×(0,0,L1)=(1)(L1)−(0)(0),(0)(0)−(0)(L1),(0)(0)−(1)(0)=(L1,0,0)
+so v2=−(L1,0,0)=(−L1,0,0)=(−0.15185,0,0).
+</w:r><w:r><w:rPr><w:rFonts w:cs="Calibri"/></w:rPr><w:t xml:space="preserve">Stacking ω on top of v gives the 6x1 screw axis:  S2=(ω2,v2)=(0,1,0,−L1,0,0)=(0,1,0,−0.15185,0,0). The symbolic form is what you will enter in MATLAB, written with the code names from Table 1:  [0, 1, 0, -d1, 0, 0].
+Physical check: v is the velocity of the point of the moving body that currently sits at the base origin. If the shoulder rotates at 1 rad/s about +y, a point at the origin (a distance L1 below the axis) sweeps in the -x direction at L1 m/s - exactly v2=(−L1,0,0).
+Check your understanding: repeat Step 3 with a different point on the same axis, for example q=(0,0.3,L1). The extra +y component is parallel to ω2, so it drops out of the cross product and v2 is unchanged. If choosing a different point on the axis changes your v, something has gone wrong.
+General cross product formula. For any two vectors a=(a₁,a₂,a₃) and b=(b₁,b₂,b₃): a×b=(a₂b₃−a₃b₂, a₃b₁−a₁b₃, a₁b₂−a₂b₁). The worked example above is this formula with a = ω and b = q. You will need it with ω along +y (joints 2, 3, 4, 6), along +z (joint 1) and along −z (joint 5).
+Now derive the remaining five screw axes the same way and record them in Table 2. Joints 3, 4 and 6 are directly analogous to joint 2: ω=(0,1,0) and q on the base axis at the height of that joint. Read the heights from Figure 1: joint 3 is L1+L2 up, joint 4 is L1+L2+L3 up, and joint 6 is a further L5 above joint 4. Joint 1 is simpler still: its axis passes through the origin, so q = (0, 0, 0) and v = (0, 0, 0). Joint 5 is the one that catches people, so its first two steps are given here.
+Joint 5 (wrist 2), Steps 1 and 2. Its axis is vertical and, in this lab, its positive direction is taken DOWNWARD: ω₅=(0,0,−1) (red arrow in Figure 1). The axis is offset from the base axis by L4 in the −y direction, so a convenient point on it is q₅=(0,−L₄,L₁+L₂+L₃); any height works because the axis is vertical. Step 3 is yours: apply the general formula to v₅=−ω₅×q₅. Physical check: with ω₅ pointing down, a point of the wrist at the base origin would move along +x, so v₅ should point along +x. Notice that flipping the sign of ω also flips v. If you pick ω₅ = (0, 0, +1) instead, the self-test for wrist 2 in Part 3 will show the x coordinate with the right size and the wrong sign.
+[Heading2] Task 1: Determine the Screw Axes
+Using the diagram (Figure 1) for reference, identify the unit rotation axis ωi, a point qi on the axis, and compute vi=−ωi×qi for each joint. Fill in the table below.
+Joint
+</w:r><m:oMath><m:sSub><m:e><m:r><m:t>ωi
+</w:r><m:oMath><m:sSub><m:e><m:r><m:t>qi (m)
+</w:r><m:oMath><m:sSub><m:e><m:r><m:t>vi=−ω×q
+1
+
+
+
+2
+
+
+
+3
+
+
+
+4
+
+
+
+5
+
+
+
+6
+
+
+
+Table 2 - Joint screw axes.
+[Heading2] How to Build the Rotation Matrix R
+The rotation part of M answers one question: which way do the tool's axes point, written in base-frame coordinates? The columns of R are exactly the tool frame's x, y and z unit vectors expressed in the base frame: R = [x_tool, y_tool, z_tool].
+Read the three directions from Figure 1 at the home pose. As a start: the tool's z-axis (pointing out of the flange) points along the base frame's −y direction, so the third column of R is (0, −1, 0). Determine x_tool and y_tool from the figure the same way, then check your result: a valid rotation matrix has columns of length 1, mutually perpendicular, with det(R) = +1.
+Table 4 has one row per tool axis, but when you type M each of these vectors is a COLUMN: R = [x_tool, y_tool, z_tool], so R_x = x_tool goes down the first column of M, R_y = y_tool down the second and R_z = z_tool down the third, each written in base coordinates. (For this robot the correct R happens to be symmetric, so a transposed entry would still pass the self-tests. Get the convention right anyway; it matters for every other robot.)
+[Heading2] Task 2: Determine the Home Pose M
+Using the diagram (Figure 1) for reference, find the homogeneous transformation M=[R,p;0,1] for the end effector at the home configuration.
+Component
+Expression
+Value (m)
+</w:r><m:oMath><m:sSub><m:e><m:r><m:t>px
+
+
+</w:r><m:oMath><m:sSub><m:e><m:r><m:t>py
+
+
+</w:r><m:oMath><m:sSub><m:e><m:r><m:t>pz
+
+
+Table 3 - End-effector position at home.
+Component
+Value
+</w:r><m:oMath><m:sSub><m:e><m:r><m:t>Rx
+
+</w:r><m:oMath><m:sSub><m:e><m:r><m:t>Ry
+
+</w:r><m:oMath><m:sSub><m:e><m:r><m:t>Rz
+
+Table 4 - End-effector orientation at home.
+Combine the position and rotation components to get the final matrix M=[R,p;0,1].
+[Heading1] Part 2 - Enter Your Parameters in MATLAB
+Open the accompanying file UR_FK_Lab.m. Find the section labeled PART 2. Enter your six screw axes into S_list (each row is Si=[ω1,ω2,ω3,v1,v2,v3]) and your 4x4 home configuration matrix into M. Write both symbolically in terms of the link-length variables d1, a2, a3, d4, d5, d6 rather than as raw numbers - your answer will then be correct for every e-series robot, and you can prove it by re-running with a different model, e.g. </w:r><w:r><w:rPr><w:rFonts w:ascii="Consolas" w:hAnsi="Consolas" w:cs="Consolas"/><w:shd w:val="clear" w:fill="F2F2F2"/></w:rPr><w:t xml:space="preserve">UR_FK_Lab("UR5e"). Then run UR_FK_Lab() in the MATLAB Command Window to execute the self-tests.
+Running the MATLAB file
+[ListBullet] Put all seven .m files in one folder and make that folder MATLAB's Current Folder (the address bar above the Command Window, or cd('...')). If MATLAB reports "Unrecognized function or variable", the Current Folder is wrong.
+[ListBullet] In UR_FK_Lab.m replace each NaN with an expression in d1, a2, a3, d4, d5, d6. These variables are defined a few lines above, so type them literally, for example -(d1+a2). Each row of S_list is one joint, [omega(1:3) v(1:3)]. The .' after the matrix turns your rows into the columns fk_space expects; leave it alone.
+[ListBullet] Run it by typing UR_FK_Lab in the Command Window and pressing Enter (UR_FK_Lab() is the same thing, and the green Run button in the Editor also works). UR_FK_Lab("UR5e") checks your symbolic answer on another robot and is optional.
+[ListBullet] After a run, S_list and M stay in the base workspace (the Workspace panel beside the Command Window), so you can call fk_space with them directly, as Part 4 does. If you close MATLAB, run UR_FK_Lab again first.
+[Heading1] Part 3 - Self-Tests
+Run UR_FK_Lab. It executes the test cases below and prints PASS or FAIL for each. For a correct answer every error is at machine precision (about 1e-16 m); the PASS threshold is 1e-10 m. Test 1 only checks that the chain reproduces the M you typed, it cannot tell whether M is right: tests 2 and 3 check the position part of M and test 5(d) its rotation. Test 5(e) is a sanity check that the tool is never further from the base than the arm is long. If a test shows FAIL it names the joint it moved: recheck both ω and v of that row of S_list. A result of the right size with the wrong sign means that ω points the wrong way.
+Test
+Configuration
+Expected Result
+Error (m)
+1
+All joints at 0 (home)
+</w:r><m:oMath><m:r><m:t>T should equal M exactly
+
+2
+</w:r><m:oMath><m:sSub><m:e><m:r><m:t>θ2=+90∘ (shoulder forward)
+</w:r><m:oMath><m:r><m:t>x=a2+a3+d5,z=d1 (arm horizontal; y stays at −(d4+d6))
+
+3
+</w:r><m:oMath><m:sSub><m:e><m:r><m:t>θ1=+90∘ (base rotated CCW)
+Wrist offset swings from -y to +x
+
+4
+</w:r><m:oMath><m:sSub><m:e><m:r><m:t>θ2=+45∘, θ3=−90∘
+Expected values printed by the self-test
+
+5
+Wrist joints individually, then a general pose
+Expected values printed by the self-test
+
+Table 5 - Self-test results.
+[Heading1] Part 4 - Hardware Verification
+⚠️ Before commanding the robot: set the speed slider to 25%, clear the workspace, and keep the e-stop in hand. You are about to send the arm to joint targets you computed yourself - a sign error can send it somewhere unexpected.
+⚠️ TCP setting: your FK model ends at the tool flange (the d6 offset). If the pendant's active TCP is still set to the Robotiq gripper from Lab 1 (0, 0, 174 mm), the pendant's position readout will differ from your FK by up to 174 mm on every pose. For this comparison, set the active TCP to the flange (all zeros) on the pendant, or add the tool offset to your FK result before comparing. On PolyScope X the active TCP is set in the Installation section (TCP); check that its position offset reads 0, 0, 0 before starting Task 4.
+[Heading2] Task 3: Determine the Angle Mapping
+Turn on the robot arm and move it to the upright home position (Move screen, Smart Skills, Home). On the Move screen's joint panel, record the six joint angle readings. Expect roughly [0, −90, 0, −90, 0, 0] degrees; small deviations are normal, but a value that is off by 90 or 180 degrees means the arm is not at Home or you are reading a different panel.
+theta_home = [___, ___, ___, ___, ___, ___]  (degrees)
+Notice that the angles are not all zero. Our PoE formula assumes all joint angles are zero at the home configuration. There is a second difference: on joints 2 through 6 the pendant's positive rotation direction is opposite to the screw axes you derived. To see it, jog joint 2 a few degrees in the pendant's positive direction: the arm tips toward −x, whereas the right-hand rule about the red ω₂ = +y arrow of Figure 1 tips it toward +x. The conversion therefore needs a sign flip as well as an offset:
+θhw(i)=s(i)θscrew(i)+θhome(i),s=[+1,−1,−1,−1,−1,−1]
+[Heading2] Task 4: Test Configurations
+[ListNumber] Convert the screw angles to pendant angles with the formula above or with the helper theta_hw = screw2hw(theta_screw, theta_home), where theta_home is the six numbers you recorded in Task 3 (all angles in degrees). For Pose 2, screw2hw([0 -45 45 0 0 0], [0 -90 0 -90 0 0]) returns [0, −45, −45, −90, 0, 0].
+[ListNumber] Check that the pose is clear of walls, the table and the camera (Pose 2 leans the upper arm 45 degrees toward −x), then command the robot to the pendant angles: Move screen, joint panel, type the six values and let the move finish. Speed slider at 25 percent, e-stop in hand.
+[ListNumber] In MATLAB, with S_list and M in the workspace from Part 3, run the FK on the ORIGINAL screw angles, not the pendant angles: T = fk_space(S_list, M, [0 -45 45 0 0 0]). The position is the last column, p_fk = T(1:3,4), in metres. For Pose 2 on a UR3e this is (−0.172, −0.223, 0.623) m.
+[ListNumber] Read the TCP position from the pendant (Move screen, TCP panel, with the feature set to Base) and convert millimetres to metres: p_robot = [X Y Z] / 1000. Record both positions in Table 6.
+[ListNumber] Compute the error in millimetres: err_mm = norm(p_fk - p_robot) * 1000. Under 3 mm is excellent and a few millimetres is success (the robot's own calibration differs slightly from the nominal link lengths). A large, roughly constant offset at every pose usually means a TCP mismatch, see the warning at the start of Part 4. The right size with the wrong sign in one coordinate means a sign error in one ω.
+[ListNumber] Repeat for three more Screw Angle poses of your choosing. (If you would rather jog the robot to a pose first, record the pendant angles and convert them back with theta_screw = hw2screw(theta_hw, theta_home).)
+Pose
+Screw Angles
+Hardware Angles
+FK Position (m)
+Robot TCP (m) = pendant mm / 1000
+Error (mm)
+1 (home)
+[0, 0, 0, 0, 0, 0] deg
+
+
+
+
+2
+[0, -45, 45, 0, 0, 0] deg
+
+
+
+
+3
+
+
+
+
+
+4
+
+
+
+
+
+5
+
+
+
+
+
+Table 6 - Hardware verification.
+[Heading1] Assessment Questions
+Q1.  Four of the six joints share the same rotation axis direction ω. Which four, and what does that tell you about the robot's kinematic structure?
+Q2.  The axis of joint 5 is vertical at the home pose. If you wanted joint 5 to rotate about a horizontal axis instead, what physical change to the robot would that require?
+Q3.  The home matrix M has a rotation component that is not the identity. Explain physically why the tool frame is rotated relative to the base frame even when all joints are at zero.
+Q4.  What was the largest position error you observed between your FK and the robot? List at least two possible sources of this error.
+Q5.  If you were to design a robot, what would you choose to be the home position, and why? What advantages does your choice bring when doing kinematic calculations?

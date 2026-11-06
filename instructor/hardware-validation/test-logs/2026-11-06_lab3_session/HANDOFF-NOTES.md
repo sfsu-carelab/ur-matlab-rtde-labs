@@ -55,19 +55,43 @@ link lengths the lab uses. This is the textbook answer to Assessment Q4.
 
 ## 2. Code state
 
-No student file was changed this session. New file:
-`instructor/hardware-validation/UR_FK_Lab3_Verify.m` (instructor only, moves the robot,
-run from the desktop). The read-only `lab3_live_check.m` is kept in this folder as a
+New file: `instructor/hardware-validation/UR_FK_Lab3_Verify.m` (instructor only, moves the
+robot, run from the desktop). The read-only `lab3_live_check.m` is kept in this folder as a
 reference for the port 30002 reader.
 
-Three code issues found (not yet fixed, student-facing, need Ryan's go):
-1. `run_self_tests.m` test 5(d): a CORRECT answer scores 7.15e-11 against tol 1e-10
-   because `Rexp` is typed to 10 decimals. Store it exactly (it is the product of the six
-   rotations, link-length independent) or give 5(d) its own tolerance such as 1e-8.
-2. `run_self_tests.m` failure summary says "(and M for tests 1 and 5d)". 5(d) also fails
-   on a wrong screw axis; all three simulated students failed 5(d) with a correct M.
-3. Test 1 compares T to the M the student typed, so it passes for any M. Harmless, but
-   the manual's Table 5 says "T should equal M exactly" as if M were being verified.
+Student file changed (Ryan's go, 2026-11-06 evening): `run_self_tests.m`
+1. Test 5(d) expected rotation is now built from the lab's axis directions
+   (`Rz(30)*Ry(45)*Ry(-60)*Ry(45)*Rz(30)*Ry(60)*Rhome`) instead of a 10-decimal literal.
+   A correct answer now scores 6e-16 (was 7e-11 against tol 1e-10).
+2. Failure summary: recheck both omega and v of the named joint; a mirrored position means
+   a flipped omega; 5(d) depends on every omega and on R of M; tests 2 and 3 check p of M.
+3. Test 1 is labelled "T must equal the M you typed" with a comment that it is a
+   consistency check only.
+Verified: key passes on UR3e and UR10e; a flipped omega_5 still fails 5(b) and 5(d);
+checkcode clean.
+
+Manual changed: `Lab 3 - Forward Kinematics.docx` is now Rev2 (Rev1 kept in `archive/`,
+ignored). Built by `build_manual_rev2.ps1` in this folder (direct document.xml edits, zip
+rebuilt with correct entry names; verified by re-extraction and XML parse, NOT yet opened
+in Word: Ryan to open it once on the Mac). Full extracted text: `manual_rev2_text.txt`.
+- Figure 1 replaced by a schematic drawn in the lab's convention (source
+  `resources/lab3-figure1/make_lab3_figure1.m`, MATLAB): lettered base axes, joints 1-6,
+  red omega arrows, L1-L6 with MATLAB names, legend. The UR DH drawing is kept as Figure 2
+  with a caption saying its blue arrows are the opposite sense on joints 2-6.
+- Part 1: base-frame convention paragraph; general cross product formula; joint heights
+  spelled out; joint 5 steps 1 and 2 given (omega_5 = (0,0,-1), q_5), step 3 left to the
+  student with a physical check.
+- Table 4 text: columns, not rows, with the symmetric-R caveat.
+- Part 2: "Running the MATLAB file" bullets (folder, Current Folder, NaN replacement,
+  the .' transpose, how to run, base workspace).
+- Part 3: what each test does and does not check, how to read a FAIL.
+- Part 4: PolyScope X TCP location, expected theta_home, jog-joint-2 direction check,
+  Task 4 steps with the exact calls (screw2hw with numbers, fk_space, T(1:3,4), mm/1000,
+  norm*1000), a clearance warning for Pose 2, Table 6 header says mm/1000.
+- Q1 and Q2 no longer print the answers.
+- Em dashes removed (3).
+Pendant screen names ("Move screen, joint panel / TCP panel, feature Base",
+"Installation section (TCP)") are written generically: RYAN TO CONFIRM against PolyScope X.
 
 ## 3. Safety event and room geometry
 
@@ -123,28 +147,14 @@ Secondary gaps, all cheap:
 Student time estimates: 65 min (B) to 3 to 4 h (C) for Parts 1 to 3; most of the spread
 is Figure 1.
 
-## 5. Proposed next steps (need Ryan's go; manual edits now allowed since the code is
-verified on hardware)
+## 5. Done after Ryan's go (same evening)
 
-Code (small):
-1. Fix 5(d) tolerance/precision, fix the failure summary wording, and say in the manual
-   that test 1 is a consistency check, not a check of M.
-Manual (Lab 3 docx, Rev1 -> Rev2):
-2. Replace or annotate Figure 1: labelled base axes (x into page, +y to the LEFT, z up),
-   joints numbered 1 to 6, each omega drawn in the lab's convention, legend for colours
-   and circle symbols. Add one sentence: the coloured triads are UR's DH frames; the screw
-   directions for joints 2 to 6 are the opposite of their blue arrows, which is the same
-   reversal as the sign flip in Part 4.
-3. Put omega_5 = (0,0,-1) and the reason in Part 1; rewrite Q1 and Q2 so they do not
-   print the answers.
-4. Table 4: say columns. Add the general cross-product formula and a second worked
-   example for joint 5.
-5. Part 4 as a checklist with PolyScope X screen names, expected theta_home, the exact
-   MATLAB lines (fk_space call, T(1:3,4), error in mm), and the mm to m note. Consider
-   making the instructor verification numbers above the sample answers for Table 6.
-6. Add a "Running the MATLAB file" box (one folder, Current Folder, type the name or press
-   Run, what "saved to the base workspace" means).
-Runbook: add `UR_FK_Lab3_Verify` to section 3 (Lab 3) and the room/keep-out note.
+All of the proposed items were applied: see section 2 (code and manual Rev2) and the
+runbook section 3 (UR_FK_Lab3_Verify, keep-out note). Still for Ryan:
+- Open `Lab 3 - Forward Kinematics.docx` once in Word on the Mac (Figures 1 and 2 sizes,
+  the new bullets, the Task 4 steps) and confirm the PolyScope X screen names.
+- Decide whether the joint 5 example should give step 3 too (currently the student does
+  the cross product; the general formula and a physical check are provided).
 
 ## 6. Open questions
 - Lab 3 manual Table 6 pose 2 is at x = -0.17 m in this room: fine today, but the manual
