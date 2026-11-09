@@ -487,17 +487,14 @@ end
 
 function [S, M] = urScrewModel(p)
 %URSCREWMODEL  Instructor solution to Lab 3 (same as UR_FK_Lab_KEY).
-    d1=p.d1; a2=p.a2; a3=p.a3; d4=p.d4; d5=p.d5; d6=p.d6;
-    S = [ 0, 0,  1,               0, 0, 0;
-          0, 1,  0,             -d1, 0, 0;
-          0, 1,  0,        -(d1+a2), 0, 0;
-          0, 1,  0,     -(d1+a2+a3), 0, 0;
-          0, 0, -1,              d4, 0, 0;
-          0, 1,  0,  -(d1+a2+a3+d5), 0, 0 ].';
-    M = [ -1,  0,  0,            0;
-           0,  0, -1,     -(d4+d6);
-           0, -1,  0,  d1+a2+a3+d5;
-           0,  0,  0,            1 ];
+    L1=p.L1; L2=p.L2; L3=p.L3; L4=p.L4; L5=p.L5; L6=p.L6;
+    S = [0  0 1            0 0 0;
+         0 -1 0           L1 0 0;
+         0 -1 0        L1+L2 0 0;
+         0 -1 0     L1+L2+L3 0 0;
+         0  0 1          -L4 0 0;
+         0 -1 0  L1+L2+L3+L5 0 0].';
+    M = [-1 0 0 0; 0 0 -1 -(L4+L6); 0 -1 0 L1+L2+L3+L5; 0 0 0 1];
 end
 
 function e = rotm2eulZYX(R)

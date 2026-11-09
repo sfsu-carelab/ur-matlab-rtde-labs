@@ -1,30 +1,35 @@
 function p = ur_link_lengths(model)
-%UR_LINK_LENGTHS  Kinematic link lengths for any UR e-series manipulator.
+%UR_LINK_LENGTHS  Link lengths L1 to L6 of a UR e-series manipulator.
 %
-%   p = ur_link_lengths(model) returns a struct with fields d1, a2, a3,
-%   d4, d5, d6 (all in metres) for the requested robot.
+%   p = ur_link_lengths(model)
 %
-%   Supported models:
-%     "UR3e"   "UR5e"   "UR7e"   "UR10e"   "UR12e"   "UR16e"   "UR20"   "UR30"
+%   INPUT:
+%     model - string with the robot model. Supported:
+%             "UR3e"  "UR5e"  "UR7e"  "UR10e"  "UR12e"  "UR16e"  "UR20"  "UR30"
+%             (default "UR3e")
 %
-%   Values are the magnitudes of the offsets in the DH table published by
-%   Universal Robots (UR lists a2 and a3 as negative; this lab uses the
-%   Product-of-Exponentials convention, which needs the magnitudes).
+%   OUTPUT:
+%     p     - struct with the fields model, L1, L2, L3, L4, L5, L6.
+%             L1 to L6 are the link lengths of Figure 1 in the lab manual
+%             (units in meters).
+%
+%   EXAMPLE:
+%     p = ur_link_lengths("UR5e");
+%     disp(p.L2)
 %
 %   Source: Universal Robots, "DH Parameters for calculations of kinematics
 %   and dynamics", https://www.universal-robots.com/articles/ur/
 %   application-installation/dh-parameters-for-calculations-of-kinematics-
 %   and-dynamics/
-%
-%   Example:
-%       p = ur_link_lengths("UR5e");
-%       disp(p.a2)
+%   That table names the same six lengths d1, a2, a3, d4, d5, d6 (and lists
+%   a2 and a3 as negative). This lab uses screw theory, which only needs
+%   the magnitudes, so they are simply numbered L1 to L6 from the base up.
 
     arguments
         model (1,1) string = "UR3e"
     end
 
-    %          d1        a2        a3        d4        d5        d6
+    %          L1        L2        L3        L4        L5        L6
     T = { ...
       "UR3e" , 0.15185 , 0.24355 , 0.21320 , 0.13105 , 0.08535 , 0.09210 ; ...
       "UR5e" , 0.16250 , 0.42500 , 0.39220 , 0.13330 , 0.09970 , 0.09960 ; ...
@@ -43,6 +48,6 @@ function p = ur_link_lengths(model)
     end
 
     p = struct('model', names(idx), ...
-               'd1', T{idx,2}, 'a2', T{idx,3}, 'a3', T{idx,4}, ...
-               'd4', T{idx,5}, 'd5', T{idx,6}, 'd6', T{idx,7});
+               'L1', T{idx,2}, 'L2', T{idx,3}, 'L3', T{idx,4}, ...
+               'L4', T{idx,5}, 'L5', T{idx,6}, 'L6', T{idx,7});
 end

@@ -1,25 +1,25 @@
 function theta_hw = screw2hw(theta_screw, theta_home)
-%SCREW2HW  Convert PoE screw-model joint angles to Teach Pendant angles.
+%SCREW2HW  Convert screw-model joint angles to Teach Pendant joint angles.
 %
 %   theta_hw = screw2hw(theta_screw)
 %   theta_hw = screw2hw(theta_screw, theta_home)
 %
-%   The PoE model in this lab measures every joint angle from the UPRIGHT
-%   home configuration, using the screw axes you derived.  The Teach Pendant
-%   measures joint angles from UR's own zero (arm stretched horizontally) and
-%   its positive sense is OPPOSITE to the lab's screw axes on joints 2-6.
+%   INPUT:
+%     theta_screw - 1x6 joint angles of the screw model (DEGREES), measured
+%                   from the upright home configuration of Figure 1
+%     theta_home  - 1x6 Teach Pendant reading at that upright home
+%                   configuration (DEGREES). Default [0, -90, 0, -90, 0, 0]
 %
-%   The full conversion is therefore a sign flip AND an offset:
+%   OUTPUT:
+%     theta_hw    - 1x6 joint angles as the Teach Pendant shows them (DEGREES)
 %
-%       theta_hw(i) = SIGN(i) * theta_screw(i) + theta_home(i)
+%   The screw axes in this lab point the same way the robot counts positive
+%   rotation, so the two sets of angles differ only by where zero is:
 %
-%   with SIGN = [+1, -1, -1, -1, -1, -1].  A pure addition is NOT correct.
+%       theta_hw = theta_screw + theta_home
 %
-%   theta_home defaults to [0, -90, 0, -90, 0, 0] deg, which is where the
-%   pendant reads when the arm is at the upright Smart Skills "Home" pose.
-%   Record your own robot's values in Task 3 and pass them in if they differ.
-%
-%   All angles are in DEGREES.
+%   EXAMPLE:
+%     screw2hw([30 30 -60 30 0 0])      returns [30 -60 -60 -60 0 0]
 %
 %   See also HW2SCREW, FK_SPACE.
 
@@ -28,5 +28,5 @@ function theta_hw = screw2hw(theta_screw, theta_home)
         theta_home  (1,6) double = [0, -90, 0, -90, 0, 0]
     end
 
-    theta_hw = jointSignConvention() .* theta_screw + theta_home;
+    theta_hw = theta_screw + theta_home;
 end

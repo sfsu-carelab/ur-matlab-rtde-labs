@@ -14,6 +14,7 @@ UR3e
 UR5e
 UR10e
 UR16e
+URSim (simulator)
 Other
 
 [[Question:DB]]
@@ -90,7 +91,7 @@ I can explain why writing S and M symbolically in the link lengths makes one ans
 
 [[Question:MC:SingleAnswer:Horizontal]]
 [[ID:LO_5]]
-I can convert between the model's screw angles and the pendant's joint angles, including the sign flips, and explain why the flips exist.
+I can convert between the model's screw angles and the pendant's joint angles using the home offset, and explain why the offset exists.
 [[Choices]]
 1 - Strongly disagree
 2 - Disagree

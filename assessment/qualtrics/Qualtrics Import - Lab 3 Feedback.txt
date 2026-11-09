@@ -14,6 +14,7 @@ UR3e
 UR5e
 UR10e
 UR16e
+URSim (simulator)
 Other
 
 [[Question:Matrix]]
@@ -41,7 +42,7 @@ Given the robot's dimension diagram, I can determine each joint's rotation axis 
 I can compute v = -omega x q by hand, carrying the cross product through correctly, and assemble the full 6x1 screw axis.
 I can build the home pose matrix M, including the rotation part R from the tool-frame directions.
 I can explain why writing S and M symbolically in the link lengths makes one answer correct for every robot in the UR family.
-I can convert between the model's screw angles and the pendant's joint angles, including the sign flips, and explain why the flips exist.
+I can convert between the model's screw angles and the pendant's joint angles using the home offset, and explain why the offset exists.
 I can verify a kinematic model against the physical robot and account for systematic discrepancies such as the tool-TCP offset.
 When a self-test failed, I could work out which joint's screw axis was wrong from the test output.
 [[Answers]]

@@ -11,5 +11,7 @@ archive/
 *_Rev[0-9]*.pdf
 **/instructor/UR_FK_Lab_KEY.m
 **/instructor/test_all_models.m
+**/instructor/run_self_tests.m
+**/instructor/*Solutions*
 QArm*/
 calibration_results.txt

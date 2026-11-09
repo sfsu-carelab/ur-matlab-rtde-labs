@@ -42,24 +42,27 @@ theta_home = [0, -90, 0, -90, 0, 0];
 % keep-out box below refuses anything past x = MinX or y = MaxY. Leaning the
 % arm toward +x and then rotating the base POSITIVE swings it toward +y (the
 % back wall); rotate the base negative instead to swing toward -y.
+% 2026-11-09: the lab now uses the robot's own joint directions, so these are
+% the SAME six physical poses (same pendant angles) as the 2026-11-06 runs,
+% rewritten as screw angle = pendant angle - theta_home.
 poses = [  0    0    0    0    0    0;    % 1  home (upright)
-           0  -45   45    0    0    0;    % 2  manual's example
-          30  -30   60  -30    0    0;    % 3  base + wrist 1
-         -30   30  -30   30    0    0;    % 4  base -30, lean +x, wrist 1
-         -20   20   20  -40   60    0;    % 5  wrist 2 in play
-         -45   30  -30  -30  -60   90 ];  % 6  all six joints
+           0   45  -45    0    0    0;    % 2  Rev2 manual's example
+          30   30  -60   30    0    0;    % 3  base + wrist 1 (Rev3 manual's Task 3 example)
+         -30  -30   30  -30    0    0;    % 4  base -30, lean +x, wrist 1
+         -20  -20  -20   40  -60    0;    % 5  wrist 2 in play
+         -45  -30   30   30   60  -90 ];  % 6  all six joints
 % keep-out: all link points must satisfy x >= MinX, y <= MaxY, z >= MinZ
 
 % --- instructor solution (same as UR_FK_Lab_KEY) ---------------------------
 p = ur_link_lengths("UR3e");
-d1=p.d1; a2=p.a2; a3=p.a3; d4=p.d4; d5=p.d5; d6=p.d6;
-S = [0 0  1              0 0 0;
-     0 1  0            -d1 0 0;
-     0 1  0       -(d1+a2) 0 0;
-     0 1  0    -(d1+a2+a3) 0 0;
-     0 0 -1             d4 0 0;
-     0 1  0 -(d1+a2+a3+d5) 0 0].';
-M = [-1 0 0 0; 0 0 -1 -(d4+d6); 0 -1 0 d1+a2+a3+d5; 0 0 0 1];
+L1=p.L1; L2=p.L2; L3=p.L3; L4=p.L4; L5=p.L5; L6=p.L6;
+S = [0  0 1            0 0 0;
+     0 -1 0           L1 0 0;
+     0 -1 0        L1+L2 0 0;
+     0 -1 0     L1+L2+L3 0 0;
+     0  0 1          -L4 0 0;
+     0 -1 0  L1+L2+L3+L5 0 0].';
+M = [-1 0 0 0; 0 0 -1 -(L4+L6); 0 -1 0 L1+L2+L3+L5; 0 0 0 1];
 
 % --- plan ------------------------------------------------------------------
 n = size(poses, 1);
@@ -233,10 +236,10 @@ function P = linkPoints(S, M, theta_deg, p)
 % Positions of the elbow, wrist 1, wrist 2, wrist 3 axes and the flange for the
 % given screw angles. Point i rides on joints 1..i, so apply the first i
 % exponentials to its home position.
-    home = [0, 0, p.d1 + p.a2;                      % elbow (joint 3 axis)
-            0, 0, p.d1 + p.a2 + p.a3;               % wrist 1 (joint 4 axis)
-            0, -p.d4, p.d1 + p.a2 + p.a3;           % wrist 2 (joint 5 axis)
-            0, -p.d4, p.d1 + p.a2 + p.a3 + p.d5;    % wrist 3 (joint 6 axis)
+    home = [0, 0, p.L1 + p.L2;                      % elbow (joint 3 axis)
+            0, 0, p.L1 + p.L2 + p.L3;               % wrist 1 (joint 4 axis)
+            0, -p.L4, p.L1 + p.L2 + p.L3;           % wrist 2 (joint 5 axis)
+            0, -p.L4, p.L1 + p.L2 + p.L3 + p.L5;    % wrist 3 (joint 6 axis)
             M(1:3,4)'];                             % flange
     nj = [2 3 4 5 6];
     P = zeros(3, size(home, 1));
