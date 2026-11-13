@@ -74,3 +74,18 @@ convention, notes for the assessment questions.
   `rev3_text.txt` in this folder predates both edits.
 - Lab 3 survey: objective 5 reworded (home offset, no sign flips) and a "URSim (simulator)"
   model choice added, in both Qualtrics files and the paper form (previous form kept as _Rev1).
+
+## 2026-11-10: Rev4
+Dr. Quintero saved Rev3 on Box again on 2026-11-09 20:43 (small edits: "datasheet", Table 4
+header, "(J1...J6)") and sent three more notes. Rev4 (`build_rev4.py` + `dx.py` in this
+folder, built from his Rev3; full text in `rev4_text.txt`):
+- Figure 2 (the UR drawing) removed so there is one joint figure only; Part 1 text and the
+  Figure 1 caption adjusted.
+- Task 3 now defines theta_screw, theta_hw and theta_home and explains why a constant
+  offset relates them (same axes and directions, different zero pose), with a joint 2 example.
+- Variable sweep: FK, 6-DOF, T, M, n, [S_i], space frame, i/j/k unit vectors, p components,
+  tool frame {b}, NaN, e-stop, p_fk, p_robot, err_mm, X Y Z are each defined at first use.
+- Task 4 step 2 uses `theta_hw` instead of J1..J6 (read as "Jacobian"); Table 6 headers match.
+He also edited the Rev2 docx and the instructor solutions docx on Box that evening; those
+Box versions were copied into the Mac clone unchanged. Not opened in Word; nothing run on
+the robot.
