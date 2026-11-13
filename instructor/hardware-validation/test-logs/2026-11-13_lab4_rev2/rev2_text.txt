@@ -43,12 +43,12 @@
 [Normal] Figure 1: An example ready position, seen from the side: shoulder and elbow bent, tool flange facing down. The Teach Pendant joint angles of this pose are [0, −80, −80, −110, 90, 0] degrees.
 [Heading 2] Task 1: Record and Store the Waypoints
 [Normal] You will write each pose in Table 3 for MATLAB and, while the robot is still there, store it as a node of a Teach Pendant program for Part 2.
-[List Number] Set the speed slider to 25%. Create a new program named after your group, for example Lab4_Group1 (tap the program name at the top of the screen, as in Lab 2). Do not edit the Lab 2 program that holds the server script; you need it unchanged in Part 3.
-[List Number] On the Move screen, jog the joints to a ready position of your choosing that looks like Figure 1, with the gripper at least 15 cm above the table. The tool flange faces straight down when joint 5 reads 90 and joints 2, 3 and 4 add up to −270, for example −80, −80 and −110.
+[List Number] Set the speed slider to 25%. Tap the program name at the top of the screen, tap + Program, choose Create New Program, name it after your group, for example Lab4_Group1, and tap Confirm. Do not edit the Lab 2 program that holds the server script; you need it unchanged in Part 3.
+[List Number] On the Move screen, set Relative To to base and check that Active TCP is your gripper TCP. Then open the Joints tab and jog the joints to a ready position of your choosing that looks like Figure 1, with the gripper at least 15 cm above the table. The tool flange faces straight down when joint 5 reads 90 and joints 2, 3 and 4 add up to −270, for example −80, −80 and −110.
 [List Number] Record the ready position in Table 3: the six joint angles in degrees and the TCP position X, Y, Z in millimeters, both read from the Move screen.
-[List Number] Store it in your program: tap + in the program tree, add a Joint Move node, name it Ready, tap Edit Point, and tap Save while the robot is at the pose. Record and store every pose below in the same way, using the node type listed in Table 2.
-[List Number] Open the Robotiq gripper screen that the URCap adds to the Teach Pendant, activate the gripper and open it. Put the cube on the pick mark.
-[List Number] On the Move screen, set the reference to Base, as in Lab 3. From here on jog only along X, Y and Z, so that the gripper keeps pointing straight down. Jog until the open fingers are on either side of the cube and about 5 mm above the table, turning the cube if needed so that the fingers close on two flat faces. Close the gripper once to confirm the grasp, then open it again. Record and store this pose as Pick.
+[List Number] Store it in your program: tap + in the program tree and add a Joint Move node. Tap its Name field, type Ready and tap Confirm. Then tap Edit Point and, with the robot still at the pose, tap Save. Record and store every pose below in the same way, using the node type listed in Table 2. Node names take only letters, digits and underscores, so use Pick, Pre_Pick, Place and Pre_Place.
+[List Number] Open the Robotiq gripper screen that the URCap adds to the Teach Pendant, activate the gripper (tap Scan if it is not detected) and open it. Put the cube on one of the two tape marks; that mark is the pick location.
+[List Number] From here on jog only with the plus-minus buttons of X, Y and Z on the Move tab, so that the gripper keeps pointing straight down. Jog until the open fingers are on either side of the cube and about 5 mm above the table, turning the cube if needed so that the fingers close on two flat faces. Close the gripper once to confirm the grasp, then open it again. Record and store this pose as Pick.
 [List Number] Jog straight up along Z by 5 to 10 cm. Record and store this pose as Pre-Pick, and copy its values into the Retract row.
 [List Number] Jog along X and Y until the gripper is above the place mark, then jog down to the Z of Pick. Record and store this pose as Place. Jog straight up by 5 to 10 cm, then record and store Pre-Place.
 [List Number] Check Table 3: Pre-Pick must have the same X and Y as Pick to within about 2 mm, and Pre-Place the same X and Y as Place.
@@ -62,12 +62,12 @@
   | Place |  |  |  |  |  |  |  |  | 
 [Normal] 
 [Heading 1] Part 2 - Teach Pendant Program
-[Normal] The finished program has the eleven nodes listed below: the Joint Move and Linear Move nodes that you stored in Task 1, three more move nodes for the poses that are visited twice, and three Robotiq gripper nodes, which the URCap adds to the list of nodes. If your Teach Pendant offers only a Move To node, use it and set its Move type to Joint or Linear. If no gripper node appears in the list, ask your instructor to check that the URCap is installed.
+[Normal] The finished program has the eleven nodes listed below: the Joint Move and Linear Move nodes that you stored in Task 1, three more move nodes that reuse stored poses, and three Robotiq Gripper nodes, which the URCap adds to the list of nodes under URCaps. If no gripper node appears in the list, ask your instructor to check that the URCap is installed.
 [Heading 2] Task 2: Build the Program
 [List Number] Use the Move up and Move down icons to put your five stored nodes in the order of the list below.
-[List Number] Add the three missing move nodes: Retract, the second Pre-Place and the second Ready. For each one, add the node, tap Edit Point, open the Joints tab, type the six joint angles of that waypoint from Table 3, and tap Save.
-[List Number] Add the three Robotiq gripper nodes and set each one to open or close as listed.
-[List Number] Save the program.
+[List Number] Add the three missing move nodes: Retract (Linear Move), the second Pre-Place (Linear Move) and the second Ready (Joint Move). For each one, tap its Name field, open the Variable tab, select the pose already stored (Pre_Pick for Retract, Pre_Place, Ready) and tap Confirm. The node then moves to that stored pose.
+[List Number] Add the three Robotiq Gripper nodes and set each one to open or close as listed.
+[List Number] Save the program: tap the program name, tap your program, tap the save icon and choose Save.
 [Normal] The eleven nodes of the program:
 [List Number] Joint Move to Ready
 [List Number] Gripper: open
@@ -82,9 +82,9 @@
 [List Number] Joint Move to Ready
 [Normal] The long moves between Ready, Pre-Pick and Pre-Place are joint moves because the shape of the path does not matter there. The four short moves next to the cube are linear so that the gripper travels vertically.
 [Heading 2] Task 3: Test the Program
-[List Number] Put the cube on the pick mark.
+[List Number] Put the cube on the pick mark. Do this before every run.
 [List Number] Set the speed slider to 10% and press Play. The robot first moves to Ready, the first node, then runs the program once and stops. Keep your hand near the e-stop and watch every move.
-[List Number] If the gripper misses the cube or touches the table, stop the program, tap Edit Point on that node, jog to the corrected pose and tap Save. Update that row of Table 3 (and the Retract row and node if you changed Pre-Pick). Then run again at 10%.
+[List Number] If the gripper misses the cube or touches the table, stop the program, tap Edit Point on that node, jog to the corrected pose and tap Save. Update that row of Table 3 (and the Retract row if you changed Pre-Pick). Then run again at 10%.
 [List Number] When the whole sequence works at 10%, run it again at 50%.
 [List Number] At 50%, time one full cycle with a stopwatch, from pressing Play until the robot is back at Ready. Record the time, the pick success and the place accuracy in Table 5.
 [Normal] Record your observations:
@@ -94,7 +94,7 @@
 [Heading 1] Part 3 - MATLAB RTDE Program
 [Normal] UR_PickPlace_Lab.m runs the same eleven steps from MATLAB. It connects to the robot, prints the current joint angles, and then moves through the waypoints you type into it. All of its moves are joint moves, and it opens and closes the gripper through the server script. Three safeguards are built in. Each waypoint starts as NaN, and the script stops before any motion while a NaN remains. It then runs check_waypoints.p, which computes where each waypoint puts the gripper and prints PASS or FAIL for eight checks, for example that Pre-Pick is directly above Pick and that the gripper points straight down. The robot does not move while any check fails. Finally the script asks you to type yes before the robot moves.
 [Heading 2] Task 4: Connect and Verify
-[List Number] On the Teach Pendant, save your program, then open a Lab 2 program that contains the Script Code node URServerScript_Robotiq2F_PolyScopeX.script (tap the program name at the top of the screen; any group's copy works) and press Play. The node must turn green.
+[List Number] On the Teach Pendant, save your program. Then tap the program name, tap a Lab 2 program that contains the Script Code node URServerScript_Robotiq2F_PolyScopeX.script (any group's copy works), tap Open, and press Play. The node must turn green.
 [List Number] In MATLAB, open UR_PickPlace_Lab.m and find the section labeled TASK 4. Check that robotIP is the IP address of your robot ("192.168.1.10") and that cobotName matches your robot model: 'universalUR3e' for a UR3e, 'universalUR5e' for a UR5e, and so on.
 [List Number] Type UR_PickPlace_Lab in the Command Window and press Enter. The script prints the connection readout and then stops, because the waypoints are still NaN. The robot does not move.
 [List Number] Copy the six joint angles from the line "Joint angles (deg)" into the MATLAB row of Table 4. Read the same six angles from the Move screen of the Teach Pendant into the first row, and compute the difference.
@@ -108,7 +108,7 @@
 [Heading 2] Task 5: Enter the Waypoints and Run
 [List Number] In UR_PickPlace_Lab.m, find the section labeled TASK 5. Replace each nan(1,6) with the six joint angles of that waypoint from Table 3, in degrees and in order from joint 1 to joint 6. For example: pick_pos = [35.20 -98.41 -112.63 -59.02 90.05 35.11];. Fill in all six waypoints (ready_pos, pre_pick_pos, pick_pos, retract_pos, pre_place_pos, place_pos) and save the file.
 [List Number] Leave moveEndTime = 5 unchanged. It is the time in seconds scheduled for each move when the speed slider is at 100%.
-[List Number] Put the cube on the pick mark and check that the server script node is green. The script opens the gripper itself after it reaches Ready.
+[List Number] Put the cube on the pick mark, as before every run, and check that the server script node is green. The script opens the gripper itself after it reaches Ready.
 [List Number] Set the speed slider to 25% and do not touch it while the script runs. At 25% each move takes about 20 seconds, so the full sequence takes about 3 minutes.
 [List Number] Run UR_PickPlace_Lab again and read the waypoint check that it prints. If any line shows FAIL, the robot will not move: correct the waypoint that the line names, in the script and in Table 3, and run again. If the pose itself is wrong, store it again on the Teach Pendant as in Task 3.
 [List Number] When all eight checks pass, confirm that the printed joint angles match the Move screen, then type yes and press Enter. Any other answer cancels the run. Keep your hand near the e-stop and watch every move. The script prints each of its eleven steps as it starts.
@@ -128,6 +128,7 @@
   | Ease of programming (1 = easy, 5 = difficult) |  | 
   | Ease of modification (1 = easy, 5 = difficult) |  | 
 [Normal] 
+[Normal] When you finish, stop the program on the Teach Pendant, jog the robot to your ready position, and power down as in Lab 2, Part 7.
 [Heading 1] Assessment Questions
 [Normal] Q1.  What is the difference between MoveJ and MoveL? When would you prefer one over the other? Give an example of each from this lab. The MATLAB script used joint moves only: why was that acceptable for the short moves near the cube?
 [Normal] Q2.  Why do we use approach waypoints (Pre-Pick and Pre-Place) instead of moving directly from Ready to Pick? What could go wrong without them?

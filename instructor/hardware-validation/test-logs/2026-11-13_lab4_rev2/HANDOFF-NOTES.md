@@ -143,3 +143,30 @@ Questions only the pendant or Ryan can answer (manual wording is generic until t
   table on a UR3e) so that it satisfies check 8 and the "at least 15 cm" step.
 - Manual: accompanying files list the p-file; Part 3 intro and Task 4 step 2 and Task 5
   steps 5 and 6 describe the check and `cobotName`.
+
+## Dry run: naive student against a simulated PolyScope X
+A student agent (Labs 1 to 3 only) wrote a literal 107-action log (`sim_student_action_log.md`
+in this folder; its readings are invented). A second agent played the pendant, grounded in
+the PolyScope X handbook (SW 10.12), the server script and the MATLAB script, with real
+kinematics. Verdict: the student reaches the end of the lab "with recoveries". With real
+poses for the student's pick and place spots, check_waypoints passes 8 of 8, the four linear
+moves are feasible, and the MATLAB joint-interpolated descents stray 3.8 mm sideways at most.
+Estimated MATLAB run: 150 to 171 s at 25 percent, 80 to 91 s at 50 percent.
+Manual changes made from it (all wording now uses handbook labels):
+- New program: program name, + Program, Create New Program, Confirm.
+- Move screen: Relative To = base, Active TCP = gripper TCP, Joints tab for the ready pose,
+  plus-minus buttons of X, Y, Z afterwards (this is set BEFORE the first X, Y, Z is recorded).
+- Storing a node: Name field, type, Confirm, Edit Point, Save. Names use underscores
+  (Pre_Pick, Pre_Place): the Name is a program variable and a hyphen may be refused.
+- Repeated poses (Retract, second Pre-Place, second Ready) are now made by selecting the
+  stored pose in the Name field's Variable tab (handbook p. 191), not by typing joint angles:
+  the handbook does not say whether Save after typing stores the typed or the current pose.
+- Robotiq Gripper node is under URCaps; "tap Scan if it is not detected".
+- Save: program name, your program, save icon, Save. Opening the Lab 2 program: tap it, Open.
+- "Put the cube on the pick mark before every run"; closing line on stopping and power-down.
+- Move To fallback sentence removed (Joint Move and Linear Move are documented).
+Not changed, per Ryan: no "Move robot into position" or looping hedges (Play runs the tree
+once, starting with the move to Ready).
+Only the real pendant can settle: hyphens/duplicates in names, the Robotiq screen location
+and its Activate/Open/Close labels and the node's open/close control, whether activation
+survives a program switch, and the pendant program's cycle time.
