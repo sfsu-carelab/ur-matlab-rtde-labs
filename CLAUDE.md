@@ -28,7 +28,7 @@ One folder layout: `labs/lab1-teach-pendant-and-safety/` ... `labs/lab6-language
 recognises the old Box names, which is harmless.) Some material lives in the working tree on
 the lab PC and in Box but is gitignored so it never reaches the public mirror: every
 `archive/` folder, `*_Rev<n>.docx` and `.pdf` old manual revisions, the Lab 3 answer key
-`UR_FK_Lab_KEY.m`, `test_all_models.m`, `run_self_tests.m` and the instructor solutions
+`UR_FK_Lab_KEY.m`, `test_all_models.m`, `run_self_tests.m`, the Lab 4 `check_waypoints.m` and its test, and the instructor solutions
 docx inside any `instructor/` folder (for Lab 3: `labs/lab3-forward-kinematics/instructor/`),
 the Quanser
 `QArm Lab 11 - Visual Servoing/` folder inside lab6, `gemini_api_key.txt` and
@@ -40,7 +40,7 @@ once by hand and only change if someone edits them. Never force-add them.
 | 1 Teach pendant and safety | `labs/lab1-teach-pendant-and-safety` | none | taught before |
 | 2 MATLAB + RTDE setup | `labs/lab2-matlab-rtde-setup` | snippet in the manual | connect/read verified on hardware 2026-10-28 |
 | 3 Forward kinematics (PoE) | `labs/lab3-forward-kinematics` | `UR_FK_Lab.m` + helpers, `run_self_tests.p` (source, key and solutions in `instructor/`, ignored) | manual at Rev3 (2026-11-09, built on Dr. Quintero's Rev2): screw axes now use the ROBOT'S OWN joint directions, lengths named L1 to L6, Part 4 is jog-and-compare. Checked offline only (all 8 models vs UR DH model, and the 2026-11-06 robot measurements reproduce to 1.2 mm); NOT yet re-run on the robot or opened in Word. See test-logs/2026-11-09_lab3_rev3 |
-| 4 Pick and place | `labs/lab4-pick-and-place` | `UR_PickPlace_Lab.m` | joint move and Cartesian move verified; gripper needs the Robotiq server script; full script not yet run |
+| 4 Pick and place | `labs/lab4-pick-and-place` | `UR_PickPlace_Lab.m`, `check_waypoints.p` (source and test in `instructor/`, ignored; rebuild with `instructor/build_pfile.m`) | manual at Rev2 (2026-11-13, rewritten to the Lab 3 Rev4 standard; script comments and labels only). Joint move, Cartesian move and gripper verified separately; Ready position chosen by the students (no Smart Skills), eleven steps, waypoint check before motion; full script run only against a simulated robot on the Mac, NOT on hardware. See test-logs/2026-11-13_lab4_rev2 |
 | 5 Vision-guided pick | `labs/lab5-vision-guided-pick` | `UR_VisionPick_Lab.m` + helpers | camera path switched to USB Webcams package; NO frame captured yet (USB 2 cable); calibration not done |
 | 6 Language-directed pick (VLM) | `labs/lab6-language-directed-pick` | `UR_VLA_Lab.m` + Gemini client | 11 offline tests pass; live API never called (no key yet); never run on hardware; manual is an outline |
 
@@ -64,6 +64,8 @@ Read, in order:
 5. `instructor/hardware-validation/test-logs/2026-11-09_lab3_rev3/HANDOFF-NOTES.md`
    (Mac session: Dr. Quintero's review, Lab 3 Rev3, convention switch, p-file, what is
    still unverified).
+6. `instructor/hardware-validation/test-logs/2026-11-13_lab4_rev2/HANDOFF-NOTES.md`
+   (Mac session: Lab 4 manual Rev2, script comment changes, simulated run, open items).
 
 Ryan's working order, agreed 2026-11-04: make Lab 5 work end to end on hardware, THEN update
 its manual; make Lab 6 work, THEN update its docs. No manual edits before the code runs.

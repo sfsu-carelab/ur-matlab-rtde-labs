@@ -37,12 +37,10 @@ Robots or automation hardware
 [[ID:LO]]
 As a result of this lab, rate your agreement with each statement.
 [[Choices]]
-I can design a waypoint sequence for a pick-and-place task, including approach and retract points, and explain what each one prevents.
-I can choose between MoveJ and MoveL for a specific motion and justify the choice in terms of path shape and speed.
-I can build and safely test a pick-and-place program on the Teach Pendant, including gripper actions, ramping speed from 10% up only after it works.
-I can run the same sequence from MATLAB over RTDE: enter waypoints, verify the connection against the pendant readout, and execute safely.
-I can interpret what the script's readouts and error messages tell me (connection state, failed moves, server program not running).
-For a new automation task, such as picking parts from changing locations, I could argue which approach (pendant or external control) fits and why.
+I can design a waypoint sequence for a pick-and-place task, including the approach and retract points, and record it with the Teach Pendant.
+I can build and safely test a pick-and-place program on the Teach Pendant using joint moves (MoveJ), linear moves (MoveL) and gripper commands.
+I can run the same sequence from MATLAB over RTDE, after verifying the connection against the Teach Pendant readout.
+I can compare the two workflows and justify which one fits a given automation task.
 [[Answers]]
 1 - Strongly disagree
 2 - Disagree

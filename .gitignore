@@ -12,6 +12,9 @@ archive/
 **/instructor/UR_FK_Lab_KEY.m
 **/instructor/test_all_models.m
 **/instructor/run_self_tests.m
+**/instructor/check_waypoints.m
+**/instructor/test_check_waypoints.m
+**/instructor/make_lab4_figure1.m
 **/instructor/*Solutions*
 QArm*/
 calibration_results.txt
