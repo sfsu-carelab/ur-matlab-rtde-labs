@@ -1,0 +1,28 @@
+
+===== PART 1: offline =====
+request body layout                  PASS  (382 bytes)
+inline PNG is a PNG                  PASS  (107 bytes)
+vlm_json strips fences               PASS  (ok)
+vlm_json finds embedded object       PASS  (ok)
+vlm_point y,x -> u,v                 PASS  ([160 240])
+vlm_point empty list                 PASS  (ok)
+vlm_point multiple                   PASS  ([64 48;576 432])
+vlm_plan parse                       PASS  (pick [320 120] place [80 360])
+vlm_plan null points -> NaN          PASS  (no red block visible)
+vlm_verify true/false                PASS  (ok)
+xy_in_calibrated_area                PASS  (ok)
+--------------------------------------------
+ALL OFFLINE VLM TESTS PASS
+
+===== PART 2: live API (needs a key) =====
+No API key found - skipping. Set GEMINI_API_KEY or create gemini_api_key.txt to run this part.
+
+========== C:\Users\924414657\2026 Thesis\ur-matlab-rtde-labs\labs\lab6-language-directed-pick\UR_VLA_Lab.m ==========
+========== C:\Users\924414657\2026 Thesis\ur-matlab-rtde-labs\labs\lab6-language-directed-pick\gemini_generate.m ==========
+========== C:\Users\924414657\2026 Thesis\ur-matlab-rtde-labs\labs\lab6-language-directed-pick\vlm_plan.m ==========
+========== C:\Users\924414657\2026 Thesis\ur-matlab-rtde-labs\labs\lab6-language-directed-pick\vlm_point.m ==========
+========== C:\Users\924414657\2026 Thesis\ur-matlab-rtde-labs\labs\lab6-language-directed-pick\vlm_verify.m ==========
+========== C:\Users\924414657\2026 Thesis\ur-matlab-rtde-labs\labs\lab6-language-directed-pick\vlm_json.m ==========
+========== C:\Users\924414657\2026 Thesis\ur-matlab-rtde-labs\labs\lab6-language-directed-pick\xy_in_calibrated_area.m ==========
+========== C:\Users\924414657\2026 Thesis\ur-matlab-rtde-labs\labs\lab6-language-directed-pick\genai_hello.m ==========
+

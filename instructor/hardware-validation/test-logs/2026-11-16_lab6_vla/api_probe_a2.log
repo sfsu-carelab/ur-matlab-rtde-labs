@@ -1,0 +1,8 @@
+key length 53, starts AQ.A
+--- step 1: webread GET models ---
+GET failed: Dot indexing is not supported for variables of this type.
+--- step 2: gemini_generate text ---
+reply "OK", modelVersion gemini-robotics-er-2-preview
+--- step 3: gemini_generate with ThinkingLevel=low ---
+reply "OK", modelVersion gemini-robotics-er-2-preview
+--- done ---

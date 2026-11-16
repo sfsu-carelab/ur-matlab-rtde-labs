@@ -1,0 +1,25 @@
+
+===== PART 1: offline =====
+request body layout                  PASS  (382 bytes)
+inline PNG is a PNG                  PASS  (107 bytes)
+vlm_json strips fences               PASS  (ok)
+vlm_json finds embedded object       PASS  (ok)
+vlm_point y,x -> u,v                 PASS  ([160 240])
+vlm_point empty list                 PASS  (ok)
+vlm_point multiple                   PASS  ([64 48;576 432])
+vlm_plan parse                       PASS  (pick [320 120] place [80 360])
+vlm_plan null points -> NaN          PASS  (no red block visible)
+vlm_verify true/false                PASS  (ok)
+xy_in_calibrated_area                PASS  (ok)
+--------------------------------------------
+ALL OFFLINE VLM TESTS PASS
+
+===== PART 2: live API (needs a key) =====
+live text call                       PASS  ("OK" in 2.1 s, model gemini-robotics-er-2-preview)
+live vlm_point in red square         PASS  ([349 139] "red square" in 2.4 s)
+live vlm_plan red -> blue            PASS  (pick [349 139] place [149 339] in 3.6 s (The task is to stack the red square on top of the blue square, so the robot picks the red square and places it on the blue square's location.))
+live vlm_verify success              PASS  (4.4 s: The red square was successfully moved from its initial position and placed on top of the blue square.)
+live vlm_verify no-change -> false   PASS  (The robot did not move any objects; the red square and the blue square remain in their original positions from the before image.)
+--------------------------------------------
+ALL LIVE VLM TESTS PASS
+

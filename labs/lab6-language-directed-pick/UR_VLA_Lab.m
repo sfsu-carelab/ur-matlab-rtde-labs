@@ -18,13 +18,14 @@ function UR_VLA_Lab()
 %                          base XY, check they are inside the calibrated area
 %     Stage D (TASK 5):    confirm, execute, verify, retry
 %
-%   Copy imaging_pose, UV/XY and ref_pick_pose straight from your Lab 5
-%   script - the calibration is reused unchanged.
+%   imaging_pose, UV/XY and ref_pick_pose come from UR_CalibrateCamera_VLM
+%   (run it first; it prints the lines to paste). If you still have Lab 5
+%   values and the camera has not moved, those work too.
 %
-%   Required files (same folder or on the path): gemini_generate.m,
-%   vlm_json.m, vlm_point.m, vlm_plan.m, vlm_verify.m,
-%   xy_in_calibrated_area.m, and from Lab 5: capture_realsense.m,
-%   detect_block.m, fit_pixel_to_base.m, pixel_to_base.m
+%   Required files (same folder): gemini_generate.m, vlm_json.m,
+%   vlm_point.m, vlm_plan.m, vlm_verify.m, xy_in_calibrated_area.m,
+%   UR_CalibrateCamera_VLM.m, capture_realsense.m, detect_block.m,
+%   fit_pixel_to_base.m, pixel_to_base.m
 
     %% ====================================================================
     %  CONNECTION
@@ -36,11 +37,11 @@ function UR_VLA_Lab()
     fprintf('\n  Connected to %s.\n', robotIP);
 
     %% ====================================================================
-    %  TASK 2 - IMAGING POSE AND CALIBRATION (copy from Lab 5)
+    %  TASK 2 - IMAGING POSE AND CALIBRATION (printed by UR_CalibrateCamera_VLM)
     %  ====================================================================
-    imaging_pose = nan(1,6);       % TODO: Lab 5 Table 2, degrees
-    UV = [ nan nan ; nan nan ; nan nan ; nan nan ];   % TODO: Lab 5 Table 4 pixels
-    XY = [ nan nan ; nan nan ; nan nan ; nan nan ];   % TODO: Lab 5 Table 4 metres
+    imaging_pose = nan(1,6);       % TODO: joint angles in degrees, arm out of the camera view
+    UV = [ nan nan ; nan nan ; nan nan ; nan nan ];   % TODO: pixel [u v] per placement
+    XY = [ nan nan ; nan nan ; nan nan ; nan nan ];   % TODO: base [X Y] in metres per placement
 
     %% ====================================================================
     %  TASK 3 - WHAT TO POINT AT (plain English)
@@ -57,9 +58,9 @@ function UR_VLA_Lab()
     instruction = "";              % TODO: e.g. "Put the red block on the blue square"
 
     %% ====================================================================
-    %  TASK 5 - PICK REFERENCE POSE (copy from Lab 5) AND HEIGHTS
+    %  TASK 5 - PICK REFERENCE POSE (printed by UR_CalibrateCamera_VLM) AND HEIGHTS
     %  ====================================================================
-    ref_pick_pose = nan(1,6);      % TODO: [thetaz thetay thetax x y z] from Lab 5
+    ref_pick_pose = nan(1,6);      % TODO: [thetaz thetay thetax x y z], the placement 1 touch pose
     approach_dz   = 0.10;          % hover height above pick / place (m)
     place_dz      = 0.03;          % release this far above the pick height (m)
     bounds_margin = 0.03;          % how far outside the calibration box is allowed (m)
@@ -71,7 +72,7 @@ function UR_VLA_Lab()
     %  STAGE A - imaging pose and capture
     %  ====================================================================
     if any(isnan(imaging_pose))
-        fprintf('  imaging_pose not set (TASK 2): copy it from Lab 5, then run again.\n'); return
+        fprintf('  imaging_pose not set (TASK 2): run UR_CalibrateCamera_VLM and paste its lines, then run again.\n'); return
     end
     fprintf('  Moving to the imaging pose...\n');
     moveToJ(ur, imaging_pose, moveEndTime);
@@ -109,7 +110,7 @@ function UR_VLA_Lab()
     title(sprintf('VLM: %s (yellow)   HSV centroid (red +)', items(1).label));
 
     if any(isnan(UV(:))) || any(isnan(XY(:)))
-        fprintf('  Calibration not entered (TASK 2): copy UV and XY from Lab 5, then run again.\n'); return
+        fprintf('  Calibration not entered (TASK 2): paste UV and XY from UR_CalibrateCamera_VLM, then run again.\n'); return
     end
     [A, ~, rms_mm] = fit_pixel_to_base(UV, XY);
     fprintf('  Calibration RMS %.2f mm. VLM point -> base (%.4f, %.4f) m\n', rms_mm, pixel_to_base(A, uv(1,:)));
@@ -127,7 +128,7 @@ function UR_VLA_Lab()
     %  STAGE D - execute, verify, retry
     %  ====================================================================
     if any(isnan(ref_pick_pose))
-        fprintf('  ref_pick_pose not set (TASK 5): copy it from Lab 5, then run again.\n'); return
+        fprintf('  ref_pick_pose not set (TASK 5): paste it from UR_CalibrateCamera_VLM, then run again.\n'); return
     end
 
     before = img;

@@ -1,0 +1,174 @@
+
+===== PART 1: offline =====
+request body layout                  PASS  (382 bytes)
+inline PNG is a PNG                  PASS  (107 bytes)
+vlm_json strips fences               PASS  (ok)
+vlm_json finds embedded object       PASS  (ok)
+vlm_point y,x -> u,v                 PASS  ([160 240])
+vlm_point empty list                 PASS  (ok)
+vlm_point multiple                   PASS  ([64 48;576 432])
+vlm_plan parse                       PASS  (pick [320 120] place [80 360])
+vlm_plan null points -> NaN          PASS  (no red block visible)
+vlm_verify true/false                PASS  (ok)
+xy_in_calibrated_area                PASS  (ok)
+--------------------------------------------
+ALL OFFLINE VLM TESTS PASS
+
+===== PART 2: live API (needs a key) =====
+
+--------------------------------------------------------------------------------
+             std::terminate() detected at 2026-11-16 14:36:03 -0800
+--------------------------------------------------------------------------------
+
+Configuration:
+  Crash Decoding           : Disabled - No sandbox or build area path
+  Crash Mode               : continue (default)
+  Default Encoding         : UTF-8
+  Deployed                 : false
+  Graphics Driver          : Uninitialized hardware 
+  Graphics card 1          : NVIDIA ( 0x10de ) NVIDIA GeForce RTX 4060 Version 32.0.15.6624 (2024-11-22)
+  Graphics card 2          : Intel Corporation ( 0x8086 ) Intel(R) UHD Graphics 770 Version 31.0.101.5382 (2024-3-27)
+  Java Version             : Java 1.8.0_202-b08 with Oracle Corporation Java HotSpot(TM) 64-Bit Server VM mixed mode
+  MATLAB Architecture      : win64
+  MATLAB Entitlement ID    : 5521452
+  MATLAB Root              : C:\Program Files\MATLAB\R2024b
+  MATLAB Version           : 24.2.0.2863752 (R2024b) Update 5
+  OpenGL                   : hardware
+  Operating System         : Microsoft Windows 11 Enterprise
+  Process ID               : 14536
+  Processor ID             : x86 Family 6 Model 183 Stepping 1, GenuineIntel
+  Session Key              : 90a51848-5620-4790-94f6-45de0fdaa5e9
+  Window System            : Version 10.0 (Build 26100)
+
+Fault Count: 1
+
+
+Abnormal termination:
+std::terminate()
+
+Current Thread: 'MCR 0 interpreter thread' id 11972
+
+Register State (captured):
+  RAX = 00007ffd659d82c8  RBX = 00007ffd659d82c8
+  RCX = 000000e5481ecd80  RDX = 00007ffd65981920
+  RSP = 000000e5481eccc0  RBP = 000000e5481eda50
+  RSI = 0000000000000000  RDI = 00007ffd659d82c8
+ 
+   R8 = 0000000000000004   R9 = 000000e5481ecc38
+  R10 = 00007ffd77c40000  R11 = 0000000000000000
+  R12 = 000000e5481ed958  R13 = 000000e5481f0bb0
+  R14 = 00007ffd659c81f8  R15 = 000000e5481ed390
+ 
+  RIP = 00007ffd658c21ca  EFL = 00000206
+ 
+   CS = 0033   FS = 0053   GS = 002b
+
+Stack Trace (captured):
+[  0] 0x00007ffd658bb563 C:\Program Files\MATLAB\R2024b\bin\win64\libmwfl.dll+00046435 foundation::core::diag::thread_context::unspecified_bool+00000051
+[  1] 0x00007ffd658b9998 C:\Program Files\MATLAB\R2024b\bin\win64\libmwfl.dll+00039320 foundation::core::diag::stacktrace_base::capture+00000024
+[  2] 0x00007ffd658bde0f C:\Program Files\MATLAB\R2024b\bin\win64\libmwfl.dll+00056847 foundation::core::diag::symbols::getSymbolAddress+00009903
+[  3] 0x00007ffd658c0cb7 C:\Program Files\MATLAB\R2024b\bin\win64\libmwfl.dll+00068791 foundation::core::diag::is_terminate_message_enabled+00000519
+[  4] 0x00007ffd15385778   C:\Program Files\MATLAB\R2024b\bin\win64\mcr.dll+00808824 mnFullExitFcn+00042264
+[  5] 0x00007ffd15384eed   C:\Program Files\MATLAB\R2024b\bin\win64\mcr.dll+00806637 mnFullExitFcn+00040077
+[  6] 0x00007ffd153809b5   C:\Program Files\MATLAB\R2024b\bin\win64\mcr.dll+00788917 mnFullExitFcn+00022357
+[  7] 0x00007ffd15387458   C:\Program Files\MATLAB\R2024b\bin\win64\mcr.dll+00816216 mnSetSegvServiceUrl+00000184
+[  8] 0x00007ffd9fca2187                   C:\WINDOWS\System32\ucrtbase.dll+00795015 terminate+00000023
+[  9] 0x00007ffd8de51911 C:\Program Files\MATLAB\R2024b\bin\win64\VCRUNTIME140_1.dll+00006417
+[ 10] 0x00007ffd8de5218f C:\Program Files\MATLAB\R2024b\bin\win64\VCRUNTIME140_1.dll+00008591
+[ 11] 0x00007ffd8de521e9 C:\Program Files\MATLAB\R2024b\bin\win64\VCRUNTIME140_1.dll+00008681
+[ 12] 0x00007ffd8de54019 C:\Program Files\MATLAB\R2024b\bin\win64\VCRUNTIME140_1.dll+00016409 _CxxFrameHandler4+00000169
+[ 13] 0x00007ffda23fab3f                      C:\WINDOWS\SYSTEM32\ntdll.dll+01485631 _chkstk+00000159
+[ 14] 0x00007ffda2356985                      C:\WINDOWS\SYSTEM32\ntdll.dll+00813445 RtlWow64GetCurrentMachine+00001621
+[ 15] 0x00007ffda22a9f3d                      C:\WINDOWS\SYSTEM32\ntdll.dll+00106301 RtlRaiseException+00000397
+[ 16] 0x00007ffd9f4f569a                 C:\WINDOWS\System32\KERNELBASE.dll+00808602 RaiseException+00000138
+[ 17] 0x00007ffd77c45267 C:\Program Files\MATLAB\R2024b\bin\win64\VCRUNTIME140.dll+00021095 CxxThrowException+00000151
+[ 18] 0x00007ffc75026379 C:\Program Files\MATLAB\R2024b\bin\win64\restful.dll+00025465
+[ 19] 0x00007ffc75026448 C:\Program Files\MATLAB\R2024b\bin\win64\restful.dll+00025672
+[ 20] 0x00007ffc7503a63b C:\Program Files\MATLAB\R2024b\bin\win64\restful.dll+00108091
+[ 21] 0x00007ffc7505330f C:\Program Files\MATLAB\R2024b\bin\win64\restful.dll+00209679 mwboost::serialization::singleton_module::unlock+00030191
+[ 22] 0x00007ffca7d0922f C:\Program Files\MATLAB\R2024b\bin\win64\mcos_impl.dll+01872431 mwboost::serialization::singleton_module::unlock+01322127
+[ 23] 0x00007ffca7d8205b C:\Program Files\MATLAB\R2024b\bin\win64\mcos_impl.dll+02367579 mcos::impl::terminateFcn+00098123
+[ 24] 0x00007ffca7c8b633 C:\Program Files\MATLAB\R2024b\bin\win64\mcos_impl.dll+01357363 mwboost::serialization::singleton_module::unlock+00807059
+[ 25] 0x00007ffd5954d5ed  C:\Program Files\MATLAB\R2024b\bin\win64\mcos.dll+00120301 mcos::COSInterfacePtr::release+00000141
+[ 26] 0x00007ffd5954d571  C:\Program Files\MATLAB\R2024b\bin\win64\mcos.dll+00120177 mcos::COSInterfacePtr::release+00000017
+[ 27] 0x00007ffca7f83b89 C:\Program Files\MATLAB\R2024b\bin\win64\mcos_impl.dll+04471689 namedArgsToCell+00009257
+[ 28] 0x00007ffd2b796b73 C:\Program Files\MATLAB\R2024b\bin\win64\libmx.dll+00224115 matrix::detail::noninlined::mx_array_api::mxSetObjectCreateDestroyFn+00004467
+[ 29] 0x00007ffd2b791df3 C:\Program Files\MATLAB\R2024b\bin\win64\libmx.dll+00204275 matrix::destroyArray+00000163
+[ 30] 0x00007ffd2b791dd5 C:\Program Files\MATLAB\R2024b\bin\win64\libmx.dll+00204245 matrix::destroyArray+00000133
+[ 31] 0x00007ffd143e776b C:\Program Files\MATLAB\R2024b\bin\win64\libmwlxemainservices.dll+01210219 mwboost::archive::detail::oserializer<mwboost::archive::text_oarchive,MathWorks::MatlabComponents::ComponentIdentifier>::save_object_data+00306139
+[ 32] 0x00007ffca7f3660f C:\Program Files\MATLAB\R2024b\bin\win64\mcos_impl.dll+04154895 mwboost::archive::detail::oserializer<mwboost::archive::text_oarchive,MathWorks::MatlabComponents::ComponentIdentifier>::save_object_data+00270575
+[ 33] 0x00007ffca7d0922f C:\Program Files\MATLAB\R2024b\bin\win64\mcos_impl.dll+01872431 mwboost::serialization::singleton_module::unlock+01322127
+[ 34] 0x00007ffca7d8205b C:\Program Files\MATLAB\R2024b\bin\win64\mcos_impl.dll+02367579 mcos::impl::terminateFcn+00098123
+[ 35] 0x00007ffca7c8b633 C:\Program Files\MATLAB\R2024b\bin\win64\mcos_impl.dll+01357363 mwboost::serialization::singleton_module::unlock+00807059
+[ 36] 0x00007ffd5954d5df  C:\Program Files\MATLAB\R2024b\bin\win64\mcos.dll+00120287 mcos::COSInterfacePtr::release+00000127
+[ 37] 0x00007ffd5954d571  C:\Program Files\MATLAB\R2024b\bin\win64\mcos.dll+00120177 mcos::COSInterfacePtr::release+00000017
+[ 38] 0x00007ffca7f83b89 C:\Program Files\MATLAB\R2024b\bin\win64\mcos_impl.dll+04471689 namedArgsToCell+00009257
+[ 39] 0x00007ffd2b796b73 C:\Program Files\MATLAB\R2024b\bin\win64\libmx.dll+00224115 matrix::detail::noninlined::mx_array_api::mxSetObjectCreateDestroyFn+00004467
+[ 40] 0x00007ffd2b791df3 C:\Program Files\MATLAB\R2024b\bin\win64\libmx.dll+00204275 matrix::destroyArray+00000163
+[ 41] 0x00007ffd2b791dd5 C:\Program Files\MATLAB\R2024b\bin\win64\libmx.dll+00204245 matrix::destroyArray+00000133
+[ 42] 0x00007ffd124fbd13 C:\Program Files\MATLAB\R2024b\bin\win64\libmwlxetypes.dll+00048403 MathWorks::lxe::xvalue::set+00000163
+[ 43] 0x00007ffd12568565 C:\Program Files\MATLAB\R2024b\bin\win64\libmwlxetypes.dll+00492901 MathWorks::lxe::NewConstantXvalueOf+00001589
+[ 44] 0x00007ffcb508e865 C:\Program Files\MATLAB\R2024b\bin\win64\m_lxe.dll+10086501 MathWorks::lxe::LxeTypes::GetTypeTaggedIrPointer+00002133
+[ 45] 0x00007ffd1256428c C:\Program Files\MATLAB\R2024b\bin\win64\libmwlxetypes.dll+00475788 MathWorks::lxe::GetTypeTupleOfXvalues+00001276
+[ 46] 0x00007ffcb4af806c C:\Program Files\MATLAB\R2024b\bin\win64\m_lxe.dll+04227180 MathWorks::lxe::samplingprofiler::SetNextTrigger+00007708
+[ 47] 0x00007ffcb4ae5855 C:\Program Files\MATLAB\R2024b\bin\win64\m_lxe.dll+04151381 MathWorks::lxe::SetEngineImplUnlinkFlagForAllCallsOnStack+00055941
+[ 48] 0x00007ffcb4ae5591 C:\Program Files\MATLAB\R2024b\bin\win64\m_lxe.dll+04150673 MathWorks::lxe::SetEngineImplUnlinkFlagForAllCallsOnStack+00055233
+[ 49] 0x00007ffcb6aff586 C:\Program Files\MATLAB\R2024b\bin\win64\m_lxe.dll+37811590 MathWorks::lxe::LXEConstants::InitializeElementwiseMachinePrimitiveConstants_9+21518406
+[ 50] 0x00007ffd8de54160 C:\Program Files\MATLAB\R2024b\bin\win64\VCRUNTIME140_1.dll+00016736 _CxxFrameHandler4+00000496
+[ 51] 0x00007ffd8de52572 C:\Program Files\MATLAB\R2024b\bin\win64\VCRUNTIME140_1.dll+00009586
+[ 52] 0x00007ffda23b71e6                      C:\WINDOWS\SYSTEM32\ntdll.dll+01208806 RtlCaptureContext2+00001190
+[ 53] 0x00007ffcb4ae3778 C:\Program Files\MATLAB\R2024b\bin\win64\m_lxe.dll+04142968 MathWorks::lxe::SetEngineImplUnlinkFlagForAllCallsOnStack+00047528
+[ 54] 0x00007ffcb4ae79e5 C:\Program Files\MATLAB\R2024b\bin\win64\m_lxe.dll+04159973 MathWorks::lxe::SetEngineImplUnlinkFlagForAllCallsOnStack+00064533
+[ 55] 0x00007ffd14429816 C:\Program Files\MATLAB\R2024b\bin\win64\libmwlxemainservices.dll+01480726 FeatureTestObservableWorkspace+00212358
+[ 56] 0x00007ffd1436b0f6 C:\Program Files\MATLAB\R2024b\bin\win64\libmwlxemainservices.dll+00700662 mwboost::archive::detail::pointer_oserializer<mwboost::archive::xml_oarchive,MathWorks::lxe::PreLineExecutionEvent>::save_object_ptr+00074918
+[ 57] 0x00007ffd1436cbf4 C:\Program Files\MATLAB\R2024b\bin\win64\libmwlxemainservices.dll+00707572 mwboost::archive::detail::pointer_oserializer<mwboost::archive::xml_oarchive,MathWorks::lxe::PreLineExecutionEvent>::save_object_ptr+00081828
+[ 58] 0x00007ffd143ecb77 C:\Program Files\MATLAB\R2024b\bin\win64\libmwlxemainservices.dll+01231735 mwboost::archive::detail::oserializer<mwboost::archive::text_oarchive,MathWorks::MatlabComponents::ComponentIdentifier>::save_object_data+00327655
+[ 59] 0x00007ffd143ee977 C:\Program Files\MATLAB\R2024b\bin\win64\libmwlxemainservices.dll+01239415 mwboost::archive::detail::oserializer<mwboost::archive::text_oarchive,MathWorks::MatlabComponents::ComponentIdentifier>::save_object_data+00335335
+[ 60] 0x00007ffd143ed914 C:\Program Files\MATLAB\R2024b\bin\win64\libmwlxemainservices.dll+01235220 mwboost::archive::detail::oserializer<mwboost::archive::text_oarchive,MathWorks::MatlabComponents::ComponentIdentifier>::save_object_data+00331140
+[ 61] 0x00007ffd14b48cac C:\Program Files\MATLAB\R2024b\bin\win64\m_interpreter.dll+00691372 inEvalCmdWithLocalReturnInDesiredWSAndPublishEvents+00000076
+[ 62] 0x00007ffd151e2d45   C:\Program Files\MATLAB\R2024b\bin\win64\iqm.dll+00798021 iqm::InternalEvalPlugin::inEvalCmdWithLocalReturn+00000101
+[ 63] 0x00007ffd151e279c   C:\Program Files\MATLAB\R2024b\bin\win64\iqm.dll+00796572 iqm::InternalEvalPlugin::execute+00000236
+[ 64] 0x00007ffd151c229f   C:\Program Files\MATLAB\R2024b\bin\win64\iqm.dll+00664223 iqm::Iqm::setupIqmFcnPtrs+00110911
+[ 65] 0x00007ffd15195807   C:\Program Files\MATLAB\R2024b\bin\win64\iqm.dll+00481287 iqm::Iqm::create+00038695
+[ 66] 0x00007ffd15130cd3   C:\Program Files\MATLAB\R2024b\bin\win64\iqm.dll+00068819 iqm::BaseIqmPlugin::processMFileError+00001763
+[ 67] 0x00007ffd17b14a5c C:\Program Files\MATLAB\R2024b\bin\win64\mlutil.dll+03230300 cmddistributor::IIPRunNowMessage::deliver+00000028
+[ 68] 0x00007ffd5c5d15d7 C:\Program Files\MATLAB\R2024b\bin\win64\libmwms.dll+01775063 foundation::msg_svc::exchange::MessageQueue::deliver+00000455
+[ 69] 0x00007ffd5c5d32b1 C:\Program Files\MATLAB\R2024b\bin\win64\libmwms.dll+01782449 foundation::msg_svc::exchange::NoOpMessage::deliver+00003121
+[ 70] 0x00007ffd5c5bc5a2 C:\Program Files\MATLAB\R2024b\bin\win64\libmwms.dll+01688994 foundation::msg_svc::exchange::TerminatedException::operator=+00029234
+[ 71] 0x00007ffd5c5c95ad C:\Program Files\MATLAB\R2024b\bin\win64\libmwms.dll+01742253 foundation::msg_svc::exchange::TerminatedException::operator=+00082493
+[ 72] 0x00007ffd5c5c7aec C:\Program Files\MATLAB\R2024b\bin\win64\libmwms.dll+01735404 foundation::msg_svc::exchange::TerminatedException::operator=+00075644
+[ 73] 0x00007ffd17972341 C:\Program Files\MATLAB\R2024b\bin\win64\mlutil.dll+01516353 cmddistributor::IIP::EventMgrBypass::operator=+00052369
+[ 74] 0x00007ffd1793bf24 C:\Program Files\MATLAB\R2024b\bin\win64\mlutil.dll+01294116 cmddistributor::DebugLoopEvent::serializeExplicit+00024708
+[ 75] 0x00007ffd5dad9c2c   C:\Program Files\MATLAB\R2024b\bin\win64\mvm.dll+00498732 mvm::MVM::setClientCapabilities+00010284
+[ 76] 0x00007ffd152fe111   C:\Program Files\MATLAB\R2024b\bin\win64\mcr.dll+00254225 mwboost::archive::codecvt_null<wchar_t>::do_out+00003329
+[ 77] 0x00007ffd152fdab2   C:\Program Files\MATLAB\R2024b\bin\win64\mcr.dll+00252594 mwboost::archive::codecvt_null<wchar_t>::do_out+00001698
+[ 78] 0x00007ffd152d91de   C:\Program Files\MATLAB\R2024b\bin\win64\mcr.dll+00102878 mcrFunctionSignature::set_signature+00080062
+[ 79] 0x00007ffd152f63c2   C:\Program Files\MATLAB\R2024b\bin\win64\mcr.dll+00222146 mwboost::archive::codecvt_null<wchar_t>::`default constructor closure'+00017266
+[ 80] 0x00007ffd151efe2a   C:\Program Files\MATLAB\R2024b\bin\win64\iqm.dll+00851498 iqm::PackagedTaskPlugin::execute+00000074
+[ 81] 0x00007ffd151c229f   C:\Program Files\MATLAB\R2024b\bin\win64\iqm.dll+00664223 iqm::Iqm::setupIqmFcnPtrs+00110911
+[ 82] 0x00007ffd1518e384   C:\Program Files\MATLAB\R2024b\bin\win64\iqm.dll+00451460 iqm::Iqm::create+00008868
+[ 83] 0x00007ffd14cc9546 C:\Program Files\MATLAB\R2024b\bin\win64\libmwbridge.dll+00103750 ioReadLine+00000406
+[ 84] 0x00007ffd14cc9375 C:\Program Files\MATLAB\R2024b\bin\win64\libmwbridge.dll+00103285 ioReadLine+00000165
+[ 85] 0x00007ffd14cfa070 C:\Program Files\MATLAB\R2024b\bin\win64\libmwbridge.dll+00303216 mnGetCommandLineBuffer+00000288
+[ 86] 0x00007ffd14cfa517 C:\Program Files\MATLAB\R2024b\bin\win64\libmwbridge.dll+00304407 mnParser+00000487
+[ 87] 0x00007ffd1532d19f   C:\Program Files\MATLAB\R2024b\bin\win64\mcr.dll+00446879 mcr_initialize_main+00016975
+[ 88] 0x00007ffd152d91de   C:\Program Files\MATLAB\R2024b\bin\win64\mcr.dll+00102878 mcrFunctionSignature::set_signature+00080062
+[ 89] 0x00007ffd152f63c2   C:\Program Files\MATLAB\R2024b\bin\win64\mcr.dll+00222146 mwboost::archive::codecvt_null<wchar_t>::`default constructor closure'+00017266
+[ 90] 0x00007ffd151efe2a   C:\Program Files\MATLAB\R2024b\bin\win64\iqm.dll+00851498 iqm::PackagedTaskPlugin::execute+00000074
+[ 91] 0x00007ffd151c229f   C:\Program Files\MATLAB\R2024b\bin\win64\iqm.dll+00664223 iqm::Iqm::setupIqmFcnPtrs+00110911
+[ 92] 0x00007ffd1518f32a   C:\Program Files\MATLAB\R2024b\bin\win64\iqm.dll+00455466 iqm::Iqm::create+00012874
+[ 93] 0x00007ffd1518f811   C:\Program Files\MATLAB\R2024b\bin\win64\iqm.dll+00456721 iqm::Iqm::create+00014129
+[ 94] 0x00007ffd1518ec9d   C:\Program Files\MATLAB\R2024b\bin\win64\iqm.dll+00453789 iqm::Iqm::create+00011197
+[ 95] 0x00007ffd15311b7c   C:\Program Files\MATLAB\R2024b\bin\win64\mcr.dll+00334716 mcrInstantiationError::operator=+00010652
+[ 96] 0x00007ffd1531263f   C:\Program Files\MATLAB\R2024b\bin\win64\mcr.dll+00337471 mcrInstantiationError::operator=+00013407
+[ 97] 0x00007ffd1530fc41   C:\Program Files\MATLAB\R2024b\bin\win64\mcr.dll+00326721 mcrInstantiationError::operator=+00002657
+[ 98] 0x00007ffd6e178fba C:\Program Files\MATLAB\R2024b\bin\win64\mwboost_thread-vc143-mt-x64-1_81.dll+00036794 mwboost::detail::win32::handle_manager::swap+00000650
+[ 99] 0x00007ffd9fc0cd30                   C:\WINDOWS\System32\ucrtbase.dll+00183600 wcsrchr+00000336
+[100] 0x00007ffda0afdda7                   C:\WINDOWS\System32\KERNEL32.DLL+00187815 BaseThreadInitThunk+00000023
+[101] 0x00007ffda2359c5c                      C:\WINDOWS\SYSTEM32\ntdll.dll+00826460 RtlUserThreadStart+00000044
+
+** This crash report has been saved to disk as C:\Users\924414~1\AppData\Local\Temp\matlab_crash_dump.14536-1 **
+
+
+
+MATLAB is exiting because of fatal error

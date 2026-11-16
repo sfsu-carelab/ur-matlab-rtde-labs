@@ -1,0 +1,6 @@
+    {'Intel(R) RealSense(TM) Depth Camera 435i RGB'  }
+    {'Intel(R) RealSense(TM) Depth Camera 435i Depth'}
+
+capture [720 1280 3] in 3.16 s, mean RGB [85.7 115.0 110.2]
+red  band: centroid (438.8, 370.1), mask px 4236
+teal band: centroid (650.3, 396.3), mask px 2868
