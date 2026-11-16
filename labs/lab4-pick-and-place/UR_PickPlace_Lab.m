@@ -86,7 +86,8 @@ function UR_PickPlace_Lab()
     %  placeholders - [0 0 0 0 0 0] is a real pose (arm fully outstretched).
     % ---------------------------------------------------------------------
 
-    ready_pos     = nan(1,6);   % TODO: your ready position (start and end)
+    ready_pos     = nan(1,6);   % TODO: your Ready position (start and end):
+                                %       joint 5 = 90, joint 6 = 0, joints 2+3+4 = -270
     pre_pick_pos  = nan(1,6);   % TODO: directly above the cube
     pick_pos      = nan(1,6);   % TODO: fingers around the cube
     retract_pos   = nan(1,6);   % TODO: straight back up from Pick (same as Pre-Pick)
@@ -97,8 +98,9 @@ function UR_PickPlace_Lab()
     %  IMPORTANT: when EndTime is non-zero, sendJointConfigurationAndWait
     %  time-parameterizes the move - the robot schedules EACH move to take
     %  about EndTime seconds at a 100 percent speed slider (EndTime divided
-    %  by the slider fraction otherwise: 20 s per move at 25 percent), and any Velocity/Acceleration settings are
-    %  ignored ("time takes precedence" per the MathWorks documentation).
+    %  by the slider fraction otherwise: 12 s per move at 25 percent), and
+    %  any Velocity/Acceleration settings are ignored ("time takes
+    %  precedence" per the MathWorks documentation).
     %  That makes motion slow, smooth and predictable, which is what we
     %  want in a teaching lab, but it also means the printed cycle time
     %  mostly reflects this setting rather than the path length - keep that

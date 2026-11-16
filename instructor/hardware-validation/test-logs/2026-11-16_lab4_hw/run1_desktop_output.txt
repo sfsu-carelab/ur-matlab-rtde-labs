@@ -1,0 +1,66 @@
+Run 1 of UR_PickPlace_Lab from the MATLAB desktop (Ryan, e-stop in hand), 2026-11-16 about 14:00.
+Pasted from the Command Window. Speed slider setting: see HANDOFF-NOTES.md.
+
+>> UR_PickPlace_Lab
+
+============================================================
+  RTDE Connection Established
+============================================================
+  Robot IP: 192.168.1.10
+  Joint angles (deg): [-25.28, -120.86, -86.82, -58.45, 87.94, 16.09]
+  Flange position (mm): [308.9, -294.5, 175.8]
+============================================================
+
+============================================================
+  Waypoint Check (nothing moves during this check)
+============================================================
+  1. Six waypoints, six angles each, in degrees       PASS
+  2. Retract has the same joint angles as Pre-Pick    PASS
+       largest difference 0.00 deg (limit 1.0)
+  3. Gripper points straight down at every waypoint   PASS
+       largest tilt 4.4 deg at Pre-Place (limit 5)
+  4. Pre-Pick is directly above Pick                  PASS
+       0.1 mm sideways (limit 5), 71 mm higher (20 to 200)
+  5. Pre-Place is directly above Place                PASS
+       0.1 mm sideways (limit 5), 70 mm higher (20 to 200)
+  6. Place is at the same height as Pick              PASS
+       Place is +5.8 mm relative to Pick (limit +/-10)
+  7. Pick and Place are different locations           PASS
+       260 mm apart (at least 50)
+  8. Ready is well above Pick                         PASS
+       216 mm above Pick (at least 100)
+============================================================
+  ALL CHECKS PASS.
+============================================================
+
+  WARNING: the robot will move when you proceed.
+  Set the pendant speed slider to 25% for the first run and leave it alone.
+  Clear the workspace and keep the e-stop within reach.
+
+  Type "yes" to run the sequence: yes
+
+  Starting pick-and-place sequence...
+
+  [ 1/11] Moving to Ready...
+  [ 2/11] Opening gripper...
+  [ 3/11] Moving to Pre-Pick...
+  [ 4/11] Moving to Pick...
+  [ 5/11] Closing gripper...
+  [ 6/11] Retracting...
+  [ 7/11] Moving to Pre-Place...
+  [ 8/11] Moving to Place...
+  [ 9/11] Opening gripper...
+  [10/11] Retracting to Pre-Place...
+  [11/11] Returning to Ready...
+
+  Sequence complete. Cycle time, Ready to Ready: 30.4 s.
+  (Record this as the MATLAB RTDE cycle time in Table 5. With timed
+   moves it is roughly 7 x moveEndTime divided by the speed slider
+   fraction, plus the gripper actions.)
+
+============================================================
+  Final State
+============================================================
+  Joint angles (deg): [-9.31, -90.34, -84.99, -97.55, 90.68, -1.76]
+  Flange position (mm): [269.6, -175.9, 316.5]
+============================================================

@@ -1,0 +1,23 @@
+﻿============================================================
+  Waypoint Check (nothing moves during this check)
+============================================================
+  1. Six waypoints, six angles each, in degrees       PASS
+  2. Retract has the same joint angles as Pre-Pick    PASS
+       largest difference 0.00 deg (limit 1.0)
+  3. Gripper points straight down at every waypoint   PASS
+       largest tilt 4.4 deg at Pre-Place (limit 5)
+  4. Pre-Pick is directly above Pick                  PASS
+       0.1 mm sideways (limit 5), 71 mm higher (20 to 200)
+  5. Pre-Place is directly above Place                PASS
+       0.1 mm sideways (limit 5), 70 mm higher (20 to 200)
+  6. Place is at the same height as Pick              PASS
+       Place is +5.8 mm relative to Pick (limit +/-10)
+  7. Pick and Place are different locations           PASS
+       260 mm apart (at least 50)
+  8. Ready is well above Pick                         PASS
+       216 mm above Pick (at least 100)
+============================================================
+  ALL CHECKS PASS.
+============================================================
+
+ok=1
