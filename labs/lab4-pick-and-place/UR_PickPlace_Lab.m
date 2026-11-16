@@ -30,9 +30,10 @@ function UR_PickPlace_Lab()
 %     - Robotics System Toolbox
 %     - Robotics System Toolbox Support Package for Universal Robots
 %       UR Series Manipulators
-%     - Robot powered on, the Lab 2 program with the Script Code node
+%     - Robot powered on, a program with the Script Code node
 %       URServerScript_Robotiq2F_PolyScopeX.script loaded and playing
-%       (green node in the program tree), connected over Ethernet
+%       (green node in the program tree), connected over Ethernet. A copy
+%       of the script is in this folder; it runs on the robot, not in MATLAB.
 %
 %   API reference:
 %     https://www.mathworks.com/help/robotics/urseries/ref/urrtdeclient.html
@@ -69,7 +70,7 @@ function UR_PickPlace_Lab()
     fprintf('  Robot IP: %s\n', robotIP);
     fprintf('  Joint angles (deg): [%.2f, %.2f, %.2f, %.2f, %.2f, %.2f]\n', ...
         rad2deg(currentJoints));
-    fprintf('  Flange position (m): [%.4f, %.4f, %.4f]\n', currentPose(4:6));
+    fprintf('  Flange position (mm): [%.1f, %.1f, %.1f]\n', 1000*currentPose(4:6));
     fprintf('============================================================\n\n');
 
     %% ====================================================================
@@ -104,7 +105,7 @@ function UR_PickPlace_Lab()
     %  in mind when you fill in Table 5 (see Task 6).
     %  Instructor option: EndTime = 0 uses the Velocity/Acceleration
     %  arguments instead, so moves run at their natural speed.
-    moveEndTime       = 5;     % seconds scheduled per move at a 100% slider
+    moveEndTime       = 3;     % seconds scheduled per move at a 100% slider
     gripperSettleTime = 0.5;   % seconds to wait after grip/release
 
     %% ====================================================================
@@ -160,17 +161,22 @@ function UR_PickPlace_Lab()
         'Retracting to Pre-Place', @() moveTo(ur, pre_place_pos, moveEndTime); ...
         'Returning to Ready',      @() moveTo(ur, ready_pos,     moveEndTime)};
 
+    % Cycle timer: tic starts a stopwatch and toc(t0) reads it. It is started
+    % once the robot is at Ready with the gripper open (after step 2) and read
+    % when the robot is back at Ready, the same interval that the Timer nodes
+    % of the Teach Pendant program measure in Task 3.
     t0 = tic;
     for k = 1:size(steps, 1)
         fprintf('  [%2d/%d] %s...\n', k, size(steps,1), steps{k,1});
         steps{k,2}();
+        if k == 2, t0 = tic; end
     end
     cycleTime = toc(t0);
 
-    fprintf('\n  Sequence complete in %.1f s.\n', cycleTime);
-    fprintf('  (Record this as the MATLAB RTDE cycle time in Table 5 - and note\n');
-    fprintf('   that with time-parameterized moves it is roughly 8 x moveEndTime\n');
-    fprintf('   divided by the speed slider fraction.)\n\n');
+    fprintf('\n  Sequence complete. Cycle time, Ready to Ready: %.1f s.\n', cycleTime);
+    fprintf('  (Record this as the MATLAB RTDE cycle time in Table 5. With timed\n');
+    fprintf('   moves it is roughly 7 x moveEndTime divided by the speed slider\n');
+    fprintf('   fraction, plus the gripper actions.)\n\n');
 
     %% ====================================================================
     %  FINAL STATE READOUT
@@ -184,7 +190,7 @@ function UR_PickPlace_Lab()
     fprintf('============================================================\n');
     fprintf('  Joint angles (deg): [%.2f, %.2f, %.2f, %.2f, %.2f, %.2f]\n', ...
         rad2deg(finalJoints));
-    fprintf('  Flange position (m): [%.4f, %.4f, %.4f]\n', finalPose(4:6));
+    fprintf('  Flange position (mm): [%.1f, %.1f, %.1f]\n', 1000*finalPose(4:6));
     fprintf('============================================================\n\n');
 end
 
@@ -218,7 +224,7 @@ function ok = waitForArrival(ur, readFcn, target, idx, tol)
 %WAITFORARRIVAL  Poll readFcn until elements idx are within tol of target, no longer
 %   changing between reads, AND the server script reports its last motion command
 %   finished; then pause briefly so the server is ready for the next command. Gives up
-%   after 60 s (a 5 s EndTime move at a 10 percent slider takes 50 s).
+%   after 60 s (a 3 s EndTime move at a 10 percent slider takes 30 s).
 %
 %   2026-11-04 hardware (Lab 5): the server script cannot read a new command until its
 %   current movej has returned. At a 25 percent slider the next command was sent while
