@@ -39,6 +39,8 @@ Downloaded and text-extracted with pypdf (Anaconda Python on PC 17). Result per 
 - Move Here: brown Move Here button below the X, Y, Z coordinate space in the 3D main screen;
   opens "Move robot into position"; long tap Move to Position; Tap Ok. MATCHES; the manual
   says hold Move to Position until the robot stops and omits the final Ok (pages 39, 140).
+  Ryan, on the real pendant 2026-11-16: there is no Ok button in this flow, just the Move
+  Here button in the 3D view, so the manual stays as written.
 - Joint Move / Linear Move nodes: fields Motion Profile and Name; buttons Edit Point,
   Move Here, More; Name field has Value, Variable, Expression tabs. MATCHES (14.3.15, 14.3.16).
 - Edit Point screen: tabs Move, Joints, TCP, Smart Skills; jog, Save; Joints tab: tap the
