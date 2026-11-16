@@ -107,5 +107,12 @@ script's prompt flow).
 - [ ] decide on the two proposed gemini_generate changes (key file line break, 429 retry)
 - [ ] Lab 6 README.txt and the outline still say "Lab 5 Code folder on the path" (doc fix,
       after the code runs)
-- [ ] CLAUDE.md Lab 6 row and "Facts" paragraph: live API verified, model id and both
-      thinking fields OK, key format, calibration now in Lab 6
+- [x] CLAUDE.md Lab 6 row and "Facts" paragraph updated at the end of the session
+- [ ] VLA side project (separate from the labs): see `pi0_feasibility.md` in this folder.
+      Decision: LeRobot + SmolVLA on the lab's Jetson AGX Orin with SpaceMouse teleop.
+      Waiting on the Orin's memory size and JetPack version.
+
+## 7. End of session
+Commits 5205f40 (session work), e9b3d77 (pi0 note), and the wrap-up commit (this note,
+CLAUDE.md) pushed to origin/main. Ryan to pull on the Mac and rsync into Box. The robot was
+never moved for Lab 6 today; `UR_CalibrateCamera_VLM` is untested on hardware.

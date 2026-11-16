@@ -56,6 +56,26 @@ time and a few hundred dollars of cloud GPU time.
   The four-point calibration in Labs 5 and 6 is the same knowledge made explicit.
 - Hardware to buy: SpaceMouse; optionally a wrist camera and mount.
 
+## Update, end of day: the lab has a Jetson AGX Orin
+Ryan asked whether the Orin is enough for training. Assessment given in chat:
+- Not for pi0 / pi0.5 training: openpi trains in JAX with no CUDA build for Jetson
+  (Tegra, aarch64); the PyTorch port has no LoRA, so it would need a full fine-tune
+  (> 70 GB), above even the 64 GB module; and the Orin is roughly 5 to 10 times slower
+  than an A100.
+- Yes for SmolVLA fine-tuning (PyTorch, 10 to 16 GB at batch 8, an overnight run), and yes
+  as the local policy server for either model (openpi inference > 8 GB, Orin 32 or 64 GB
+  unified), which removes the cloud round trip.
+- DECISION (Ryan): the project is UR3e + Robotiq + D435i (plus a wrist camera), Jetson AGX
+  Orin running LeRobot (record, fine-tune SmolVLA, serve), SpaceMouse teleop, lab PC
+  optional. Steps: LeRobot robot class for the UR3e on ur_rtde (gripper through the
+  register pattern of the PolyScope X server script, own pendant program since servoJ and
+  the MathWorks program cannot run together); 100 to 200 teleop episodes of one task at
+  10 Hz; SmolVLA fine-tune on the Orin; LeRobot eval loop on the robot. 6 to 10 weeks
+  part time, no cloud cost. Risks: the UR3e class and gripper path, demo quality,
+  SmolVLA's SO-100 bias (expect a second data round), JetPack and LeRobot version pins.
+- Still needed from Ryan: the Orin's memory size (32 or 64 GB) and JetPack version
+  (`cat /etc/nv_tegra_release`), then a setup plan against exact versions.
+
 ## Sources
 - https://github.com/Physical-Intelligence/openpi (README: requirements table, checkpoints, fine-tuning steps)
 - https://github.com/Physical-Intelligence/openpi/blob/main/docs/remote_inference.md
