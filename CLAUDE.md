@@ -40,7 +40,7 @@ once by hand and only change if someone edits them. Never force-add them.
 | 1 Teach pendant and safety | `labs/lab1-teach-pendant-and-safety` | none | taught before |
 | 2 MATLAB + RTDE setup | `labs/lab2-matlab-rtde-setup` | snippet in the manual | connect/read verified on hardware 2026-10-28 |
 | 3 Forward kinematics (PoE) | `labs/lab3-forward-kinematics` | `UR_FK_Lab.m` + helpers, `run_self_tests.p` (source, key and solutions in `instructor/`, ignored) | manual at Rev3 (2026-11-09, built on Dr. Quintero's Rev2): screw axes now use the ROBOT'S OWN joint directions, lengths named L1 to L6, Part 4 is jog-and-compare. Checked offline only (all 8 models vs UR DH model, and the 2026-11-06 robot measurements reproduce to 1.2 mm); NOT yet re-run on the robot or opened in Word. See test-logs/2026-11-09_lab3_rev3 |
-| 4 Pick and place | `labs/lab4-pick-and-place` | `UR_PickPlace_Lab.m`, `check_waypoints.p` (source and test in `instructor/`, ignored; rebuild with `instructor/build_pfile.m`) | MATLAB half VERIFIED ON HARDWARE 2026-11-16 (PC 17, UR3e): Task 4 readout, eight waypoint checks PASS on real taught poses, full eleven-step run at a 100 percent slider picked and placed the cube, cycle time 30.4 s. Manual at Rev4 (2026-11-16): Ready position is a RULE (joint 5 = 90, joint 6 = 0, joints 2+3+4 = -270, joints 1 to 3 chosen to clear the group's walls), Move Here is in the 3D tab of the left sidebar. Rev3 (Dr. Quintero's feedback: Timer nodes, tic/toc, `moveEndTime` 3 s, Table 4 with X/Y/Z, server script in the lab folder). NOT verified: 25 and 50 percent runs, Part 2 on the pendant (node names, Variable tab, Gripper and Timer nodes). See test-logs/2026-11-16_lab4_hw |
+| 4 Pick and place | `labs/lab4-pick-and-place` | `UR_PickPlace_Lab.m`, `check_waypoints.p` (source and test in `instructor/`, ignored; rebuild with `instructor/build_pfile.m`) | MATLAB half VERIFIED ON HARDWARE 2026-11-16 (PC 17, UR3e): Task 4 readout, eight waypoint checks PASS on real taught poses, full eleven-step run at a 100 percent slider picked and placed the cube, cycle time 30.4 s. Manual at Rev4 (2026-11-16): Ready position is a RULE (joint 5 = 90, joint 6 = 0, joints 2+3+4 = -270, joints 1 to 3 chosen to clear the group's walls), Move Here is in the 3D tab of the left sidebar, Robotiq screen under Application > URCaps, plus eight wording fixes from a three-persona simulated-student review and a check of every pendant name against the PolyScope X 10.12 handbook (all match). Rev3 (Dr. Quintero's feedback: Timer nodes, tic/toc, `moveEndTime` 3 s, Table 4 with X/Y/Z, server script in the lab folder). NOT verified: 25 and 50 percent runs, Part 2 on the pendant (node names, Variable tab, Gripper and Timer nodes). See test-logs/2026-11-16_lab4_hw |
 | 5 Vision-guided pick | `labs/lab5-vision-guided-pick` | `UR_VisionPick_Lab.m` + helpers | camera path switched to USB Webcams package; NO frame captured yet (USB 2 cable); calibration not done |
 | 6 Language-directed pick (VLM) | `labs/lab6-language-directed-pick` | `UR_VLA_Lab.m` + Gemini client | 11 offline tests pass; live API never called (no key yet); never run on hardware; manual is an outline |
 
@@ -158,7 +158,12 @@ Next PC checklist, before anything else:
   what the workspace needs is the Lab 5 calibration.
 - MATLAB on these PCs: R2024b Update 5 at `C:\Program Files\MATLAB\R2024b\bin`. Batch:
   `matlab -batch "cd('<folder>'); test_vlm_offline"`. Every batch log starts with a harmless
-  Quanser QUARC `startup.m` error block. Python is NOT installed on the lab PCs.
+  Quanser QUARC `startup.m` error block. Python: the `python` on PATH is the Microsoft Store
+  stub, but PC 17 has Anaconda 3 (Python 3.12.7) at `C:\ProgramData\anaconda3\python.exe`
+  (lxml present, no python-docx or pypdf; `pip install --target <folder> <pkg>` works
+  without admin). Found 2026-11-16. The docx manuals can also be patched without Python:
+  unzip, replace text runs in `word/document.xml`, rezip with forward-slash entry names
+  (scripts in `test-logs/2026-11-16_lab4_hw/`), then open in Word via COM to verify.
 
 ## Evidence and handoff
 Everything goes in `instructor/hardware-validation/test-logs/<timestamp>/`: the smoke test

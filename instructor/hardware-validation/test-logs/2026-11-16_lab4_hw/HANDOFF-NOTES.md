@@ -61,6 +61,29 @@ NaN placeholders restored.
    `../2026-11-16_lab4_rev3/build_lab4_rev3.py` and `rev3_text.txt` so a rebuild on the
    Mac keeps them.
 
+## Later: simulated-student review and second docx patch
+Three fresh student agents walked Rev4 (details and the handbook cross-check in
+`student_sim_2026-11-16.md`). Eight wording fixes went into the docx with
+`rev4_patch2_student_sim_fixes.ps1` (same XML-patch method, Word opens the result):
+never reach in for the cube (open the gripper from the pendant), check the loaded program
+before Play in Task 4, Table 4 prediction (Z about 174 mm higher, X and Y within about
+15 mm), tape marks at least 10 cm apart, Retract not stored in Task 1, "a little over 2
+minutes" at 25 percent, e-stop recovery (Power On and Unlock), and the Robotiq screen path
+(Application in the left sidebar, URCaps, Robotiq; from Ryan). `rev3_text.txt` mirrors all
+of it; `build_lab4_rev3.py` only the first patch (Ready rule, 3D tab), so a Mac rebuild must
+start from the committed docx, not from the build chain.
+
+Pendant wording was then checked against the PolyScope X 10.12 handbook: all names used in
+Parts 1 and 2 match (Move panel fields, Joints tool, Move Here and Move to Position, Joint
+Move and Linear Move with Edit Point and Save, Variable tab, Move up and Move down, URCaps
+node group, Timer with Start/Pause/Reset, Global Variables in the sidebar, save icon,
+Robot State and Shutdown). The robot runs something newer than 10.12 (Script Code node with
+Select File, as Lab 2 documents, instead of the handbook's Script node).
+
+PC 17 has Python after all: Anaconda 3 (Python 3.12.7) at `C:\ProgramData\anaconda3\python.exe`,
+not on PATH (the `python` on PATH is the Microsoft Store stub). No pypdf or python-docx in
+it; `pip install --target <folder> pypdf` works, and lxml is present. CLAUDE.md corrected.
+
 ## Findings worth knowing
 - With the server program STOPPED on the pendant, `urRTDEClient`, the joint and pose reads
   AND `readMotionStatus` (state "Not Executing") all still succeed. The script cannot tell
