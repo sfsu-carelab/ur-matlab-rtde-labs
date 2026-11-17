@@ -111,6 +111,10 @@ script's prompt flow).
 - [ ] VLA side project (separate from the labs): see `pi0_feasibility.md` in this folder.
       Decision: LeRobot + SmolVLA on the lab's Jetson AGX Orin with SpaceMouse teleop.
       Waiting on the Orin's memory size and JetPack version.
+- [ ] SUPERSEDED IN PART (Mac session, same evening): MATLAB must stay in the loop. Current
+      plan and the four first tests are in `vla_matlab_in_loop_plan.md` in this folder
+      (MATLAB + urRTDEClient executes, SmolVLA fine-tuned and served from WSL2 on PC 17,
+      Jetson as fallback).
 
 ## 7. End of session
 Commits 5205f40 (session work), e9b3d77 (pi0 note), and the wrap-up commit (this note,
