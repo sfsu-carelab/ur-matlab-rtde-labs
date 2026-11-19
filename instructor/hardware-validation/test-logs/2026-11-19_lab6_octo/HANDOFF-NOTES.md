@@ -225,12 +225,24 @@ Ryan chose 2. Implemented, verified offline and read-only, NOT yet run on the ro
   at the start pose (`plan_waypoints_readonly.log`): a run-1-like chunk with one 1 mm step
   gave 3 of 4 waypoints kept, IK-to-FK error 0.00 mm at each, max joint step 4.2 deg, blend
   capped 10 -> 5.6 mm, 0.65 s to plan.
-- What to watch on the first hardware run: a MATLAB warning "Ignoring waypoint times
-  because blend radius is specified" is expected (seen with the Cartesian cousin on
-  2026-11-04); Velocity and Acceleration then set the pace. If the arm still visibly stops
-  at every waypoint, the server runs the chain without blending (the 2026-11-04 finding for
-  Cartesian waypoints) and option 3 is the remaining route. The arrival check is on the
-  last waypoint only.
+- FIRST CHUNK RUN (14:25) errored before any motion: `followJointWaypoints` "The value of
+  'WaypointTimes' is invalid. Expected input to be an array with number of columns equal
+  to 6." Read the toolbox source (`manipulatorRTDEInterfaceInputParser.m` L144-183,
+  `manipulatorRTDEInterface.m` L505-526, `sharedRTDEInterface.m` L157-231):
+  - the help text says one waypoint per ROW, but the parser sets Ncols = size(wp, 2) as
+    "Number of Waypoints" and the method does `JointWaypoints'` "convert 6xN to Nx6": the
+    matrix must be 6 x N, and WaypointTimes must have N columns;
+  - with BlendRadius > 0 the times are zeroed and a warning is raised (so each segment is a
+    movej at the given Velocity/Acceleration); with BlendRadius 0, times must be increasing;
+  - the server-side chain gives the first and last waypoints blend 0 and caps the blend of
+    the last two segments at 0.8 x the segment length; interior waypoints get the given radius.
+  Fix in `moveThrough`: send `[q0; Q]'` (the current joints as waypoint 1, a zero-length
+  movej, so every chunk target blends except the last) with Velocity, Acceleration and
+  BlendRadius and no times. Verified with the toolbox parser offline
+  (`test_fjw_parser.m`, `fjw_parser_offline.log`): 6x4 with blend parses to times
+  [0 0 0 0] and blend 0.0056; the N x 6 form reproduces the live error. checkcode 0. The
+  motion itself is still unverified; if the arm visibly stops at every waypoint anyway,
+  option 3 (`sendServoJCommands`) is the remaining route. Arrival check on the last waypoint.
 
 ## 8. Sync
 `git pull` brought 223cb34 (Mac: the SmolVLA plan) before any work; nothing else was ahead.

@@ -309,10 +309,21 @@ function moveThrough(ur, T, stepTime, vel, acc, blend, singleEndTime)
     if size(Q, 1) == 1
         sendJointConfigurationAndWait(ur, Q, EndTime = singleEndTime);
     else
-        % 2026-11-04 (Lab 5, Cartesian version): the toolbox warned "Ignoring waypoint
-        % times because blend radius is specified", so Velocity and Acceleration are given
-        % too and are what limits the pace when the times are dropped.
-        followJointWaypoints(ur, Q, WaypointTimes = times, Velocity = vel, Acceleration = acc, BlendRadius = blend);
+        % 2026-11-19, from the toolbox source (manipulatorRTDEInterfaceInputParser,
+        % sharedRTDEInterface.followJointWaypoints), found when the first chunk run errored:
+        %  - the help text says one waypoint per ROW, but the parser counts waypoints as
+        %    COLUMNS and the method transposes "6xN to Nx6", so the matrix goes in as 6 x N;
+        %  - with a blend radius the waypoint times are zeroed (warning), so Velocity and
+        %    Acceleration set the pace; times are only passed when blend is 0;
+        %  - the FIRST and LAST waypoints always get blend 0, so the current joints are sent
+        %    as waypoint 1 (a zero-length movej) and every chunk target can blend except the
+        %    last, where the arm stops and the arrival check runs.
+        Qsend = [q0; Q];
+        if blend > 0
+            followJointWaypoints(ur, Qsend', Velocity = vel, Acceleration = acc, BlendRadius = blend);
+        else
+            followJointWaypoints(ur, Qsend', WaypointTimes = [0 times], Velocity = vel, Acceleration = acc);
+        end
     end
     ok = waitForArrival(ur, @() readCartesianPose(ur), T(end, :), 4:6, 0.002);
     if ~ok

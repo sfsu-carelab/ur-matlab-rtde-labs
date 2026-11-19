@@ -1,0 +1,5 @@
+﻿matrix sent: 6 x 4
+blend call parsed: JointWaypoints [6 4], WaypointTimes [0 0 0 0], Velocity 0.30, Acceleration 0.50, BlendRadius 0.0056
+timed call parsed: WaypointTimes [0 0.6 1.2 1.8], BlendRadius 0.0000
+N x 6 call rejected as in the live run: The value of 'WaypointTimes' is invalid. Expected input to be an array with number of columns equal to 6.
+checkcode: 0 message(s)
