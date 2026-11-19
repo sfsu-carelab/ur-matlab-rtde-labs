@@ -268,6 +268,28 @@ lower (the close then happens at the block), or `z_min` closer to the table; or 
 close until the chunk has finished (a policy change, less honest). Ryan's choice: wait for the
 USB 3 cable and try two cameras next (section 12).
 
+## 12. Two cameras: the wrist image path (built 14:45 while waiting for the USB 3 cable)
+octo-base config: observation tokenizers `primary` (image_primary, 256x256) and `wrist`
+(image_wrist, 128x128), window 2, both pretrained. Without a wrist image the wrist tokenizer
+is skipped (the "Skipping observation tokenizer: obs_wrist" warning in every run so far).
+- `octoChunk.py`: `step_chunk(image, task, wrist_image=None)`. The wrist frame is resized to
+  128x128 (lanczos3, like the primary), kept in its own 2-frame history, cleared on reset,
+  and passed as `image_wrist`; an episode must give it on every step or on none (error
+  otherwise). Python test on the start-pose frame with a fake wrist (the same frame
+  downsampled): the skip warning disappears, actions change, first call 6 s, the second
+  call 9 s (a second JAX compile for the 2-frame window), then 0.2 s expected.
+- `UR_VLA_Octo_Prototype.m`: settings `use_wrist` (true), `wrist_camera` ("435if RGB"),
+  `wrist_resolution` ("640x480", in both the USB 2 and USB 3 mode lists). Both cameras are
+  opened once by name (`openCamera(pattern, resolution)`), one snapshot each per picture,
+  the figure shows bird's-eye | wrist side by side. Offline: `ImageFile=` plus
+  `WristImageFile=`. `use_wrist = false` is runs 1 and 2 exactly.
+- NOT run with the real wrist camera: it still has no USB 3 cable. When it arrives: unplug
+  and replug the 435if on the new cable, `webcamlist` must show "435if RGB", a `webcam` on it
+  should list the long mode table (1920x1080 ... 320x180) and `snapshot` must return a frame
+  (batch probe: `matlab -batch "c = webcam('Intel(R) RealSense(TM) Depth Camera 435if RGB'); disp(c.AvailableResolutions); imwrite(snapshot(c), 'wrist_probe.png')"`).
+  Then the same `UR_VLA_Octo_Prototype` run, same start pose and task, for a direct
+  comparison with run 2. Expect the first two pictures to take 6 to 9 s each.
+
 ## 8. Sync
 `git pull` brought 223cb34 (Mac: the SmolVLA plan) before any work; nothing else was ahead.
 This folder was committed and pushed at the end of the session. Box is not mounted on PC 17;

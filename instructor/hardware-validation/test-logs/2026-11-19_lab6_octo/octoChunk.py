@@ -6,16 +6,40 @@ execute a chunk as one blended multi-waypoint move and re-observe afterwards.
 
 Added 2026-11-19 for the SFSU UR3e labs. octoModel.py itself is untouched.
 """
+from collections import deque
+
 import jax
 import numpy as np
+import tensorflow as tf
 from transforms3d.euler import euler2axangle
 
 from octoModel import OctoInference
 
 
+WRIST_IMAGE_SIZE = 128   # octo-base config: frame_transform resize_size wrist [128, 128]
+
+
 class OctoChunkInference(OctoInference):
-    def step_chunk(self, image: np.ndarray, task_description=None) -> dict:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.wrist_history = deque(maxlen=self.horizon)
+
+    def reset(self, task_description: str) -> None:
+        super().reset(task_description)
+        self.wrist_history.clear()
+
+    def _resize_wrist(self, image: np.ndarray) -> np.ndarray:
+        image = tf.image.resize(image, size=(WRIST_IMAGE_SIZE, WRIST_IMAGE_SIZE), method="lanczos3", antialias=True)
+        return tf.cast(tf.clip_by_value(tf.round(image), 0, 255), tf.uint8).numpy()
+
+    def step_chunk(self, image: np.ndarray, task_description=None, wrist_image=None) -> dict:
         """Same observation handling as step(); returns every step of the predicted chunk.
+
+        image        uint8 (H, W, 3), the fixed third-person camera -> image_primary (256x256)
+        wrist_image  uint8 (H, W, 3) or None, the camera behind the gripper -> image_wrist
+                     (128x128). octo-base was pretrained with both tokenizers; without a
+                     wrist image the wrist tokenizer is skipped (the "Skipping observation
+                     tokenizer: obs_wrist" warning). Give it on every step or on none.
 
         Returns a dict of numpy arrays, H = pred_action_horizon:
             'world_vector' (H, 3)  xyz translation delta per step [m]
@@ -36,6 +60,14 @@ class OctoChunkInference(OctoInference):
         if not self.automatic_task_creation:
             raise NotImplementedError("step_chunk supports the octo-base / octo-small checkpoints only")
         obs = {"image_primary": images, "timestep_pad_mask": pad_mask}
+        if wrist_image is not None:
+            assert wrist_image.dtype == np.uint8
+            self.wrist_history.append(self._resize_wrist(wrist_image))
+            if len(self.wrist_history) != len(self.image_history):
+                raise ValueError("wrist_image must be given on every step of an episode, or on none")
+            obs["image_wrist"] = np.stack(self.wrist_history, axis=0)[None]
+        elif len(self.wrist_history) > 0:
+            raise ValueError("this episode started with a wrist image; give one on every step")
         norm = np.asarray(self.model.sample_actions(obs, self.task, rng=key))[0]   # (H, 7)
         assert norm.shape == (self.pred_action_horizon, 7)
         raw = norm * self.action_std[None] + self.action_mean[None]

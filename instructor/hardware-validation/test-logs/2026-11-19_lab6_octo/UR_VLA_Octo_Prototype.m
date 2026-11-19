@@ -45,6 +45,7 @@ function UR_VLA_Octo_Prototype(opts)
         opts.ImageFile (1,1) string  = ""     % with DryRun: use this image instead of the camera
         opts.MaxSteps  (1,1) double  = 20
         opts.Task      (1,1) string  = ""     % skips the task prompt (needed in batch)
+        opts.WristImageFile (1,1) string = "" % with DryRun + ImageFile and use_wrist: the wrist frame file
     end
 
     %% ====================================================================
@@ -91,7 +92,14 @@ function UR_VLA_Octo_Prototype(opts)
     confirm_each_step = false;                    % true: Enter before every move. false (Ryan, after run 1,
                                                   % 2026-11-19): runs on its own; press q in the figure
                                                   % window to stop after the current step, or use the e-stop.
-    primary_camera    = "435i RGB";               % webcamlist entry for the bird's-eye (the wrist unit is "435if")
+    primary_camera    = "435i RGB";               % webcamlist entry for the bird's-eye -> image_primary (256x256)
+    % Second camera behind the gripper, FPV (Ryan, 2026-11-19) -> Octo's image_wrist input
+    % (128x128), which octo-base was pretrained with. use_wrist = false runs the bird's-eye
+    % only (runs 1 and 2). The wrist unit needs a USB 3 cable: on USB 2 it enumerates, lists
+    % four modes and never returns a frame (2026-11-04 and 2026-11-19 findings).
+    use_wrist         = true;
+    wrist_camera      = "435if RGB";              % webcamlist entry for the wrist unit
+    wrist_resolution  = "640x480";                % plenty for 128x128; in both the USB 2 and USB 3 mode lists
 
     % Chunk execution (Ryan, 2026-11-19, "option 2"): Octo predicts 4 steps per picture. The
     % first chunk_steps of them become cumulative targets, each solved to joint angles, and go
@@ -167,9 +175,13 @@ function UR_VLA_Octo_Prototype(opts)
     stopAfterThis = false;
     % Camera stays open for the whole run: one snapshot per step (capture_realsense reopens
     % the camera and waits 30 frames every call, about 3 s; run 1 spent most of each step there).
-    cam = [];
-    if ~(opts.DryRun && strlength(opts.ImageFile) > 0)
-        cam = openCamera(primary_camera);
+    cam = []; camW = [];
+    offlineImages = opts.DryRun && strlength(opts.ImageFile) > 0;
+    if ~offlineImages
+        cam = openCamera(primary_camera, "1280x720");
+        if use_wrist, camW = openCamera(wrist_camera, wrist_resolution); end
+    elseif use_wrist && strlength(opts.WristImageFile) == 0
+        error('UR_VLA_Octo_Prototype:noWristFile', 'use_wrist is true: give WristImageFile= with ImageFile=, or set use_wrist = false.');
     end
     fig = figure(1); clf;
     setappdata(fig, 'key', '');
@@ -177,10 +189,13 @@ function UR_VLA_Octo_Prototype(opts)
     fprintf('  Running. Click the figure window and press q to stop after the current chunk.\n');
     for k = 1:opts.MaxSteps                                  % one picture and one chunk per iteration
         % ---- observe ----------------------------------------------------
-        if isempty(cam)
+        wimg = []; %#ok<NASGU>  (set below when use_wrist)
+        if offlineImages
             img = imread(opts.ImageFile);
+            if use_wrist, wimg = imread(opts.WristImageFile); end
         else
             img = snapshot(cam);
+            if use_wrist, wimg = snapshot(camW); end
         end
         if ~opts.DryRun
             cur = readCartesianPose(ur);                     % [thetaz thetay thetax x y z], model FK
@@ -188,7 +203,11 @@ function UR_VLA_Octo_Prototype(opts)
 
         % ---- policy: the whole predicted chunk --------------------------
         t = tic;
-        a = policy.step_chunk(py.numpy.array(img), task);
+        if use_wrist
+            a = policy.step_chunk(py.numpy.array(img), task, py.numpy.array(wimg));
+        else
+            a = policy.step_chunk(py.numpy.array(img), task); %#ok<UNRCH>  (use_wrist is a settings flag)
+        end
         tp = toc(t);
         D = double(a{'world_vector'}) * action_scale;        % H x 3 translation deltas (m)
         R = double(a{'rot_axangle'});                        % H x 3 axis-angle deltas (rad)
@@ -213,7 +232,9 @@ function UR_VLA_Octo_Prototype(opts)
             end
         end
 
-        imshow(img); title(sprintf('picture %d  chunk total = [%+.1f %+.1f %+.1f] mm  gripper %+d  (%.2f s)   [q stops]', ...
+        shown = img; %#ok<NASGU>
+        if use_wrist, shown = [img, imresize(wimg, [size(img, 1) NaN])]; end   % bird's-eye | wrist
+        imshow(shown); title(sprintf('picture %d  chunk total = [%+.1f %+.1f %+.1f] mm  gripper %+d  (%.2f s)   [q stops]', ...
             k, 1000*sum(D, 1), G(end), tp)); drawnow;
         fprintf('  picture %2d  policy %.2f s\n', k, tp);
         for j = 1:n
@@ -262,7 +283,7 @@ function UR_VLA_Octo_Prototype(opts)
         if stopAfterThis, break; end
     end
     fclose(fid);
-    clear cam                                                  % release the camera
+    clear cam camW                                             % release the cameras
     fprintf('\n  Log: %s\n', logFile);
     if ~opts.DryRun
         fprintf('  Returning to the start pose.\n');
@@ -275,9 +296,9 @@ function s = csv(v)
     s = strjoin(compose('%.4f', v), ',');
 end
 
-function cam = openCamera(pattern)
-%OPENCAMERA  Open the RealSense RGB stream whose webcamlist name contains pattern, pin
-%   1280x720, let auto-exposure settle (30 frames, see capture_realsense) and keep it open.
+function cam = openCamera(pattern, resolution)
+%OPENCAMERA  Open the RealSense RGB stream whose webcamlist name contains pattern, pin the
+%   resolution, let auto-exposure settle (30 frames, see capture_realsense) and keep it open.
     if isempty(which('webcam'))
         error('UR_VLA_Octo_Prototype:noPackage', 'The USB Webcams support package is not on the path (Lab 5, Part 1).');
     end
@@ -287,7 +308,8 @@ function cam = openCamera(pattern)
         error('UR_VLA_Octo_Prototype:noCamera', 'No camera matching "%s". webcamlist: %s', pattern, strjoin(names, ', '));
     end
     cam = webcam(names{k});
-    if any(strcmp(cam.AvailableResolutions, '1280x720')), cam.Resolution = '1280x720'; end
+    if any(strcmp(cam.AvailableResolutions, resolution)), cam.Resolution = char(resolution); end
+    fprintf('  Camera "%s" open at %s.\n', names{k}, cam.Resolution);
     for n = 1:30, snapshot(cam); end
 end
 

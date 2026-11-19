@@ -1,0 +1,25 @@
+﻿checkcode: 3 message(s)
+  L192: Value assigned to variable might be unused.
+  L209: This statement (and possibly following ones) cannot be reached.
+  L235: Value assigned to variable might be unused.
+  Task: "pick up the red block"
+  Python 3.10 (OutOfProcess)
+  Octo loaded in 10.1 s.
+  DRY RUN: no robot, actions are printed only.
+  Running. Click the figure window and press q to stop after the current chunk.
+  picture  1  policy 7.80 s
+     step 1  d = [  -1.8   +1.0   +1.8] mm  rot = [+0.002 +0.001 +0.002]  gripper +1
+     step 2  d = [  -2.2   +1.1   +3.0] mm  rot = [+0.004 -0.000 -0.002]  gripper +1
+     step 3  d = [  -2.3   +0.9   +3.5] mm  rot = [+0.003 +0.001 -0.001]  gripper +1
+     step 4  d = [  -2.2   +0.8   +3.2] mm  rot = [+0.002 +0.001 -0.003]  gripper +1
+  picture  2  policy 8.31 s
+     step 1  d = [  -1.7   +0.3   +3.7] mm  rot = [+0.002 +0.001 +0.002]  gripper +1
+     step 2  d = [  -0.7   +1.3   +6.5] mm  rot = [+0.003 +0.001 +0.001]  gripper +1
+     step 3  d = [  -1.8   +0.8   +3.2] mm  rot = [+0.002 +0.000 +0.000]  gripper +1
+     step 4  d = [  -1.3   -0.1   +1.3] mm  rot = [+0.001 +0.001 +0.003]  gripper +1
+  picture  3  policy 0.27 s
+     step 1  d = [  -1.8   +2.2   +3.1] mm  rot = [+0.003 +0.001 +0.000]  gripper +1
+     step 2  d = [  -1.8   +1.2   +3.3] mm  rot = [+0.003 +0.000 -0.002]  gripper +1
+     step 3  d = [  -1.9   +1.3   +3.7] mm  rot = [+0.002 +0.000 -0.001]  gripper +1
+     step 4  d = [  -2.1   +2.2   +4.5] mm  rot = [+0.003 +0.003 +0.001]  gripper +1
+  Log: C:\Users\924414657\2026 Thesis\ur-matlab-rtde-labs\instructor\hardware-validation\test-logs\2026-11-19_lab6_octo\octo_run_20261119_143638.csv
