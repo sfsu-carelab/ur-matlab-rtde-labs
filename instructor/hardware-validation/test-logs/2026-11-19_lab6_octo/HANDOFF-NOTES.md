@@ -317,6 +317,9 @@ is skipped (the "Skipping observation tokenizer: obs_wrist" warning in every run
   Lab 4 grasp line). Why 20 mm above the open-tip touch point: the 2F-85 pads swing outward
   as the fingers close, so an empty close reaches well below where the open tips were. The
   honest number is a measurement with the gripper closed (pendant), jogged down to touch.
+- Measured: closed fingertips resting on the table at flange Z 96.2 mm (open tips 2 to 3 mm
+  up at 84.9), so the empty close reaches 11 mm lower than the open tips. Floor stays 0.105,
+  9 mm above the closed touch point.
 
 ## 8. Sync
 `git pull` brought 223cb34 (Mac: the SmolVLA plan) before any work; nothing else was ahead.
