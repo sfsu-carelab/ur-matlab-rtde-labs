@@ -290,6 +290,27 @@ is skipped (the "Skipping observation tokenizer: obs_wrist" warning in every run
   Then the same `UR_VLA_Octo_Prototype` run, same start pose and task, for a direct
   comparison with run 2. Expect the first two pictures to take 6 to 9 s each.
 
+## 13. Runs 3 and 4 and the measured box (14:45 to 15:10)
+- Run 3 (`octo_run_20261119_144517.csv`, start pose 45 mm lower, flange Z 179 mm): stopped
+  by the script's own floor. The policy was heading for Z 98 mm (the Lab 4 grasp line is
+  100.4 mm) with the gripper still open; waypoint 4 of chunk 2 fell below z_min 0.100 and the
+  rule then was "stop the loop". Changed: Z targets outside [z_min z_max] are clamped (the
+  rest of the chunk shifted by the same amount) and the loop continues; X and Y outside still
+  stop it.
+- Box measured with Ryan at the pendant (read over RTDE): open fingertips 2 to 3 mm above
+  the table at flange Z 84.9 mm; highest wanted pose Z 530.5 mm (nothing above the robot in
+  reach); the PolyScope X safety planes for the back wall and the curtain read at about
+  X +105 and X -225 mm, both behind the base, so the Lab 4 X/Y edges (0.25 to 0.50,
+  -0.35 to 0.00) stay. Advice given: keep the planes (hard layer), keep the box inside them
+  (a plane hit is a protective stop that kills the server program and the MATLAB run).
+- Run 4 (`octo_run_20261119_150950.csv`, floor 0.085, ceiling 0.530): 6 chunks, 24 steps,
+  all executed. Descent to 91 mm, a 6 mm lift, CLOSE at 97 to 89 mm (the right height this
+  time), the floor held Z at exactly 85.0 for three waypoints while the policy pushed down,
+  then a 29 mm lift and a return to 92 mm with the fingers closed. Ryan: "it was dragging
+  the fingertips across the table". The box worked; the 2 to 3 mm margin did not survive a
+  closed gripper (a closing 2F-85 swings its tips lower) and 5 cm of table. Floor raised to
+  0.095. Whether the fingers caught the block is not in the log (Ryan did not say).
+
 ## 8. Sync
 `git pull` brought 223cb34 (Mac: the SmolVLA plan) before any work; nothing else was ahead.
 This folder was committed and pushed at the end of the session. Box is not mounted on PC 17;

@@ -85,9 +85,11 @@ function UR_VLA_Octo_Prototype(opts)
     % in front of the base, down to just above the Lab 4 grasp height, never above Ready.
     xy_min = [0.25 -0.35];                        % [X Y] min (m)
     xy_max = [0.50  0.00];                        % [X Y] max (m)
-    z_min  = 0.085;                               % MEASURED 2026-11-19: Ryan jogged the open gripper until the
-                                                  % fingertips were 2 to 3 mm above the table; flange Z read 84.9 mm.
-                                                  % (Run 3 was stopped by the earlier 0.100 floor 2 mm short of grasp.)
+    z_min  = 0.095;                               % MEASURED 2026-11-19: open fingertips 2 to 3 mm above the table at
+                                                  % flange Z 84.9 mm, plus 10 mm. Run 4 at a floor of 0.085 dragged the
+                                                  % CLOSED fingertips on the table: a closing 2F-85 reaches a few mm
+                                                  % lower, and the table is not flat to the mm 5 cm from the measured
+                                                  % spot. 0.095 is still 5 mm under the Lab 4 grasp line (100.4 mm).
     z_max  = 0.53;                                % MEASURED 2026-11-19: Ryan jogged to the highest pose he wants
                                                   % allowed (nothing above the robot in reach); flange Z read 530.5 mm.
 
