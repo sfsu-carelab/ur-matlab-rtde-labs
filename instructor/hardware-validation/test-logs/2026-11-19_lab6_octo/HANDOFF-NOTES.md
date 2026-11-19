@@ -310,6 +310,13 @@ is skipped (the "Skipping observation tokenizer: obs_wrist" warning in every run
   the fingertips across the table". The box worked; the 2 to 3 mm margin did not survive a
   closed gripper (a closing 2F-85 swings its tips lower) and 5 cm of table. Floor raised to
   0.095. Whether the fingers caught the block is not in the log (Ryan did not say).
+- Run 5 (`octo_run_20261119_151427.csv`, floor 0.095): 12 chunks, 48 steps, all executed, the
+  floor held Z at exactly 95.0 for 22 of them. The closed fingertips hit the table again
+  (Ryan). The policy cycled close / lift / come back down / open / close four times, the
+  Bridge regrasp pattern, so it never had the block. Floor raised to 0.105 (5 mm above the
+  Lab 4 grasp line). Why 20 mm above the open-tip touch point: the 2F-85 pads swing outward
+  as the fingers close, so an empty close reaches well below where the open tips were. The
+  honest number is a measurement with the gripper closed (pendant), jogged down to touch.
 
 ## 8. Sync
 `git pull` brought 223cb34 (Mac: the SmolVLA plan) before any work; nothing else was ahead.
