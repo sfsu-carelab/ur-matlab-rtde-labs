@@ -72,9 +72,10 @@ function UR_VLA_Octo_Prototype(opts)
 
     % Start pose: gripper open, pointing straight down, 10 to 15 cm above the table, IN the
     % camera view together with the blocks (the policy must see its own gripper).
-    % 2026-11-19 first run: jogged by Ryan, read over RTDE; flange (341.3, -110.9, 224.8) mm,
-    % tool 0.7 deg from straight down.
-    start_pose = [3.59 -101.4 -98.88 -69.58 89.36 180.9];   % joint angles in degrees
+    % 2026-11-19 runs 1 and 2: [3.59 -101.4 -98.88 -69.58 89.36 180.9], flange (341.3, -110.9,
+    % 224.8) mm. Run 2 closed the gripper 33 mm above the block, so run 3 starts 45 mm lower:
+    % jogged by Ryan, read over RTDE, flange (356.3, -103.0, 179.4) mm, tool 0.6 deg from down.
+    start_pose = [4.63 -109.08 -101.88 -59.64 89.74 184.59];   % joint angles in degrees
 
     % Keep-out box in base coordinates (metres). Use the Lab 6 calibration XY box plus margin
     % for X and Y; z_min = table touch height from the calibration + 0.005; z_max well below
