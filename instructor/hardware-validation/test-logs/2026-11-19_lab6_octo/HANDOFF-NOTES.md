@@ -244,6 +244,30 @@ Ryan chose 2. Implemented, verified offline and read-only, NOT yet run on the ro
   motion itself is still unverified; if the arm visibly stops at every waypoint anyway,
   option 3 (`sendServoJCommands`) is the remaining route. Arrival check on the last waypoint.
 
+## 11. RUN 2, chunk mode (14:31, `octo_run_20261119_143130.csv`): "it almost picked it up"
+Same start pose, task "pick up the red block", red block moved under and ahead of the
+gripper. 4 pictures, 16 steps, all executed, blended motion through each chunk. Ryan:
+"holy shit lol it almost picked it up! very sick." The arm went from flange Z 225 mm to
+110 mm (grasp height 100) in four chunks, with a clear hover (chunk 3: all deltas under
+3 mm, the policy's "settle above the object" phase), then the gripper closed at the first
+waypoint of chunk 4 at Z 133 mm and the arm kept descending to 110 mm with the fingers
+closed, so it closed about 3 cm above the block instead of around it.
+
+| chunk | policy s | net motion (mm) | gripper | flange Z after (mm) |
+|---|---|---|---|---|
+| 1 | 5.3 | +21 -31 -71 | open | 154 |
+| 2 | 6.8 | +12 -9 -12 | open | 143 |
+| 3 | 0.23 | +2 +2 -3 | open (hover) | 141 |
+| 4 | 0.22 | +7 +16 -30 | CLOSE at step 1 | 110 |
+
+Reading: unlike run 1 the policy tracked the block (the Y component reversed sign in chunk 4
+toward it) and showed the Bridge pick structure (approach, hover, close, lift was about to
+come). The miss is the gripper timing in Z: the WidowX fingers reach lower relative to its
+camera than the Robotiq 2F-85 does at our flange height. Cheap fixes to try: start 2 to 3 cm
+lower (the close then happens at the block), or `z_min` closer to the table; or delay the
+close until the chunk has finished (a policy change, less honest). Ryan's choice: wait for the
+USB 3 cable and try two cameras next (section 12).
+
 ## 8. Sync
 `git pull` brought 223cb34 (Mac: the SmolVLA plan) before any work; nothing else was ahead.
 This folder was committed and pushed at the end of the session. Box is not mounted on PC 17;
