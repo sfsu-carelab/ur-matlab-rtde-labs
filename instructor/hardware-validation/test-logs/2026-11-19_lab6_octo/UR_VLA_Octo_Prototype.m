@@ -88,7 +88,8 @@ function UR_VLA_Octo_Prototype(opts)
     z_min  = 0.085;                               % MEASURED 2026-11-19: Ryan jogged the open gripper until the
                                                   % fingertips were 2 to 3 mm above the table; flange Z read 84.9 mm.
                                                   % (Run 3 was stopped by the earlier 0.100 floor 2 mm short of grasp.)
-    z_max  = 0.30;                                % below Ready (m)
+    z_max  = 0.53;                                % MEASURED 2026-11-19: Ryan jogged to the highest pose he wants
+                                                  % allowed (nothing above the robot in reach); flange Z read 530.5 mm.
 
     action_scale      = 1.0;                      % multiply the translation delta
     max_step_m        = 0.02;                     % clamp per-step translation to this length
