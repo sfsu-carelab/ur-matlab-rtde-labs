@@ -193,7 +193,7 @@ function UR_VLA_Octo_Prototype(opts)
     fprintf('  Running. Click the figure window and press q to stop after the current chunk.\n');
     for k = 1:opts.MaxSteps                                  % one picture and one chunk per iteration
         % ---- observe ----------------------------------------------------
-        wimg = []; %#ok<NASGU>  (set below when use_wrist)
+        wimg = [];
         if offlineImages
             img = imread(opts.ImageFile);
             if use_wrist, wimg = imread(opts.WristImageFile); end
@@ -210,7 +210,7 @@ function UR_VLA_Octo_Prototype(opts)
         if use_wrist
             a = policy.step_chunk(py.numpy.array(img), task, py.numpy.array(wimg));
         else
-            a = policy.step_chunk(py.numpy.array(img), task); %#ok<UNRCH>  (use_wrist is a settings flag)
+            a = policy.step_chunk(py.numpy.array(img), task);
         end
         tp = toc(t);
         D = double(a{'world_vector'}) * action_scale;        % H x 3 translation deltas (m)
@@ -236,7 +236,7 @@ function UR_VLA_Octo_Prototype(opts)
             end
         end
 
-        shown = img; %#ok<NASGU>
+        shown = img;
         if use_wrist, shown = [img, imresize(wimg, [size(img, 1) NaN])]; end   % bird's-eye | wrist
         imshow(shown); title(sprintf('picture %d  chunk total = [%+.1f %+.1f %+.1f] mm  gripper %+d  (%.2f s)   [q stops]', ...
             k, 1000*sum(D, 1), G(end), tp)); drawnow;
