@@ -85,7 +85,8 @@ function UR_VLA_Octo_Prototype(opts)
     % in front of the base, down to just above the Lab 4 grasp height, never above Ready.
     xy_min = [0.25 -0.35];                        % [X Y] min (m)
     xy_max = [0.50  0.00];                        % [X Y] max (m)
-    z_min  = 0.100;                               % flange Z at the Lab 4 grasp height (m)
+    z_min  = 0.090;                               % 1 cm under the Lab 4 grasp height (100.4 mm). Run 3 (2026-11-19)
+                                                  % was stopped at 0.100 while heading for 0.098, before closing.
     z_max  = 0.30;                                % below Ready (m)
 
     action_scale      = 1.0;                      % multiply the translation delta
@@ -252,9 +253,19 @@ function UR_VLA_Octo_Prototype(opts)
 
         executed = zeros(1, n);
         if ~opts.DryRun
-            % ---- bounds (never move to an unchecked point): run the chunk up to the last
-            %      waypoint inside the box, then stop the loop if any was outside ----------
-            inBox = all(T(:, 4:5) >= xy_min, 2) & all(T(:, 4:5) <= xy_max, 2) & T(:, 6) >= z_min & T(:, 6) <= z_max;
+            % ---- bounds (never move to an unchecked point) ----------------------------
+            % Z: a target below z_min or above z_max is clamped to it (the policy pressing
+            % down onto the table is normal grasp behaviour; the floor holds it). The later
+            % waypoints of the chunk are shifted by the same amount, so they keep their shape.
+            for j = 1:n
+                zc = min(max(T(j, 6), z_min), z_max);
+                if zc ~= T(j, 6)
+                    fprintf('  waypoint %d Z %.3f clamped to %.3f\n', j, T(j, 6), zc);
+                    T(j:end, 6) = T(j:end, 6) + (zc - T(j, 6));
+                end
+            end
+            % X, Y: run the chunk up to the last waypoint inside the box, then stop the loop.
+            inBox = all(T(:, 4:5) >= xy_min, 2) & all(T(:, 4:5) <= xy_max, 2);
             nOK = find(~inBox, 1) - 1;
             if isempty(nOK), nOK = n; end
             if nOK < n
