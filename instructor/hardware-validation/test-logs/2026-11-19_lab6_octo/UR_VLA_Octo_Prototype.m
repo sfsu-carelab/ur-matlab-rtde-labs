@@ -144,7 +144,11 @@ function UR_VLA_Octo_Prototype(opts)
         insert(py.sys.path, int64(0), vlapyDir);
     end
     t = tic;
-    py.importlib.import_module("octoChunk");                 % OctoInference + step_chunk (whole 4-step chunk)
+    % Reload the wrapper every run: the OutOfProcess Python lives on between runs of this
+    % script, so an edited octoChunk.py was otherwise invisible until pyenv was terminated
+    % (found 2026-11-19: "step_chunk() takes from 2 to 3 positional arguments").
+    mod = py.importlib.import_module("octoChunk");           % OctoInference + step_chunk (whole 4-step chunk)
+    py.importlib.reload(mod);
     policy = py.octoChunk.OctoChunkInference();
     fprintf('  Octo loaded in %.1f s.\n', toc(t));
 
