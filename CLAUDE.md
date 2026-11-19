@@ -42,7 +42,7 @@ once by hand and only change if someone edits them. Never force-add them.
 | 3 Forward kinematics (PoE) | `labs/lab3-forward-kinematics` | `UR_FK_Lab.m` + helpers, `run_self_tests.p` (source, key and solutions in `instructor/`, ignored) | manual at Rev3 (2026-11-09, built on Dr. Quintero's Rev2): screw axes now use the ROBOT'S OWN joint directions, lengths named L1 to L6, Part 4 is jog-and-compare. Checked offline only (all 8 models vs UR DH model, and the 2026-11-06 robot measurements reproduce to 1.2 mm); NOT yet re-run on the robot or opened in Word. See test-logs/2026-11-09_lab3_rev3 |
 | 4 Pick and place | `labs/lab4-pick-and-place` | `UR_PickPlace_Lab.m`, `check_waypoints.p` (source and test in `instructor/`, ignored; rebuild with `instructor/build_pfile.m`) | MATLAB half VERIFIED ON HARDWARE 2026-11-16 (PC 17, UR3e): Task 4 readout, eight waypoint checks PASS on real taught poses, full eleven-step run at a 100 percent slider picked and placed the cube, cycle time 30.4 s. Manual at Rev4 (2026-11-16): Ready position is a RULE (joint 5 = 90, joint 6 = 0, joints 2+3+4 = -270, joints 1 to 3 chosen to clear the group's walls), Move Here is in the 3D tab of the left sidebar, Robotiq screen under Application > URCaps, plus eight wording fixes from a three-persona simulated-student review and a check of every pendant name against the PolyScope X 10.12 handbook (all match). Rev3 (Dr. Quintero's feedback: Timer nodes, tic/toc, `moveEndTime` 3 s, Table 4 with X/Y/Z, server script in the lab folder). NOT verified: 25 and 50 percent runs, Part 2 on the pendant (node names, Variable tab, Gripper and Timer nodes). See test-logs/2026-11-16_lab4_hw |
 | 5 Vision-guided pick | `labs/lab5-vision-guided-pick` | `UR_VisionPick_Lab.m` + helpers | camera path switched to USB Webcams package; NO frame captured yet (USB 2 cable); calibration not done |
-| 6 Language-directed pick (VLM) | `labs/lab6-language-directed-pick` | `UR_VLA_Lab.m` + Gemini client + `UR_CalibrateCamera_VLM.m`; Lab 5 helpers copied in (self-contained folder) | TABLED 2026-11-16 at its fallback definition: VLM detection and planning in place of colour blobs, on the Lab 5 calibration and motion path. Live API VERIFIED 2026-11-16 (test_vlm_offline Part 2 5/5, real-scene point within 2 px of HSV); robot never moved for Lab 6; calibration script untested on hardware; manual is an outline. See test-logs/2026-11-16_lab6_vla |
+| 6 Language-directed pick (VLM) | `labs/lab6-language-directed-pick` | `UR_VLA_Lab.m` + Gemini client + `UR_CalibrateCamera_VLM.m`; Lab 5 helpers copied in (self-contained folder) | TABLED 2026-11-16 at its fallback definition: VLM detection and planning in place of colour blobs, on the Lab 5 calibration and motion path. Live API VERIFIED 2026-11-16 (test_vlm_offline Part 2 5/5, real-scene point within 2 px of HSV); robot never moved for Lab 6; calibration script untested on hardware; manual is an outline. See test-logs/2026-11-16_lab6_vla. SEPARATE, 2026-11-19: a real VLA (Octo, actions out) runs from MATLAB R2024b through pyenv on PC 17, CPU, 0.2 s per step; instructor prototype `test-logs/2026-11-19_lab6_octo/UR_VLA_Octo_Prototype.m`, dry run verified, NOT yet run at the robot. See that folder's notes |
 
 Instructor tooling: `instructor/hardware-validation/UR_HardwareSmokeTest.m` plus the
 `RUNBOOK - End-to-end hardware test, Labs 2-6.md` in the same folder.
@@ -69,9 +69,16 @@ Read, in order:
 7. `instructor/hardware-validation/test-logs/2026-11-16_lab4_hw/HANDOFF-NOTES.md`
    (PC 17: Lab 4 MATLAB half run on the robot, measured waypoints, Ready rule, Rev4 docx
    patched in place without Python, what is still unverified on the pendant).
-8. `instructor/hardware-validation/test-logs/2026-11-16_lab6_vla/HANDOFF-NOTES.md` and
-   `pi0_feasibility.md` (PC 17: Gemini live from MATLAB, key-file crash, 429 limit, camera
-   moved since 11-04, VLM calibration script, Lab 6 tabled, Jetson + SmolVLA side project).
+8. `instructor/hardware-validation/test-logs/2026-11-16_lab6_vla/HANDOFF-NOTES.md`,
+   `pi0_feasibility.md` and `vla_matlab_in_loop_plan.md` (PC 17: Gemini live from MATLAB,
+   key-file crash, 429 limit, camera moved since 11-04, VLM calibration script, Lab 6
+   tabled; Mac: MATLAB-in-the-loop SmolVLA plan, Ryan's requirement that MATLAB stays in
+   the control loop and Python is for training and serving only).
+9. `instructor/hardware-validation/test-logs/2026-11-19_lab6_octo/HANDOFF-NOTES.md`
+   (PC 17, no one at the robot: the MathWorks File Exchange VLA item is Octo/RT-1-X through
+   pyenv; its Python environment was built at `C:\Users\924414657\vla-octo` and Octo runs
+   from R2024b with no Simulink; `UR_VLA_Octo_Prototype.m` closed-loop script, dry run only;
+   what a hardware run needs and why zero-shot success is unlikely).
 
 Ryan's working order, agreed 2026-11-04: make Lab 5 work end to end on hardware, THEN update
 its manual; make Lab 6 work, THEN update its docs. No manual edits before the code runs.
@@ -161,6 +168,19 @@ Next PC checklist, before anything else:
   crashes MATLAB inside webwrite, no catchable error). Free tier returns HTTP 429 after
   about ten calls in a minute. No model fine-tuning exists or is needed; the calibration
   (now `UR_CalibrateCamera_VLM` inside Lab 6) is what turns pixels into base X,Y.
+- VLA with actions (Octo) on PC 17, 2026-11-19: `C:\Users\924414657\vla-octo\win64\python\python.exe`
+  is a standalone CPython 3.10.4 with TF 2.15, JAX 0.4.23 (CPU), flax, octo (pinned
+  commit) and the MathWorks `vlapy` wrapper plus `octo-base` weights in
+  `C:\Users\924414657\vla-octo\vlapy`. Built exactly as `installPythonEnv.m` of
+  github.com/mathworks/robot-vla-simulink does, plus `tensorflow-metadata==1.14.0`
+  (protobuf 3.20.3) or `import octo` fails. From MATLAB:
+  `pyenv(Version=<that exe>, ExecutionMode="OutOfProcess")`, insert `vlapy` into
+  `py.sys.path`, `py.importlib.import_module("octoModel")`,
+  `m = py.octoModel.OctoInference()`, `a = m.step(py.numpy.array(img), task)`;
+  `a{2}{'world_vector'}` (m), `a{2}{'rot_axangle'}` (rad), `a{2}{'gripper'}` (+1 open,
+  -1 close). Load about 6 s, first two steps 7 s (JAX compile), then 0.2 s. The folder is
+  2.9 GB, not in git, not in Box; the notes have the rebuild recipe. Two MATLAB processes
+  can each start their own Python; the camera rule (one owner) still applies.
 - MATLAB on these PCs: R2024b Update 5 at `C:\Program Files\MATLAB\R2024b\bin`. Batch:
   `matlab -batch "cd('<folder>'); test_vlm_offline"`. Every batch log starts with a harmless
   Quanser QUARC `startup.m` error block. Python: the `python` on PATH is the Microsoft Store

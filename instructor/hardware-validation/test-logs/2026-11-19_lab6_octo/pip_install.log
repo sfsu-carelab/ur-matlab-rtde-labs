@@ -1,0 +1,651 @@
+﻿=== pip upgrade 11/19/2026 12:45:21 ===
+Requirement already satisfied: pip in c:\users\924414657\vla-octo\win64\python\lib\site-packages (22.1.1)
+Collecting pip
+  Downloading pip-26.3-py3-none-any.whl (2.0 MB)
+     ---------------------------------------- 2.0/2.0 MB 30.8 MB/s eta 0:00:00
+Collecting wheel
+  Downloading wheel-0.48.0-py3-none-any.whl (33 kB)
+Collecting packaging>=24.0
+  Downloading packaging-26.3-py3-none-any.whl (129 kB)
+     ---------------------------------------- 130.0/130.0 kB ? eta 0:00:00
+Installing collected packages: pip, packaging, wheel
+  Attempting uninstall: pip
+    Found existing installation: pip 22.1.1
+    Uninstalling pip-22.1.1:
+      Successfully uninstalled pip-22.1.1
+python.exe :   WARNING: The scripts pip.exe, pip3.10.exe and pip3.exe are installed in 
+'C:\Users\924414657\vla-octo\win64\python\Scripts' which is not on PATH.
+At line:1 char:527
++ ... -Encoding utf8; & $py -m pip install --upgrade pip wheel 2>&1 | Out-F ...
++                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (  WARNING: The ...is not on PATH.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  WARNING: The script wheel.exe is installed in 'C:\Users\924414657\vla-octo\win64\python\Scripts' which is not on 
+PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+Successfully installed packaging-26.3 pip-26.3 wheel-0.48.0
+=== requirements 11/19/2026 12:45:28 ===
+Collecting dlimp @ git+https://github.com/kvablack/dlimp@d08da3852c149548aaa8551186d619d87375df08 (from -r repo\vlapy\requirements.txt (line 25))
+  Cloning https://github.com/kvablack/dlimp (to revision d08da3852c149548aaa8551186d619d87375df08) to C:\Users\924414657\AppData\Local\Temp\pip-install-1b6zt1_6\dlimp_48d91540185840d389122b8fe08c96de
+python.exe :   Running command git clone --filter=blob:none --quiet https://github.com/kvablack/dlimp 
+'C:\Users\924414657\AppData\Local\Temp\pip-install-1b6zt1_6\dlimp_48d91540185840d389122b8fe08c96de'
+At line:1 char:688
++ ... oding utf8; & $py -m pip install -r repo\vlapy\requirements.txt -c re ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (  Running comma...122b8fe08c96de':String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  Running command git rev-parse -q --verify 'd08da3852c149548aaa8551186d619d87375df08^{commit}'
+  d08da3852c149548aaa8551186d619d87375df08
+  Running command git checkout -q d08da3852c149548aaa8551186d619d87375df08
+  Resolved https://github.com/kvablack/dlimp to commit d08da3852c149548aaa8551186d619d87375df08
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Collecting tensorflow==2.15.0 (from -r repo\vlapy\requirements.txt (line 13))
+  Downloading tensorflow-2.15.0-cp310-cp310-win_amd64.whl.metadata (3.6 kB)
+Collecting jax==0.4.23 (from -r repo\vlapy\requirements.txt (line 16))
+  Downloading jax-0.4.23-py3-none-any.whl.metadata (24 kB)
+Collecting jaxlib==0.4.23 (from -r repo\vlapy\requirements.txt (line 19))
+  Downloading jaxlib-0.4.23-cp310-cp310-win_amd64.whl.metadata (2.1 kB)
+Collecting flax==0.8.1 (from -r repo\vlapy\requirements.txt (line 22))
+  Downloading flax-0.8.1-py3-none-any.whl.metadata (10 kB)
+Collecting distrax==0.1.5 (from -r repo\vlapy\requirements.txt (line 28))
+  Downloading distrax-0.1.5-py3-none-any.whl.metadata (13 kB)
+Collecting transformers==4.38.2 (from -r repo\vlapy\requirements.txt (line 31))
+  Downloading transformers-4.38.2-py3-none-any.whl.metadata (130 kB)
+Collecting transforms3d==0.4.2 (from -r repo\vlapy\requirements.txt (line 34))
+  Downloading transforms3d-0.4.2-py3-none-any.whl.metadata (2.8 kB)
+Collecting tensorflow-hub==0.16.1 (from -r repo\vlapy\requirements.txt (line 37))
+  Downloading tensorflow_hub-0.16.1-py2.py3-none-any.whl.metadata (1.3 kB)
+Collecting tf-agents==0.19.0 (from -r repo\vlapy\requirements.txt (line 38))
+  Downloading tf_agents-0.19.0-py3-none-any.whl.metadata (12 kB)
+Collecting tensorflow_datasets>=4.9.2 (from dlimp @ git+https://github.com/kvablack/dlimp@d08da3852c149548aaa8551186d619d87375df08->-r repo\vlapy\requirements.txt (line 25))
+  Downloading tensorflow_datasets-4.9.10-py3-none-any.whl.metadata (11 kB)
+Collecting tensorflow-intel==2.15.0 (from tensorflow==2.15.0->-r repo\vlapy\requirements.txt (line 13))
+  Downloading tensorflow_intel-2.15.0-cp310-cp310-win_amd64.whl.metadata (5.1 kB)
+Collecting ml-dtypes>=0.2.0 (from jax==0.4.23->-r repo\vlapy\requirements.txt (line 16))
+  Downloading ml_dtypes-0.2.0-cp310-cp310-win_amd64.whl.metadata (20 kB)
+Collecting numpy>=1.22 (from jax==0.4.23->-r repo\vlapy\requirements.txt (line 16))
+  Downloading numpy-1.26.4-cp310-cp310-win_amd64.whl.metadata (61 kB)
+Collecting opt-einsum (from jax==0.4.23->-r repo\vlapy\requirements.txt (line 16))
+  Downloading opt_einsum-3.4.0-py3-none-any.whl.metadata (6.3 kB)
+Collecting scipy>=1.9 (from jax==0.4.23->-r repo\vlapy\requirements.txt (line 16))
+  Downloading scipy-1.12.0-cp310-cp310-win_amd64.whl.metadata (60 kB)
+Collecting msgpack (from flax==0.8.1->-r repo\vlapy\requirements.txt (line 22))
+  Downloading msgpack-1.2.4-cp310-cp310-win_amd64.whl.metadata (8.5 kB)
+Collecting optax (from flax==0.8.1->-r repo\vlapy\requirements.txt (line 22))
+  Downloading optax-0.2.9-py3-none-any.whl.metadata (7.9 kB)
+Collecting orbax-checkpoint (from flax==0.8.1->-r repo\vlapy\requirements.txt (line 22))
+  Downloading orbax_checkpoint-0.11.39-py3-none-any.whl.metadata (2.8 kB)
+Collecting tensorstore (from flax==0.8.1->-r repo\vlapy\requirements.txt (line 22))
+  Downloading tensorstore-0.1.78-cp310-cp310-win_amd64.whl.metadata (21 kB)
+Collecting rich>=11.1 (from flax==0.8.1->-r repo\vlapy\requirements.txt (line 22))
+  Downloading rich-15.0.0-py3-none-any.whl.metadata (18 kB)
+Collecting typing-extensions>=4.2 (from flax==0.8.1->-r repo\vlapy\requirements.txt (line 22))
+  Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+Collecting PyYAML>=5.4.1 (from flax==0.8.1->-r repo\vlapy\requirements.txt (line 22))
+  Downloading pyyaml-6.0.3-cp310-cp310-win_amd64.whl.metadata (2.4 kB)
+Collecting absl-py>=0.9.0 (from distrax==0.1.5->-r repo\vlapy\requirements.txt (line 28))
+  Downloading absl_py-2.5.1-py3-none-any.whl.metadata (3.3 kB)
+Collecting chex>=0.1.8 (from distrax==0.1.5->-r repo\vlapy\requirements.txt (line 28))
+  Downloading chex-0.1.90-py3-none-any.whl.metadata (18 kB)
+Collecting tensorflow-probability>=0.15.0 (from distrax==0.1.5->-r repo\vlapy\requirements.txt (line 28))
+  Downloading tensorflow_probability-0.23.0-py2.py3-none-any.whl.metadata (13 kB)
+Collecting filelock (from transformers==4.38.2->-r repo\vlapy\requirements.txt (line 31))
+  Downloading filelock-4.1.0-py3-none-any.whl.metadata (2.0 kB)
+Collecting huggingface-hub<1.0,>=0.19.3 (from transformers==4.38.2->-r repo\vlapy\requirements.txt (line 31))
+  Downloading huggingface_hub-0.36.2-py3-none-any.whl.metadata (15 kB)
+Requirement already satisfied: packaging>=20.0 in .\win64\python\lib\site-packages (from transformers==4.38.2->-r repo\vlapy\requirements.txt (line 31)) (26.3)
+Collecting regex!=2019.12.17 (from transformers==4.38.2->-r repo\vlapy\requirements.txt (line 31))
+  Downloading regex-2026.9.29-cp310-cp310-win_amd64.whl.metadata (41 kB)
+Collecting requests (from transformers==4.38.2->-r repo\vlapy\requirements.txt (line 31))
+  Downloading requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+Collecting tokenizers<0.19,>=0.14 (from transformers==4.38.2->-r repo\vlapy\requirements.txt (line 31))
+  Downloading tokenizers-0.15.2-cp310-none-win_amd64.whl.metadata (6.8 kB)
+Collecting safetensors>=0.4.1 (from transformers==4.38.2->-r repo\vlapy\requirements.txt (line 31))
+  Downloading safetensors-0.8.0-cp310-abi3-win_amd64.whl.metadata (4.2 kB)
+Collecting tqdm>=4.27 (from transformers==4.38.2->-r repo\vlapy\requirements.txt (line 31))
+  Downloading tqdm-4.70.1-py3-none-any.whl.metadata (57 kB)
+Collecting protobuf>=3.19.6 (from tensorflow-hub==0.16.1->-r repo\vlapy\requirements.txt (line 37))
+  Downloading protobuf-7.36.2-cp310-abi3-win_amd64.whl.metadata (595 bytes)
+Collecting tf-keras>=2.14.1 (from tensorflow-hub==0.16.1->-r repo\vlapy\requirements.txt (line 37))
+  Downloading tf_keras-2.21.0-py3-none-any.whl.metadata (1.8 kB)
+Collecting cloudpickle>=1.3 (from tf-agents==0.19.0->-r repo\vlapy\requirements.txt (line 38))
+  Downloading cloudpickle-3.1.3-py3-none-any.whl.metadata (7.1 kB)
+Collecting gin-config>=0.4.0 (from tf-agents==0.19.0->-r repo\vlapy\requirements.txt (line 38))
+  Downloading gin_config-0.5.0-py3-none-any.whl.metadata (2.9 kB)
+Collecting gym<=0.23.0,>=0.17.0 (from tf-agents==0.19.0->-r repo\vlapy\requirements.txt (line 38))
+  Downloading gym-0.23.0.tar.gz (624 kB)
+     ---------------------------------------- 624.4/624.4 kB 5.8 MB/s  0:00:00
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Collecting pillow (from tf-agents==0.19.0->-r repo\vlapy\requirements.txt (line 38))
+  Downloading pillow-12.3.0-cp310-cp310-win_amd64.whl.metadata (9.3 kB)
+Collecting six>=1.10.0 (from tf-agents==0.19.0->-r repo\vlapy\requirements.txt (line 38))
+  Downloading six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
+Collecting wrapt>=1.11.1 (from tf-agents==0.19.0->-r repo\vlapy\requirements.txt (line 38))
+  Downloading wrapt-2.5.2-cp310-cp310-win_amd64.whl.metadata (7.7 kB)
+Collecting typing-extensions>=4.2 (from flax==0.8.1->-r repo\vlapy\requirements.txt (line 22))
+  Downloading typing_extensions-4.5.0-py3-none-any.whl.metadata (8.5 kB)
+Collecting pygame==2.1.3 (from tf-agents==0.19.0->-r repo\vlapy\requirements.txt (line 38))
+  Downloading pygame-2.1.3-cp310-cp310-win_amd64.whl.metadata (9.6 kB)
+Collecting astunparse>=1.6.0 (from tensorflow-intel==2.15.0->tensorflow==2.15.0->-r repo\vlapy\requirements.txt (line 13))
+  Downloading astunparse-1.6.3-py2.py3-none-any.whl.metadata (4.4 kB)
+Collecting flatbuffers>=23.5.26 (from tensorflow-intel==2.15.0->tensorflow==2.15.0->-r repo\vlapy\requirements.txt (line 13))
+  Downloading flatbuffers-25.12.19-py2.py3-none-any.whl.metadata (1.0 kB)
+Collecting gast!=0.5.0,!=0.5.1,!=0.5.2,>=0.2.1 (from tensorflow-intel==2.15.0->tensorflow==2.15.0->-r repo\vlapy\requirements.txt (line 13))
+  Downloading gast-0.7.0-py3-none-any.whl.metadata (1.5 kB)
+Collecting google-pasta>=0.1.1 (from tensorflow-intel==2.15.0->tensorflow==2.15.0->-r repo\vlapy\requirements.txt (line 13))
+  Downloading google_pasta-0.2.0-py3-none-any.whl.metadata (814 bytes)
+Collecting h5py>=2.9.0 (from tensorflow-intel==2.15.0->tensorflow==2.15.0->-r repo\vlapy\requirements.txt (line 13))
+  Downloading h5py-3.16.0-cp310-cp310-win_amd64.whl.metadata (3.1 kB)
+Collecting libclang>=13.0.0 (from tensorflow-intel==2.15.0->tensorflow==2.15.0->-r repo\vlapy\requirements.txt (line 13))
+  Downloading libclang-18.1.1-py2.py3-none-win_amd64.whl.metadata (5.3 kB)
+Collecting protobuf>=3.19.6 (from tensorflow-hub==0.16.1->-r repo\vlapy\requirements.txt (line 37))
+  Downloading protobuf-4.25.9-cp310-abi3-win_amd64.whl.metadata (541 bytes)
+Requirement already satisfied: setuptools in .\win64\python\lib\site-packages (from tensorflow-intel==2.15.0->tensorflow==2.15.0->-r repo\vlapy\requirements.txt (line 13)) (62.3.2)
+Collecting termcolor>=1.1.0 (from tensorflow-intel==2.15.0->tensorflow==2.15.0->-r repo\vlapy\requirements.txt (line 13))
+  Downloading termcolor-3.3.0-py3-none-any.whl.metadata (6.5 kB)
+Collecting wrapt>=1.11.1 (from tf-agents==0.19.0->-r repo\vlapy\requirements.txt (line 38))
+  Downloading wrapt-1.14.2-cp310-cp310-win_amd64.whl.metadata (6.6 kB)
+Collecting tensorflow-io-gcs-filesystem>=0.23.1 (from tensorflow-intel==2.15.0->tensorflow==2.15.0->-r repo\vlapy\requirements.txt (line 13))
+  Downloading tensorflow_io_gcs_filesystem-0.31.0-cp310-cp310-win_amd64.whl.metadata (14 kB)
+Collecting grpcio<2.0,>=1.24.3 (from tensorflow-intel==2.15.0->tensorflow==2.15.0->-r repo\vlapy\requirements.txt (line 13))
+  Downloading grpcio-1.85.3-cp310-cp310-win_amd64.whl.metadata (3.9 kB)
+Collecting tensorboard<2.16,>=2.15 (from tensorflow-intel==2.15.0->tensorflow==2.15.0->-r repo\vlapy\requirements.txt (line 13))
+  Downloading tensorboard-2.15.2-py3-none-any.whl.metadata (1.7 kB)
+Collecting tensorflow-estimator<2.16,>=2.15.0 (from tensorflow-intel==2.15.0->tensorflow==2.15.0->-r repo\vlapy\requirements.txt (line 13))
+  Downloading tensorflow_estimator-2.15.0-py2.py3-none-any.whl.metadata (1.3 kB)
+Collecting keras<2.16,>=2.15.0 (from tensorflow-intel==2.15.0->tensorflow==2.15.0->-r repo\vlapy\requirements.txt (line 13))
+  Downloading keras-2.15.0-py3-none-any.whl.metadata (2.4 kB)
+Collecting grpcio<2.0,>=1.24.3 (from tensorflow-intel==2.15.0->tensorflow==2.15.0->-r repo\vlapy\requirements.txt (line 13))
+  Downloading grpcio-1.85.1-cp310-cp310-win_amd64.whl.metadata (3.9 kB)
+INFO: pip is looking at multiple versions of grpcio to determine which version is compatible with other requirements. This could take a while.
+  Downloading grpcio-1.85.0-cp310-cp310-win_amd64.whl.metadata (3.9 kB)
+  Downloading grpcio-1.84.2-cp310-cp310-win_amd64.whl.metadata (3.9 kB)
+  Downloading grpcio-1.84.1-cp310-cp310-win_amd64.whl.metadata (3.9 kB)
+  Downloading grpcio-1.84.0-cp310-cp310-win_amd64.whl.metadata (3.9 kB)
+  Downloading grpcio-1.83.2-cp310-cp310-win_amd64.whl.metadata (3.8 kB)
+  Downloading grpcio-1.83.1-cp310-cp310-win_amd64.whl.metadata (3.8 kB)
+INFO: pip is still looking at multiple versions of grpcio to determine which version is compatible with other requirements. This could take a while.
+  Downloading grpcio-1.83.0-cp310-cp310-win_amd64.whl.metadata (3.8 kB)
+  Downloading grpcio-1.82.3-cp310-cp310-win_amd64.whl.metadata (3.8 kB)
+  Downloading grpcio-1.82.2-cp310-cp310-win_amd64.whl.metadata (3.8 kB)
+  Downloading grpcio-1.82.1-cp310-cp310-win_amd64.whl.metadata (3.8 kB)
+  Downloading grpcio-1.81.2-cp310-cp310-win_amd64.whl.metadata (3.8 kB)
+INFO: This is taking longer than usual. You might need to provide the dependency resolver with stricter constraints to reduce runtime. See https://pip.pypa.io/warnings/backtracking for guidance. If you want to abort this run, press Ctrl + C.
+  Downloading grpcio-1.81.1-cp310-cp310-win_amd64.whl.metadata (3.8 kB)
+  Downloading grpcio-1.81.0-cp310-cp310-win_amd64.whl.metadata (3.8 kB)
+  Downloading grpcio-1.80.1-cp310-cp310-win_amd64.whl.metadata (3.9 kB)
+  Downloading grpcio-1.80.0-cp310-cp310-win_amd64.whl.metadata (3.9 kB)
+  Downloading grpcio-1.78.2-cp310-cp310-win_amd64.whl.metadata (3.9 kB)
+  Downloading grpcio-1.78.0-cp310-cp310-win_amd64.whl.metadata (3.9 kB)
+  Downloading grpcio-1.76.0-cp310-cp310-win_amd64.whl.metadata (3.8 kB)
+  Downloading grpcio-1.75.1-cp310-cp310-win_amd64.whl.metadata (3.8 kB)
+  Downloading grpcio-1.75.0-cp310-cp310-win_amd64.whl.metadata (3.8 kB)
+  Downloading grpcio-1.74.0-cp310-cp310-win_amd64.whl.metadata (4.0 kB)
+Collecting gym_notices>=0.0.4 (from gym<=0.23.0,>=0.17.0->tf-agents==0.19.0->-r repo\vlapy\requirements.txt (line 38))
+  Downloading gym_notices-0.1.0-py3-none-any.whl.metadata (1.2 kB)
+Collecting fsspec>=2023.5.0 (from huggingface-hub<1.0,>=0.19.3->transformers==4.38.2->-r repo\vlapy\requirements.txt (line 31))
+  Downloading fsspec-2026.9.0-py3-none-any.whl.metadata (10 kB)
+Collecting google-auth<3,>=1.6.3 (from tensorboard<2.16,>=2.15->tensorflow-intel==2.15.0->tensorflow==2.15.0->-r repo\vlapy\requirements.txt (line 13))
+  Downloading google_auth-2.62.2-py3-none-any.whl.metadata (6.0 kB)
+Collecting google-auth-oauthlib<2,>=0.5 (from tensorboard<2.16,>=2.15->tensorflow-intel==2.15.0->tensorflow==2.15.0->-r repo\vlapy\requirements.txt (line 13))
+  Downloading google_auth_oauthlib-1.5.0-py3-none-any.whl.metadata (2.6 kB)
+Collecting markdown>=2.6.8 (from tensorboard<2.16,>=2.15->tensorflow-intel==2.15.0->tensorflow==2.15.0->-r repo\vlapy\requirements.txt (line 13))
+  Downloading markdown-3.10.3-py3-none-any.whl.metadata (5.1 kB)
+Collecting tensorboard-data-server<0.8.0,>=0.7.0 (from tensorboard<2.16,>=2.15->tensorflow-intel==2.15.0->tensorflow==2.15.0->-r repo\vlapy\requirements.txt (line 13))
+  Downloading tensorboard_data_server-0.7.2-py3-none-any.whl.metadata (1.1 kB)
+Collecting werkzeug>=1.0.1 (from tensorboard<2.16,>=2.15->tensorflow-intel==2.15.0->tensorflow==2.15.0->-r repo\vlapy\requirements.txt (line 13))
+  Downloading werkzeug-3.1.9-py3-none-any.whl.metadata (4.1 kB)
+Collecting pyasn1-modules>=0.2.1 (from google-auth<3,>=1.6.3->tensorboard<2.16,>=2.15->tensorflow-intel==2.15.0->tensorflow==2.15.0->-r repo\vlapy\requirements.txt (line 13))
+  Downloading pyasn1_modules-0.4.2-py3-none-any.whl.metadata (3.5 kB)
+Collecting cryptography>=38.0.3 (from google-auth<3,>=1.6.3->tensorboard<2.16,>=2.15->tensorflow-intel==2.15.0->tensorflow==2.15.0->-r repo\vlapy\requirements.txt (line 13))
+  Downloading cryptography-50.0.2-cp39-abi3-win_amd64.whl.metadata (4.4 kB)
+Collecting requests-oauthlib>=0.7.0 (from google-auth-oauthlib<2,>=0.5->tensorboard<2.16,>=2.15->tensorflow-intel==2.15.0->tensorflow==2.15.0->-r repo\vlapy\requirements.txt (line 13))
+  Downloading requests_oauthlib-2.0.0-py2.py3-none-any.whl.metadata (11 kB)
+Collecting charset_normalizer<4,>=2 (from requests->transformers==4.38.2->-r repo\vlapy\requirements.txt (line 31))
+  Downloading charset_normalizer-3.5.2-cp310-cp310-win_amd64.whl.metadata (47 kB)
+Collecting idna<4,>=2.5 (from requests->transformers==4.38.2->-r repo\vlapy\requirements.txt (line 31))
+  Downloading idna-3.20-py3-none-any.whl.metadata (7.2 kB)
+Collecting urllib3<3,>=1.26 (from requests->transformers==4.38.2->-r repo\vlapy\requirements.txt (line 31))
+  Downloading urllib3-2.8.0-py3-none-any.whl.metadata (7.4 kB)
+Collecting certifi>=2023.5.7 (from requests->transformers==4.38.2->-r repo\vlapy\requirements.txt (line 31))
+  Downloading certifi-2026.10.23-py3-none-any.whl.metadata (2.5 kB)
+Collecting decorator (from tensorflow-probability>=0.15.0->distrax==0.1.5->-r repo\vlapy\requirements.txt (line 28))
+  Downloading decorator-5.3.1-py3-none-any.whl.metadata (3.9 kB)
+Collecting dm-tree (from tensorflow-probability>=0.15.0->distrax==0.1.5->-r repo\vlapy\requirements.txt (line 28))
+  Downloading dm_tree-0.1.10-cp310-cp310-win_amd64.whl.metadata (2.6 kB)
+Requirement already satisfied: wheel<1.0,>=0.23.0 in .\win64\python\lib\site-packages (from astunparse>=1.6.0->tensorflow-intel==2.15.0->tensorflow==2.15.0->-r repo\vlapy\requirements.txt (line 13)) (0.48.0)
+Collecting chex>=0.1.8 (from distrax==0.1.5->-r repo\vlapy\requirements.txt (line 28))
+  Downloading chex-0.1.89-py3-none-any.whl.metadata (17 kB)
+INFO: pip is looking at multiple versions of chex to determine which version is compatible with other requirements. This could take a while.
+  Downloading chex-0.1.88-py3-none-any.whl.metadata (17 kB)
+  Downloading chex-0.1.87-py3-none-any.whl.metadata (17 kB)
+  Downloading chex-0.1.86-py3-none-any.whl.metadata (17 kB)
+Collecting toolz>=0.9.0 (from chex>=0.1.8->distrax==0.1.5->-r repo\vlapy\requirements.txt (line 28))
+  Downloading toolz-1.2.0-py3-none-any.whl.metadata (5.2 kB)
+Collecting cffi>=2.0.0 (from cryptography>=38.0.3->google-auth<3,>=1.6.3->tensorboard<2.16,>=2.15->tensorflow-intel==2.15.0->tensorflow==2.15.0->-r repo\vlapy\requirements.txt (line 13))
+  Downloading cffi-2.1.1-cp310-cp310-win_amd64.whl.metadata (2.6 kB)
+Collecting cryptography>=38.0.3 (from google-auth<3,>=1.6.3->tensorboard<2.16,>=2.15->tensorflow-intel==2.15.0->tensorflow==2.15.0->-r repo\vlapy\requirements.txt (line 13))
+  Downloading cryptography-50.0.1-cp39-abi3-win_amd64.whl.metadata (4.3 kB)
+INFO: pip is looking at multiple versions of cryptography to determine which version is compatible with other requirements. This could take a while.
+  Downloading cryptography-50.0.0-cp39-abi3-win_amd64.whl.metadata (4.3 kB)
+  Downloading cryptography-49.0.0-cp39-abi3-win_amd64.whl.metadata (4.3 kB)
+  Downloading cryptography-48.0.1-cp39-abi3-win_amd64.whl.metadata (4.3 kB)
+  Downloading cryptography-48.0.0-cp39-abi3-win_amd64.whl.metadata (4.3 kB)
+  Downloading cryptography-47.0.0-cp38-abi3-win_amd64.whl.metadata (4.5 kB)
+  Downloading cryptography-46.0.7-cp38-abi3-win_amd64.whl.metadata (5.7 kB)
+INFO: pip is still looking at multiple versions of cryptography to determine which version is compatible with other requirements. This could take a while.
+  Downloading cryptography-46.0.6-cp38-abi3-win_amd64.whl.metadata (5.7 kB)
+  Downloading cryptography-46.0.5-cp38-abi3-win_amd64.whl.metadata (5.7 kB)
+  Downloading cryptography-46.0.4-cp38-abi3-win_amd64.whl.metadata (5.7 kB)
+  Downloading cryptography-46.0.3-cp38-abi3-win_amd64.whl.metadata (5.7 kB)
+  Downloading cryptography-46.0.2-cp38-abi3-win_amd64.whl.metadata (5.7 kB)
+INFO: This is taking longer than usual. You might need to provide the dependency resolver with stricter constraints to reduce runtime. See https://pip.pypa.io/warnings/backtracking for guidance. If you want to abort this run, press Ctrl + C.
+  Downloading cryptography-46.0.1-cp38-abi3-win_amd64.whl.metadata (5.7 kB)
+  Downloading cryptography-46.0.0-cp38-abi3-win_amd64.whl.metadata (5.7 kB)
+  Downloading cryptography-45.0.7-cp37-abi3-win_amd64.whl.metadata (5.7 kB)
+Collecting pycparser (from cffi>=2.0.0->cryptography>=38.0.3->google-auth<3,>=1.6.3->tensorboard<2.16,>=2.15->tensorflow-intel==2.15.0->tensorflow==2.15.0->-r repo\vlapy\requirements.txt (line 13))
+  Downloading pycparser-3.11-py3-none-any.whl.metadata (8.2 kB)
+Collecting pyasn1<0.7.0,>=0.6.1 (from pyasn1-modules>=0.2.1->google-auth<3,>=1.6.3->tensorboard<2.16,>=2.15->tensorflow-intel==2.15.0->tensorflow==2.15.0->-r repo\vlapy\requirements.txt (line 13))
+  Downloading pyasn1-0.6.5-py3-none-any.whl.metadata (8.4 kB)
+Collecting oauthlib>=3.0.0 (from requests-oauthlib>=0.7.0->google-auth-oauthlib<2,>=0.5->tensorboard<2.16,>=2.15->tensorflow-intel==2.15.0->tensorflow==2.15.0->-r repo\vlapy\requirements.txt (line 13))
+  Downloading oauthlib-4.0.1-py3-none-any.whl.metadata (8.6 kB)
+Collecting markdown-it-py>=2.2.0 (from rich>=11.1->flax==0.8.1->-r repo\vlapy\requirements.txt (line 22))
+  Downloading markdown_it_py-4.3.0-py3-none-any.whl.metadata (7.9 kB)
+Collecting pygments<3.0.0,>=2.13.0 (from rich>=11.1->flax==0.8.1->-r repo\vlapy\requirements.txt (line 22))
+  Downloading pygments-2.21.0-py3-none-any.whl.metadata (2.5 kB)
+Collecting mdurl~=0.1 (from markdown-it-py>=2.2.0->rich>=11.1->flax==0.8.1->-r repo\vlapy\requirements.txt (line 22))
+  Downloading mdurl-0.1.2-py3-none-any.whl.metadata (1.6 kB)
+Collecting etils>=1.6.0 (from etils[edc,enp,epath,epy,etree]>=1.6.0; python_version < "3.11"->tensorflow_datasets>=4.9.2->dlimp @ git+https://github.com/kvablack/dlimp@d08da3852c149548aaa8551186d619d87375df08->-r repo\vlapy\requirements.txt (line 25))
+  Downloading etils-1.13.0-py3-none-any.whl.metadata (6.5 kB)
+Collecting immutabledict (from tensorflow_datasets>=4.9.2->dlimp @ git+https://github.com/kvablack/dlimp@d08da3852c149548aaa8551186d619d87375df08->-r repo\vlapy\requirements.txt (line 25))
+  Downloading immutabledict-4.3.1-py3-none-any.whl.metadata (3.5 kB)
+Collecting promise (from tensorflow_datasets>=4.9.2->dlimp @ git+https://github.com/kvablack/dlimp@d08da3852c149548aaa8551186d619d87375df08->-r repo\vlapy\requirements.txt (line 25))
+  Downloading promise-2.3.tar.gz (19 kB)
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Collecting psutil (from tensorflow_datasets>=4.9.2->dlimp @ git+https://github.com/kvablack/dlimp@d08da3852c149548aaa8551186d619d87375df08->-r repo\vlapy\requirements.txt (line 25))
+  Downloading psutil-7.2.2-cp37-abi3-win_amd64.whl.metadata (22 kB)
+Collecting pyarrow (from tensorflow_datasets>=4.9.2->dlimp @ git+https://github.com/kvablack/dlimp@d08da3852c149548aaa8551186d619d87375df08->-r repo\vlapy\requirements.txt (line 25))
+  Downloading pyarrow-25.0.1-cp310-cp310-win_amd64.whl.metadata (3.0 kB)
+Collecting simple_parsing (from tensorflow_datasets>=4.9.2->dlimp @ git+https://github.com/kvablack/dlimp@d08da3852c149548aaa8551186d619d87375df08->-r repo\vlapy\requirements.txt (line 25))
+  Downloading simple_parsing-0.1.9-py3-none-any.whl.metadata (8.1 kB)
+Collecting tensorflow-metadata (from tensorflow_datasets>=4.9.2->dlimp @ git+https://github.com/kvablack/dlimp@d08da3852c149548aaa8551186d619d87375df08->-r repo\vlapy\requirements.txt (line 25))
+  Downloading tensorflow_metadata-1.21.0-py3-none-any.whl.metadata (2.5 kB)
+Collecting toml (from tensorflow_datasets>=4.9.2->dlimp @ git+https://github.com/kvablack/dlimp@d08da3852c149548aaa8551186d619d87375df08->-r repo\vlapy\requirements.txt (line 25))
+  Downloading toml-0.10.2-py2.py3-none-any.whl.metadata (7.1 kB)
+Collecting einops (from etils[edc,enp,epath,epy,etree]>=1.6.0; python_version < "3.11"->tensorflow_datasets>=4.9.2->dlimp @ git+https://github.com/kvablack/dlimp@d08da3852c149548aaa8551186d619d87375df08->-r repo\vlapy\requirements.txt (line 25))
+  Downloading einops-0.8.2-py3-none-any.whl.metadata (13 kB)
+Collecting importlib_resources (from etils[edc,enp,epath,epy,etree]>=1.6.0; python_version < "3.11"->tensorflow_datasets>=4.9.2->dlimp @ git+https://github.com/kvablack/dlimp@d08da3852c149548aaa8551186d619d87375df08->-r repo\vlapy\requirements.txt (line 25))
+  Downloading importlib_resources-7.1.0-py3-none-any.whl.metadata (4.0 kB)
+Collecting zipp (from etils[edc,enp,epath,epy,etree]>=1.6.0; python_version < "3.11"->tensorflow_datasets>=4.9.2->dlimp @ git+https://github.com/kvablack/dlimp@d08da3852c149548aaa8551186d619d87375df08->-r repo\vlapy\requirements.txt (line 25))
+  Downloading zipp-4.1.2-py3-none-any.whl.metadata (3.6 kB)
+Collecting tf-keras>=2.14.1 (from tensorflow-hub==0.16.1->-r repo\vlapy\requirements.txt (line 37))
+  Downloading tf_keras-2.20.1-py3-none-any.whl.metadata (1.8 kB)
+INFO: pip is looking at multiple versions of tf-keras to determine which version is compatible with other requirements. This could take a while.
+  Downloading tf_keras-2.19.0-py3-none-any.whl.metadata (1.8 kB)
+  Downloading tf_keras-2.18.0-py3-none-any.whl.metadata (1.6 kB)
+  Downloading tf_keras-2.17.0-py3-none-any.whl.metadata (1.6 kB)
+  Downloading tf_keras-2.16.0-py3-none-any.whl.metadata (1.6 kB)
+  Downloading tf_keras-2.15.1-py3-none-any.whl.metadata (1.7 kB)
+Collecting colorama (from tqdm>=4.27->transformers==4.38.2->-r repo\vlapy\requirements.txt (line 31))
+  Downloading colorama-0.4.6-py2.py3-none-any.whl.metadata (17 kB)
+Collecting markupsafe>=2.1.1 (from werkzeug>=1.0.1->tensorboard<2.16,>=2.15->tensorflow-intel==2.15.0->tensorflow==2.15.0->-r repo\vlapy\requirements.txt (line 13))
+  Downloading markupsafe-3.0.4-cp310-cp310-win_amd64.whl.metadata (2.8 kB)
+Collecting attrs>=18.2.0 (from dm-tree->tensorflow-probability>=0.15.0->distrax==0.1.5->-r repo\vlapy\requirements.txt (line 28))
+  Downloading attrs-26.1.0-py3-none-any.whl.metadata (8.8 kB)
+Collecting optax (from flax==0.8.1->-r repo\vlapy\requirements.txt (line 22))
+  Downloading optax-0.2.8-py3-none-any.whl.metadata (7.9 kB)
+INFO: pip is looking at multiple versions of optax to determine which version is compatible with other requirements. This could take a while.
+  Downloading optax-0.2.7-py3-none-any.whl.metadata (7.9 kB)
+  Downloading optax-0.2.6-py3-none-any.whl.metadata (7.6 kB)
+  Downloading optax-0.2.5-py3-none-any.whl.metadata (7.5 kB)
+  Downloading optax-0.2.4-py3-none-any.whl.metadata (8.3 kB)
+  Downloading optax-0.2.3-py3-none-any.whl.metadata (8.3 kB)
+  Downloading optax-0.2.2-py3-none-any.whl.metadata (8.1 kB)
+Collecting orbax-checkpoint (from flax==0.8.1->-r repo\vlapy\requirements.txt (line 22))
+  Downloading orbax_checkpoint-0.11.38-py3-none-any.whl.metadata (2.8 kB)
+INFO: pip is looking at multiple versions of orbax-checkpoint to determine which version is compatible with other requirements. This could take a while.
+  Downloading orbax_checkpoint-0.11.37-py3-none-any.whl.metadata (2.8 kB)
+  Downloading orbax_checkpoint-0.11.36-py3-none-any.whl.metadata (2.7 kB)
+  Downloading orbax_checkpoint-0.11.35-py3-none-any.whl.metadata (2.7 kB)
+  Downloading orbax_checkpoint-0.11.34-py3-none-any.whl.metadata (2.7 kB)
+  Downloading orbax_checkpoint-0.11.33-py3-none-any.whl.metadata (2.7 kB)
+  Downloading orbax_checkpoint-0.11.32-py3-none-any.whl.metadata (2.5 kB)
+INFO: pip is still looking at multiple versions of orbax-checkpoint to determine which version is compatible with other requirements. This could take a while.
+  Downloading orbax_checkpoint-0.11.31-py3-none-any.whl.metadata (2.5 kB)
+  Downloading orbax_checkpoint-0.11.30-py3-none-any.whl.metadata (2.5 kB)
+  Downloading orbax_checkpoint-0.11.28-py3-none-any.whl.metadata (2.4 kB)
+  Downloading orbax_checkpoint-0.11.27-py3-none-any.whl.metadata (2.4 kB)
+  Downloading orbax_checkpoint-0.11.26-py3-none-any.whl.metadata (2.4 kB)
+INFO: This is taking longer than usual. You might need to provide the dependency resolver with stricter constraints to reduce runtime. See https://pip.pypa.io/warnings/backtracking for guidance. If you want to abort this run, press Ctrl + C.
+  Downloading orbax_checkpoint-0.11.25-py3-none-any.whl.metadata (2.3 kB)
+  Downloading orbax_checkpoint-0.11.24-py3-none-any.whl.metadata (2.3 kB)
+  Downloading orbax_checkpoint-0.11.23-py3-none-any.whl.metadata (2.3 kB)
+  Downloading orbax_checkpoint-0.11.22-py3-none-any.whl.metadata (2.3 kB)
+  Downloading orbax_checkpoint-0.11.21-py3-none-any.whl.metadata (2.3 kB)
+  Downloading orbax_checkpoint-0.11.20-py3-none-any.whl.metadata (2.3 kB)
+  Downloading orbax_checkpoint-0.11.19-py3-none-any.whl.metadata (2.2 kB)
+  Downloading orbax_checkpoint-0.11.18-py3-none-any.whl.metadata (2.2 kB)
+  Downloading orbax_checkpoint-0.11.17-py3-none-any.whl.metadata (2.2 kB)
+  Downloading orbax_checkpoint-0.11.16-py3-none-any.whl.metadata (2.0 kB)
+  Downloading orbax_checkpoint-0.11.15-py3-none-any.whl.metadata (2.0 kB)
+  Downloading orbax_checkpoint-0.11.14-py3-none-any.whl.metadata (2.0 kB)
+  Downloading orbax_checkpoint-0.11.13-py3-none-any.whl.metadata (2.0 kB)
+  Downloading orbax_checkpoint-0.11.12-py3-none-any.whl.metadata (2.0 kB)
+  Downloading orbax_checkpoint-0.11.11-py3-none-any.whl.metadata (2.0 kB)
+  Downloading orbax_checkpoint-0.11.10-py3-none-any.whl.metadata (2.0 kB)
+  Downloading orbax_checkpoint-0.11.9-py3-none-any.whl.metadata (2.0 kB)
+  Downloading orbax_checkpoint-0.11.8-py3-none-any.whl.metadata (2.0 kB)
+  Downloading orbax_checkpoint-0.11.7-py3-none-any.whl.metadata (2.0 kB)
+  Downloading orbax_checkpoint-0.11.6-py3-none-any.whl.metadata (1.9 kB)
+  Downloading orbax_checkpoint-0.11.5-py3-none-any.whl.metadata (1.9 kB)
+  Downloading orbax_checkpoint-0.11.4-py3-none-any.whl.metadata (1.9 kB)
+  Downloading orbax_checkpoint-0.11.3-py3-none-any.whl.metadata (1.9 kB)
+  Downloading orbax_checkpoint-0.11.2-py3-none-any.whl.metadata (1.9 kB)
+  Downloading orbax_checkpoint-0.11.1-py3-none-any.whl.metadata (1.9 kB)
+  Downloading orbax_checkpoint-0.11.0-py3-none-any.whl.metadata (1.9 kB)
+  Downloading orbax_checkpoint-0.10.3-py3-none-any.whl.metadata (1.9 kB)
+  Downloading orbax_checkpoint-0.10.2-py3-none-any.whl.metadata (1.9 kB)
+  Downloading orbax_checkpoint-0.10.1-py3-none-any.whl.metadata (1.9 kB)
+  Downloading orbax_checkpoint-0.10.0-py3-none-any.whl.metadata (1.9 kB)
+  Downloading orbax_checkpoint-0.9.1-py3-none-any.whl.metadata (1.8 kB)
+  Downloading orbax_checkpoint-0.9.0-py3-none-any.whl.metadata (1.8 kB)
+  Downloading orbax_checkpoint-0.8.0-py3-none-any.whl.metadata (1.8 kB)
+  Downloading orbax_checkpoint-0.7.0-py3-none-any.whl.metadata (1.8 kB)
+  Downloading orbax_checkpoint-0.6.4-py3-none-any.whl.metadata (1.8 kB)
+  Downloading orbax_checkpoint-0.6.3-py3-none-any.whl.metadata (1.8 kB)
+  Downloading orbax_checkpoint-0.6.2-py3-none-any.whl.metadata (1.8 kB)
+  Downloading orbax_checkpoint-0.6.1-py3-none-any.whl.metadata (1.8 kB)
+  Downloading orbax_checkpoint-0.6.0-py3-none-any.whl.metadata (1.8 kB)
+  Downloading orbax_checkpoint-0.5.23-py3-none-any.whl.metadata (1.8 kB)
+  Downloading orbax_checkpoint-0.5.22-py3-none-any.whl.metadata (1.8 kB)
+  Downloading orbax_checkpoint-0.5.21-py3-none-any.whl.metadata (1.8 kB)
+  Downloading orbax_checkpoint-0.5.20-py3-none-any.whl.metadata (1.8 kB)
+  Downloading orbax_checkpoint-0.5.19-py3-none-any.whl.metadata (1.8 kB)
+  Downloading orbax_checkpoint-0.5.18-py3-none-any.whl.metadata (1.8 kB)
+  Downloading orbax_checkpoint-0.5.17-py3-none-any.whl.metadata (1.8 kB)
+  Downloading orbax_checkpoint-0.5.16-py3-none-any.whl.metadata (1.8 kB)
+Collecting nest_asyncio (from orbax-checkpoint->flax==0.8.1->-r repo\vlapy\requirements.txt (line 22))
+  Downloading nest_asyncio-1.6.0-py3-none-any.whl.metadata (2.8 kB)
+Collecting tensorstore (from flax==0.8.1->-r repo\vlapy\requirements.txt (line 22))
+  Downloading tensorstore-0.1.77-cp310-cp310-win_amd64.whl.metadata (21 kB)
+INFO: pip is looking at multiple versions of tensorstore to determine which version is compatible with other requirements. This could take a while.
+  Downloading tensorstore-0.1.76-cp310-cp310-win_amd64.whl.metadata (21 kB)
+  Downloading tensorstore-0.1.75-cp310-cp310-win_amd64.whl.metadata (21 kB)
+  Downloading tensorstore-0.1.74-cp310-cp310-win_amd64.whl.metadata (21 kB)
+  Downloading tensorstore-0.1.73-cp310-cp310-win_amd64.whl.metadata (21 kB)
+  Downloading tensorstore-0.1.72-cp310-cp310-win_amd64.whl.metadata (21 kB)
+  Downloading tensorstore-0.1.71-cp310-cp310-win_amd64.whl.metadata (21 kB)
+INFO: pip is still looking at multiple versions of tensorstore to determine which version is compatible with other requirements. This could take a while.
+  Downloading tensorstore-0.1.69-cp310-cp310-win_amd64.whl.metadata (3.0 kB)
+  Downloading tensorstore-0.1.68-cp310-cp310-win_amd64.whl.metadata (3.0 kB)
+  Downloading tensorstore-0.1.67-cp310-cp310-win_amd64.whl.metadata (3.0 kB)
+  Downloading tensorstore-0.1.66-cp310-cp310-win_amd64.whl.metadata (3.0 kB)
+  Downloading tensorstore-0.1.65-cp310-cp310-win_amd64.whl.metadata (3.0 kB)
+INFO: This is taking longer than usual. You might need to provide the dependency resolver with stricter constraints to reduce runtime. See https://pip.pypa.io/warnings/backtracking for guidance. If you want to abort this run, press Ctrl + C.
+  Downloading tensorstore-0.1.64-cp310-cp310-win_amd64.whl.metadata (3.0 kB)
+  Downloading tensorstore-0.1.63-cp310-cp310-win_amd64.whl.metadata (3.0 kB)
+  Downloading tensorstore-0.1.62-cp310-cp310-win_amd64.whl.metadata (3.0 kB)
+  Downloading tensorstore-0.1.61-cp310-cp310-win_amd64.whl.metadata (3.0 kB)
+  Downloading tensorstore-0.1.60-cp310-cp310-win_amd64.whl.metadata (3.0 kB)
+  Downloading tensorstore-0.1.59-cp310-cp310-win_amd64.whl.metadata (3.0 kB)
+  Downloading tensorstore-0.1.58-cp310-cp310-win_amd64.whl.metadata (3.0 kB)
+  Downloading tensorstore-0.1.57-cp310-cp310-win_amd64.whl.metadata (3.0 kB)
+  Downloading tensorstore-0.1.56-cp310-cp310-win_amd64.whl.metadata (3.0 kB)
+  Downloading tensorstore-0.1.55-cp310-cp310-win_amd64.whl.metadata (3.0 kB)
+  Downloading tensorstore-0.1.54-cp310-cp310-win_amd64.whl.metadata (3.0 kB)
+  Downloading tensorstore-0.1.53-cp310-cp310-win_amd64.whl.metadata (3.0 kB)
+  Downloading tensorstore-0.1.52-cp310-cp310-win_amd64.whl.metadata (3.1 kB)
+  Downloading tensorstore-0.1.51-cp310-cp310-win_amd64.whl.metadata (3.1 kB)
+  Downloading tensorstore-0.1.50-cp310-cp310-win_amd64.whl.metadata (3.1 kB)
+  Downloading tensorstore-0.1.49-cp310-cp310-win_amd64.whl.metadata (3.1 kB)
+  Downloading tensorstore-0.1.48-cp310-cp310-win_amd64.whl.metadata (3.0 kB)
+  Downloading tensorstore-0.1.47-cp310-cp310-win_amd64.whl.metadata (3.0 kB)
+  Downloading tensorstore-0.1.46-cp310-cp310-win_amd64.whl.metadata (3.0 kB)
+  Downloading tensorstore-0.1.45-cp310-cp310-win_amd64.whl.metadata (3.0 kB)
+Collecting orbax-checkpoint (from flax==0.8.1->-r repo\vlapy\requirements.txt (line 22))
+  Downloading orbax_checkpoint-0.5.15-py3-none-any.whl.metadata (1.8 kB)
+  Downloading orbax_checkpoint-0.5.14-py3-none-any.whl.metadata (1.8 kB)
+  Downloading orbax_checkpoint-0.5.13-py3-none-any.whl.metadata (1.8 kB)
+  Downloading orbax_checkpoint-0.5.12-py3-none-any.whl.metadata (1.8 kB)
+  Downloading orbax_checkpoint-0.5.11-py3-none-any.whl.metadata (1.8 kB)
+  Downloading orbax_checkpoint-0.5.10-py3-none-any.whl.metadata (1.8 kB)
+  Downloading orbax_checkpoint-0.5.9-py3-none-any.whl.metadata (1.7 kB)
+  Downloading orbax_checkpoint-0.5.8-py3-none-any.whl.metadata (1.7 kB)
+  Downloading orbax_checkpoint-0.5.7-py3-none-any.whl.metadata (1.7 kB)
+  Downloading orbax_checkpoint-0.5.6-py3-none-any.whl.metadata (1.7 kB)
+  Downloading orbax_checkpoint-0.5.5-py3-none-any.whl.metadata (1.7 kB)
+  Downloading orbax_checkpoint-0.5.4-py3-none-any.whl.metadata (1.7 kB)
+  Downloading orbax_checkpoint-0.5.3-py3-none-any.whl.metadata (1.7 kB)
+  Downloading orbax_checkpoint-0.5.2-py3-none-any.whl.metadata (1.7 kB)
+  Downloading orbax_checkpoint-0.5.1-py3-none-any.whl.metadata (1.7 kB)
+  Downloading orbax_checkpoint-0.5.0-py3-none-any.whl.metadata (1.7 kB)
+  Downloading orbax_checkpoint-0.4.8-py3-none-any.whl.metadata (1.7 kB)
+  Downloading orbax_checkpoint-0.4.7-py3-none-any.whl.metadata (1.7 kB)
+  Downloading orbax_checkpoint-0.4.6-py3-none-any.whl.metadata (1.7 kB)
+  Downloading orbax_checkpoint-0.4.5-py3-none-any.whl.metadata (1.7 kB)
+  Downloading orbax_checkpoint-0.4.4-py3-none-any.whl.metadata (1.7 kB)
+Collecting docstring-parser~=0.15 (from simple_parsing->tensorflow_datasets>=4.9.2->dlimp @ git+https://github.com/kvablack/dlimp@d08da3852c149548aaa8551186d619d87375df08->-r repo\vlapy\requirements.txt (line 25))
+  Downloading docstring_parser-0.18.0-py3-none-any.whl.metadata (3.5 kB)
+Downloading tensorflow-2.15.0-cp310-cp310-win_amd64.whl (2.1 kB)
+Downloading jax-0.4.23-py3-none-any.whl (1.7 MB)
+   ---------------------------------------- 1.7/1.7 MB 47.5 MB/s  0:00:00
+Downloading jaxlib-0.4.23-cp310-cp310-win_amd64.whl (46.0 MB)
+   ---------------------------------------- 46.0/46.0 MB 11.4 MB/s  0:00:04
+Downloading flax-0.8.1-py3-none-any.whl (677 kB)
+   ---------------------------------------- 677.6/677.6 kB ?  0:00:00
+Downloading distrax-0.1.5-py3-none-any.whl (319 kB)
+Downloading transformers-4.38.2-py3-none-any.whl (8.5 MB)
+   ---------------------------------------- 8.5/8.5 MB 88.1 MB/s  0:00:00
+Downloading transforms3d-0.4.2-py3-none-any.whl (1.4 MB)
+   ---------------------------------------- 1.4/1.4 MB 69.7 MB/s  0:00:00
+Downloading tensorflow_hub-0.16.1-py2.py3-none-any.whl (30 kB)
+Downloading tf_agents-0.19.0-py3-none-any.whl (1.4 MB)
+   ---------------------------------------- 1.4/1.4 MB 70.4 MB/s  0:00:00
+Downloading pygame-2.1.3-cp310-cp310-win_amd64.whl (10.4 MB)
+   ---------------------------------------- 10.4/10.4 MB 8.5 MB/s  0:00:01
+Downloading tensorflow_intel-2.15.0-cp310-cp310-win_amd64.whl (300.9 MB)
+   ---------------------------------------- 300.9/300.9 MB 11.1 MB/s  0:00:26
+Downloading typing_extensions-4.5.0-py3-none-any.whl (27 kB)
+Downloading grpcio-1.74.0-cp310-cp310-win_amd64.whl (4.5 MB)
+   ---------------------------------------- 4.5/4.5 MB 90.0 MB/s  0:00:00
+Downloading huggingface_hub-0.36.2-py3-none-any.whl (566 kB)
+   ---------------------------------------- 566.4/566.4 kB 19.0 MB/s  0:00:00
+Downloading keras-2.15.0-py3-none-any.whl (1.7 MB)
+   ---------------------------------------- 1.7/1.7 MB 45.3 MB/s  0:00:00
+Downloading ml_dtypes-0.2.0-cp310-cp310-win_amd64.whl (938 kB)
+   ---------------------------------------- 938.6/938.6 kB 42.3 MB/s  0:00:00
+Downloading numpy-1.26.4-cp310-cp310-win_amd64.whl (15.8 MB)
+   ---------------------------------------- 15.8/15.8 MB 90.4 MB/s  0:00:00
+Downloading protobuf-4.25.9-cp310-abi3-win_amd64.whl (413 kB)
+Downloading tensorboard-2.15.2-py3-none-any.whl (5.5 MB)
+   ---------------------------------------- 5.5/5.5 MB 83.8 MB/s  0:00:00
+Downloading google_auth-2.62.2-py3-none-any.whl (270 kB)
+Downloading google_auth_oauthlib-1.5.0-py3-none-any.whl (20 kB)
+Downloading requests-2.34.2-py3-none-any.whl (73 kB)
+Downloading charset_normalizer-3.5.2-cp310-cp310-win_amd64.whl (215 kB)
+Downloading idna-3.20-py3-none-any.whl (69 kB)
+Downloading tensorboard_data_server-0.7.2-py3-none-any.whl (2.4 kB)
+Downloading tensorflow_estimator-2.15.0-py2.py3-none-any.whl (441 kB)
+Downloading tensorflow_probability-0.23.0-py2.py3-none-any.whl (6.9 MB)
+   ---------------------------------------- 6.9/6.9 MB 85.3 MB/s  0:00:00
+Downloading tokenizers-0.15.2-cp310-none-win_amd64.whl (2.2 MB)
+   ---------------------------------------- 2.2/2.2 MB 62.3 MB/s  0:00:00
+Downloading urllib3-2.8.0-py3-none-any.whl (135 kB)
+Downloading wrapt-1.14.2-cp310-cp310-win_amd64.whl (35 kB)
+Downloading absl_py-2.5.1-py3-none-any.whl (137 kB)
+Downloading astunparse-1.6.3-py2.py3-none-any.whl (12 kB)
+Downloading six-1.17.0-py2.py3-none-any.whl (11 kB)
+Downloading certifi-2026.10.23-py3-none-any.whl (135 kB)
+Downloading chex-0.1.86-py3-none-any.whl (98 kB)
+Downloading cloudpickle-3.1.3-py3-none-any.whl (22 kB)
+Downloading cryptography-45.0.7-cp37-abi3-win_amd64.whl (3.4 MB)
+   ---------------------------------------- 3.4/3.4 MB 66.6 MB/s  0:00:00
+Downloading cffi-2.1.1-cp310-cp310-win_amd64.whl (185 kB)
+Downloading flatbuffers-25.12.19-py2.py3-none-any.whl (26 kB)
+Downloading fsspec-2026.9.0-py3-none-any.whl (221 kB)
+Downloading gast-0.7.0-py3-none-any.whl (22 kB)
+Downloading gin_config-0.5.0-py3-none-any.whl (61 kB)
+Downloading google_pasta-0.2.0-py3-none-any.whl (57 kB)
+Downloading gym_notices-0.1.0-py3-none-any.whl (3.3 kB)
+Downloading h5py-3.16.0-cp310-cp310-win_amd64.whl (3.2 MB)
+   ---------------------------------------- 3.2/3.2 MB 63.5 MB/s  0:00:00
+Downloading libclang-18.1.1-py2.py3-none-win_amd64.whl (26.4 MB)
+   ---------------------------------------- 26.4/26.4 MB 88.1 MB/s  0:00:00
+Downloading markdown-3.10.3-py3-none-any.whl (110 kB)
+Downloading opt_einsum-3.4.0-py3-none-any.whl (71 kB)
+Downloading pyasn1_modules-0.4.2-py3-none-any.whl (181 kB)
+Downloading pyasn1-0.6.5-py3-none-any.whl (84 kB)
+Downloading pyyaml-6.0.3-cp310-cp310-win_amd64.whl (158 kB)
+Downloading regex-2026.9.29-cp310-cp310-win_amd64.whl (280 kB)
+Downloading requests_oauthlib-2.0.0-py2.py3-none-any.whl (24 kB)
+Downloading oauthlib-4.0.1-py3-none-any.whl (161 kB)
+Downloading rich-15.0.0-py3-none-any.whl (310 kB)
+Downloading pygments-2.21.0-py3-none-any.whl (1.3 MB)
+   ---------------------------------------- 1.3/1.3 MB 61.8 MB/s  0:00:00
+Downloading markdown_it_py-4.3.0-py3-none-any.whl (96 kB)
+Downloading mdurl-0.1.2-py3-none-any.whl (10.0 kB)
+Downloading safetensors-0.8.0-cp310-abi3-win_amd64.whl (355 kB)
+Downloading scipy-1.12.0-cp310-cp310-win_amd64.whl (46.2 MB)
+   ---------------------------------------- 46.2/46.2 MB 62.6 MB/s  0:00:00
+Downloading tensorflow_datasets-4.9.10-py3-none-any.whl (5.3 MB)
+   ---------------------------------------- 5.3/5.3 MB 65.1 MB/s  0:00:00
+Downloading etils-1.13.0-py3-none-any.whl (170 kB)
+Downloading tensorflow_io_gcs_filesystem-0.31.0-cp310-cp310-win_amd64.whl (1.5 MB)
+   ---------------------------------------- 1.5/1.5 MB 39.5 MB/s  0:00:00
+Downloading termcolor-3.3.0-py3-none-any.whl (7.7 kB)
+Downloading tf_keras-2.15.1-py3-none-any.whl (1.7 MB)
+   ---------------------------------------- 1.7/1.7 MB 45.4 MB/s  0:00:00
+Downloading toolz-1.2.0-py3-none-any.whl (60 kB)
+Downloading tqdm-4.70.1-py3-none-any.whl (80 kB)
+Downloading werkzeug-3.1.9-py3-none-any.whl (228 kB)
+Downloading markupsafe-3.0.4-cp310-cp310-win_amd64.whl (14 kB)
+Downloading colorama-0.4.6-py2.py3-none-any.whl (25 kB)
+Downloading decorator-5.3.1-py3-none-any.whl (10 kB)
+Downloading dm_tree-0.1.10-cp310-cp310-win_amd64.whl (110 kB)
+Downloading attrs-26.1.0-py3-none-any.whl (67 kB)
+Downloading einops-0.8.2-py3-none-any.whl (65 kB)
+Downloading filelock-4.1.0-py3-none-any.whl (133 kB)
+Downloading immutabledict-4.3.1-py3-none-any.whl (5.0 kB)
+Downloading importlib_resources-7.1.0-py3-none-any.whl (37 kB)
+Downloading msgpack-1.2.4-cp310-cp310-win_amd64.whl (75 kB)
+Downloading optax-0.2.2-py3-none-any.whl (223 kB)
+Downloading tensorstore-0.1.45-cp310-cp310-win_amd64.whl (10.5 MB)
+   ---------------------------------------- 10.5/10.5 MB 5.5 MB/s  0:00:01
+Downloading orbax_checkpoint-0.4.4-py3-none-any.whl (123 kB)
+Downloading nest_asyncio-1.6.0-py3-none-any.whl (5.2 kB)
+Downloading pillow-12.3.0-cp310-cp310-win_amd64.whl (7.2 MB)
+   ---------------------------------------- 7.2/7.2 MB 49.7 MB/s  0:00:00
+Downloading psutil-7.2.2-cp37-abi3-win_amd64.whl (137 kB)
+Downloading pyarrow-25.0.1-cp310-cp310-win_amd64.whl (27.8 MB)
+   ---------------------------------------- 27.8/27.8 MB 55.2 MB/s  0:00:00
+Downloading pycparser-3.11-py3-none-any.whl (51 kB)
+Downloading simple_parsing-0.1.9-py3-none-any.whl (113 kB)
+Downloading docstring_parser-0.18.0-py3-none-any.whl (22 kB)
+Downloading tensorflow_metadata-1.21.0-py3-none-any.whl (30 kB)
+Downloading toml-0.10.2-py2.py3-none-any.whl (16 kB)
+Downloading zipp-4.1.2-py3-none-any.whl (10 kB)
+Building wheels for collected packages: dlimp, gym, promise
+  Building wheel for dlimp (pyproject.toml): started
+  Building wheel for dlimp (pyproject.toml): finished with status 'done'
+  Created wheel for dlimp: filename=dlimp-0.0.1-py3-none-any.whl size=13605 sha256=49b0bbc98e138f6f8d4870d366c960f9a020828abd3cb3b763e900b5f766d7cf
+  Stored in directory: c:\users\924414657\appdata\local\pip\cache\wheels\5b\ca\c9\4a1ae12fad216c44cbd5d239f8573060a33c25765fb14f59ed
+  Building wheel for gym (pyproject.toml): started
+  Building wheel for gym (pyproject.toml): finished with status 'done'
+  Created wheel for gym: filename=gym-0.23.0-py3-none-any.whl size=697755 sha256=854f9f88ee512081dc5fdc159c82bc1b81660f47c10a7d89c7bfb4c56a75ec03
+  Stored in directory: c:\users\924414657\appdata\local\pip\cache\wheels\3d\6f\b4\3991d4fae11d0ecb0754c11cc1b4e7745012850da4efaaf0b1
+  Building wheel for promise (pyproject.toml): started
+  Building wheel for promise (pyproject.toml): finished with status 'done'
+  Created wheel for promise: filename=promise-2.3-py3-none-any.whl size=21644 sha256=b9ef33a62f0084d5fbd272a868603d4763a64e73bf7968c00f24bd8e083bdf10
+  Stored in directory: c:\users\924414657\appdata\local\pip\cache\wheels\54\4e\28\3ed0e1c8a752867445bab994d2340724928aa3ab059c57c8db
+Successfully built dlimp gym promise
+Installing collected packages: libclang, gym_notices, gin-config, flatbuffers, zipp, wrapt, urllib3, typing-extensions, toolz, toml, termcolor, tensorflow-io-gcs-filesystem, tensorflow-estimator, tensorboard-data-server, six, safetensors, regex, PyYAML, pygments, pygame, pycparser, pyasn1, pyarrow, psutil, protobuf, pillow, opt-einsum, oauthlib, numpy, nest_asyncio, msgpack, mdurl, markupsafe, markdown, keras, importlib_resources, immutabledict, idna, grpcio, gast, fsspec, filelock, etils, einops, docstring-parser, decorator, colorama, cloudpickle, charset_normalizer, certifi, attrs, absl-py, werkzeug, transforms3d, tqdm, tensorstore, tensorflow-metadata, simple_parsing, scipy, requests, pyasn1-modules, promise, ml-dtypes, markdown-it-py, h5py, gym, google-pasta, dm-tree, cffi, astunparse, tensorflow-probability, rich, requests-oauthlib, jaxlib, jax, huggingface-hub, cryptography, tokenizers, tf-agents, orbax-checkpoint, google-auth, chex, transformers, optax, google-auth-oauthlib, distrax, tensorflow_datasets, tensorboard, flax, tensorflow-intel, tensorflow, tf-keras, dlimp, tensorflow-hub
+  WARNING: The script pygmentize.exe is installed in 'C:\Users\924414657\vla-octo\win64\python\Scripts' which is not 
+on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  WARNING: The script f2py.exe is installed in 'C:\Users\924414657\vla-octo\win64\python\Scripts' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  WARNING: The script markdown_py.exe is installed in 'C:\Users\924414657\vla-octo\win64\python\Scripts' which is not 
+on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  WARNING: The script idna.exe is installed in 'C:\Users\924414657\vla-octo\win64\python\Scripts' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  WARNING: The script normalizer.exe is installed in 'C:\Users\924414657\vla-octo\win64\python\Scripts' which is not 
+on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  WARNING: The script tqdm.exe is installed in 'C:\Users\924414657\vla-octo\win64\python\Scripts' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  WARNING: The script markdown-it.exe is installed in 'C:\Users\924414657\vla-octo\win64\python\Scripts' which is not 
+on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  WARNING: The script cffi-gen-src.exe is installed in 'C:\Users\924414657\vla-octo\win64\python\Scripts' which is not 
+on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  WARNING: The scripts hf.exe, huggingface-cli.exe and tiny-agents.exe are installed in 
+'C:\Users\924414657\vla-octo\win64\python\Scripts' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  WARNING: The script transformers-cli.exe is installed in 'C:\Users\924414657\vla-octo\win64\python\Scripts' which is 
+not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  WARNING: The script google-oauthlib-tool.exe is installed in 'C:\Users\924414657\vla-octo\win64\python\Scripts' 
+which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  WARNING: The script tfds.exe is installed in 'C:\Users\924414657\vla-octo\win64\python\Scripts' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  WARNING: The script tensorboard.exe is installed in 'C:\Users\924414657\vla-octo\win64\python\Scripts' which is not 
+on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  WARNING: The scripts estimator_ckpt_converter.exe, import_pb_to_tensorboard.exe, saved_model_cli.exe, 
+tensorboard.exe, tf_upgrade_v2.exe, tflite_convert.exe, toco.exe and toco_from_protos.exe are installed in 
+'C:\Users\924414657\vla-octo\win64\python\Scripts' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+
+Successfully installed PyYAML-6.0.3 absl-py-2.5.1 astunparse-1.6.3 attrs-26.1.0 certifi-2026.10.23 cffi-2.1.1 charset_normalizer-3.5.2 chex-0.1.86 cloudpickle-3.1.3 colorama-0.4.6 cryptography-45.0.7 decorator-5.3.1 distrax-0.1.5 dlimp-0.0.1 dm-tree-0.1.10 docstring-parser-0.18.0 einops-0.8.2 etils-1.13.0 filelock-4.1.0 flatbuffers-25.12.19 flax-0.8.1 fsspec-2026.9.0 gast-0.7.0 gin-config-0.5.0 google-auth-2.62.2 google-auth-oauthlib-1.5.0 google-pasta-0.2.0 grpcio-1.74.0 gym-0.23.0 gym_notices-0.1.0 h5py-3.16.0 huggingface-hub-0.36.2 idna-3.20 immutabledict-4.3.1 importlib_resources-7.1.0 jax-0.4.23 jaxlib-0.4.23 keras-2.15.0 libclang-18.1.1 markdown-3.10.3 markdown-it-py-4.3.0 markupsafe-3.0.4 mdurl-0.1.2 ml-dtypes-0.2.0 msgpack-1.2.4 nest_asyncio-1.6.0 numpy-1.26.4 oauthlib-4.0.1 opt-einsum-3.4.0 optax-0.2.2 orbax-checkpoint-0.4.4 pillow-12.3.0 promise-2.3 protobuf-4.25.9 psutil-7.2.2 pyarrow-25.0.1 pyasn1-0.6.5 pyasn1-modules-0.4.2 pycparser-3.11 pygame-2.1.3 pygments-2.21.0 regex-2026.9.29 requests-2.34.2 requests-oauthlib-2.0.0 rich-15.0.0 safetensors-0.8.0 scipy-1.12.0 simple_parsing-0.1.9 six-1.17.0 tensorboard-2.15.2 tensorboard-data-server-0.7.2 tensorflow-2.15.0 tensorflow-estimator-2.15.0 tensorflow-hub-0.16.1 tensorflow-intel-2.15.0 tensorflow-io-gcs-filesystem-0.31.0 tensorflow-metadata-1.21.0 tensorflow-probability-0.23.0 tensorflow_datasets-4.9.10 tensorstore-0.1.45 termcolor-3.3.0 tf-agents-0.19.0 tf-keras-2.15.1 tokenizers-0.15.2 toml-0.10.2 toolz-1.2.0 tqdm-4.70.1 transformers-4.38.2 transforms3d-0.4.2 typing-extensions-4.5.0 urllib3-2.8.0 werkzeug-3.1.9 wrapt-1.14.2 zipp-4.1.2
+exit 0
+=== octo 11/19/2026 12:49:10 ===
+Collecting git+https://github.com/octo-models/octo.git@241fb3514b7c40957a86d869fecb7c7fc353f540
+  Cloning https://github.com/octo-models/octo.git (to revision 241fb3514b7c40957a86d869fecb7c7fc353f540) to C:\Users\924414657\AppData\Local\Temp\pip-req-build-7gswuc5m
+python.exe :   Running command git clone --filter=blob:none --quiet https://github.com/octo-models/octo.git 
+'C:\Users\924414657\AppData\Local\Temp\pip-req-build-7gswuc5m'
+At line:1 char:943
++ ... oding utf8; & $py -m pip install "git+https://github.com/octo-models/ ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (  Running comma...build-7gswuc5m':String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  Running command git rev-parse -q --verify '241fb3514b7c40957a86d869fecb7c7fc353f540^{commit}'
+  241fb3514b7c40957a86d869fecb7c7fc353f540
+  Resolved https://github.com/octo-models/octo.git to commit 241fb3514b7c40957a86d869fecb7c7fc353f540
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: octo
+  Building wheel for octo (pyproject.toml): started
+  Building wheel for octo (pyproject.toml): finished with status 'done'
+  Created wheel for octo: filename=octo-0.0.0-py3-none-any.whl size=90311 sha256=e48a4601307ec985c074426057b111f1331ed9444bb419d666eb6e397ebd6b13
+  Stored in directory: c:\users\924414657\appdata\local\pip\cache\wheels\94\40\c1\291ffe7707542c22724ced70a0b327a29fc730dfbef792e8ca
+Successfully built octo
+Installing collected packages: octo
+Successfully installed octo-0.0.0
+exit 0
+=== done 11/19/2026 12:49:16 ===

@@ -1,0 +1,10 @@
+﻿MATLAB 24.2.0.2863752 (R2024b) Update 5
+pyenv: 3.10  (C:\Users\924414657\vla-octo\win64\python\python.exe)
+import octoModel: 4.1 s
+OctoInference(): 5.7 s
+image [720 1280 3]
+step 1  6.68 s  dxyz = [+0.0123 -0.0209 -0.0160] m  drot = [+0.0180 -0.0055 +0.0309] rad  gripper = +1
+step 2  6.70 s  dxyz = [+0.0042 -0.0110 -0.0051] m  drot = [+0.0134 -0.0001 +0.0187] rad  gripper = +1
+step 3  0.22 s  dxyz = [+0.0009 -0.0071 -0.0019] m  drot = [+0.0086 +0.0066 +0.0096] rad  gripper = +1
+step 4  0.22 s  dxyz = [-0.0001 -0.0040 -0.0042] m  drot = [+0.0098 +0.0006 +0.0160] rad  gripper = +1
+step 5  0.20 s  dxyz = [+0.0037 +0.0011 +0.0036] m  drot = [+0.0029 -0.0078 +0.0093] rad  gripper = -1

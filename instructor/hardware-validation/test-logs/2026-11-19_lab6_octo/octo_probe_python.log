@@ -1,0 +1,17 @@
+﻿
+
+
+imports: 6.0 s
+To support symlinks on Windows, you either need to activate Developer Mode or to run Python as an administrator. In 
+order to activate developer mode, see this article: 
+https://docs.microsoft.com/en-us/windows/apps/get-started/enable-your-device-for-development
+OctoInference() load: 6.4 s  model=C:\Users\924414657\vla-octo\vlapy\octo-base
+image (720, 1280, 3) uint8
+{"step": 0, "dt_s": 4.977, "world_vector_m": [0.01233, -0.02093, -0.016], "rot_axangle_rad": [0.01799, -0.00552, 0.03087], "gripper": 1.0, "raw_open_gripper": 1.0151}
+{"step": 1, "dt_s": 6.712, "world_vector_m": [0.00423, -0.01099, -0.00506], "rot_axangle_rad": [0.01335, -0.00014, 0.01872], "gripper": 1.0, "raw_open_gripper": 1.0138}
+{"step": 2, "dt_s": 0.197, "world_vector_m": [0.00088, -0.00713, -0.00186], "rot_axangle_rad": [0.00855, 0.00655, 0.00962], "gripper": 1.0, "raw_open_gripper": 1.0041}
+{"step": 3, "dt_s": 0.201, "world_vector_m": [-0.00014, -0.00401, -0.00423], "rot_axangle_rad": [0.00978, 0.00063, 0.01598], "gripper": 1.0, "raw_open_gripper": 0.7599}
+{"step": 4, "dt_s": 0.193, "world_vector_m": [0.00368, 0.0011, 0.00359], "rot_axangle_rad": [0.00285, -0.00779, 0.00932], "gripper": -1.0, "raw_open_gripper": 0.4939}
+{"step": 5, "dt_s": 0.202, "world_vector_m": [-0.00149, -0.00087, -0.00098], "rot_axangle_rad": [0.00132, 0.00928, -0.02898], "gripper": -1.0, "raw_open_gripper": 0.263}
+{"step": 6, "dt_s": 0.193, "world_vector_m": [-0.00199, -0.00611, -0.00078], "rot_axangle_rad": [-0.00402, 0.00386, -0.0287], "gripper": -1.0, "raw_open_gripper": 0.2492}
+{"step": 7, "dt_s": 0.19, "world_vector_m": [-0.00121, -0.00051, 0.00016], "rot_axangle_rad": [-0.01071, 0.01083, -0.01321], "gripper": -1.0, "raw_open_gripper": 0.2548}
