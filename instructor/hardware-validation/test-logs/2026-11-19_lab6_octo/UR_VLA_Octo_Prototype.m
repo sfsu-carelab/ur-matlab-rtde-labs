@@ -25,6 +25,7 @@ function UR_VLA_Octo_Prototype(opts)
 %   steps, gripper timing, step time) before deciding on fine-tuning.
 %
 %   UR_VLA_Octo_Prototype                       % at the robot, from the MATLAB desktop; asks for the task
+%   UR_VLA_Octo_Prototype(Wrist=true)           % same with the wrist camera as Octo's image_wrist
 %   UR_VLA_Octo_Prototype(MaxSteps=15)          % same, longer run
 %   UR_VLA_Octo_Prototype(DryRun=true)          % camera + policy only, no robot, no motion
 %   UR_VLA_Octo_Prototype(DryRun=true, ImageFile="camera_1.png", Task="pick up the red block")
@@ -46,6 +47,7 @@ function UR_VLA_Octo_Prototype(opts)
         opts.MaxSteps  (1,1) double  = 20
         opts.Task      (1,1) string  = ""     % skips the task prompt (needed in batch)
         opts.WristImageFile (1,1) string = "" % with DryRun + ImageFile and use_wrist: the wrist frame file
+        opts.Wrist     logical {mustBeScalarOrEmpty} = []   % true/false overrides use_wrist for this run
     end
 
     %% ====================================================================
@@ -97,9 +99,11 @@ function UR_VLA_Octo_Prototype(opts)
     % (128x128), which octo-base was pretrained with. use_wrist = false runs the bird's-eye
     % only (runs 1 and 2). The wrist unit needs a USB 3 cable: on USB 2 it enumerates, lists
     % four modes and never returns a frame (2026-11-04 and 2026-11-19 findings).
-    use_wrist         = true;
+    use_wrist         = false;                    % default one camera until the 435if is on USB 3; Wrist=true for two
     wrist_camera      = "435if RGB";              % webcamlist entry for the wrist unit
     wrist_resolution  = "640x480";                % plenty for 128x128; in both the USB 2 and USB 3 mode lists
+    if ~isempty(opts.Wrist), use_wrist = opts.Wrist; end
+    fprintf('  Cameras: %s\n', ternary(use_wrist, "bird's-eye + wrist", "bird's-eye only"));
 
     % Chunk execution (Ryan, 2026-11-19, "option 2"): Octo predicts 4 steps per picture. The
     % first chunk_steps of them become cumulative targets, each solved to joint angles, and go
@@ -294,6 +298,10 @@ end
 % -------------------------------------------------------------------------
 function s = csv(v)
     s = strjoin(compose('%.4f', v), ',');
+end
+
+function out = ternary(c, a, b)
+    if c, out = a; else, out = b; end
 end
 
 function cam = openCamera(pattern, resolution)
