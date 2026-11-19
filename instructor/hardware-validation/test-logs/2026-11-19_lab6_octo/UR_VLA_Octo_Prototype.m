@@ -85,8 +85,9 @@ function UR_VLA_Octo_Prototype(opts)
     % in front of the base, down to just above the Lab 4 grasp height, never above Ready.
     xy_min = [0.25 -0.35];                        % [X Y] min (m)
     xy_max = [0.50  0.00];                        % [X Y] max (m)
-    z_min  = 0.090;                               % 1 cm under the Lab 4 grasp height (100.4 mm). Run 3 (2026-11-19)
-                                                  % was stopped at 0.100 while heading for 0.098, before closing.
+    z_min  = 0.085;                               % MEASURED 2026-11-19: Ryan jogged the open gripper until the
+                                                  % fingertips were 2 to 3 mm above the table; flange Z read 84.9 mm.
+                                                  % (Run 3 was stopped by the earlier 0.100 floor 2 mm short of grasp.)
     z_max  = 0.30;                                % below Ready (m)
 
     action_scale      = 1.0;                      % multiply the translation delta
