@@ -21,9 +21,11 @@ function UR_VLA_Octo_Prototype(opts)
 %   the point of this prototype is to measure what it does (direction of the first
 %   steps, gripper timing, step time) before deciding on fine-tuning.
 %
-%   UR_VLA_Octo_Prototype                       % at the robot, from the MATLAB desktop
+%   UR_VLA_Octo_Prototype                       % at the robot, from the MATLAB desktop; asks for the task
+%   UR_VLA_Octo_Prototype(MaxSteps=15)          % same, longer run
 %   UR_VLA_Octo_Prototype(DryRun=true)          % camera + policy only, no robot, no motion
-%   UR_VLA_Octo_Prototype(DryRun=true, ImageFile="camera_1.png")   % fully offline (batch OK)
+%   UR_VLA_Octo_Prototype(DryRun=true, ImageFile="camera_1.png", Task="pick up the red block")
+%                                               % fully offline; Task= skips the prompt (batch needs it)
 %
 %   SAFETY (same scaffolding as the labs): NaN placeholders stop the script until filled,
 %   a typed "yes" before the first move, q in the figure window stops the loop (or Enter
@@ -39,6 +41,7 @@ function UR_VLA_Octo_Prototype(opts)
         opts.DryRun    (1,1) logical = false
         opts.ImageFile (1,1) string  = ""     % with DryRun: use this image instead of the camera
         opts.MaxSteps  (1,1) double  = 20
+        opts.Task      (1,1) string  = ""     % skips the task prompt (needed in batch)
     end
 
     %% ====================================================================
@@ -47,7 +50,19 @@ function UR_VLA_Octo_Prototype(opts)
     robotIP   = "192.168.1.10";
     pyExe     = "C:\Users\924414657\vla-octo\win64\python\python.exe";
     vlapyDir  = "C:\Users\924414657\vla-octo\vlapy";
-    task      = "pick up the red block";          % Bridge-style wording works best ("put the X on the Y")
+    task_default = "pick up the red block";       % offered at the prompt; Enter accepts it
+
+    % The script asks for the task when it starts (Ryan, 2026-11-19). The Task= option
+    % skips the prompt, which batch MATLAB needs because input() does not work there.
+    if strlength(opts.Task) > 0
+        task = opts.Task;
+    else
+        fprintf('\n  Tell the robot what to do, in one short sentence. Bridge-style wording\n');
+        fprintf('  works best: "put the red block on the teal block", "pick up the red block".\n');
+        typed = strtrim(string(input(sprintf('  Task [%s]: ', task_default), 's')));
+        if strlength(typed) == 0, task = task_default; else, task = typed; end
+    end
+    fprintf('  Task: "%s"\n', task);
 
     % Start pose: gripper open, pointing straight down, 10 to 15 cm above the table, IN the
     % camera view together with the blocks (the policy must see its own gripper).
