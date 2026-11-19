@@ -1,0 +1,9 @@
+﻿  Python 3.10 (OutOfProcess)
+  Octo loaded in 33.4 s.
+  DRY RUN: no robot, actions are printed only.
+  step  1  policy 6.81 s  d = [ +11.3   -9.3  -13.6] mm  rot = [+0.039 -0.007 +0.038]  gripper +1
+  step  2  policy 6.68 s  d = [  +7.7   -7.9  -10.1] mm  rot = [+0.026 -0.001 +0.022]  gripper +1
+  step  3  policy 0.22 s  d = [  +2.9   -6.4   -9.9] mm  rot = [+0.024 +0.009 +0.012]  gripper +1
+  step  4  policy 0.21 s  d = [  +2.3   -2.4  -13.5] mm  rot = [+0.025 +0.005 +0.027]  gripper +1
+  step  5  policy 0.22 s  d = [ +10.5   +1.9   +0.8] mm  rot = [+0.015 -0.007 +0.023]  gripper -1
+  Log: C:\Users\924414657\2026 Thesis\ur-matlab-rtde-labs\instructor\hardware-validation\test-logs\2026-11-19_lab6_octo\octo_run_20261119_134637.csv

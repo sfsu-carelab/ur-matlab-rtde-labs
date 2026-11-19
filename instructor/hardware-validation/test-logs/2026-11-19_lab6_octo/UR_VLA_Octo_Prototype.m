@@ -26,12 +26,12 @@ function UR_VLA_Octo_Prototype(opts)
 %   UR_VLA_Octo_Prototype(DryRun=true, ImageFile="camera_1.png")   % fully offline (batch OK)
 %
 %   SAFETY (same scaffolding as the labs): NaN placeholders stop the script until filled,
-%   a typed "yes" before the first move, Enter before EVERY step while confirm_each_step
-%   is true, a per-step translation clamp, a keep-out box in base X, Y, Z, rotation
-%   deltas ignored unless apply_rotation is true, every move waits for arrival.
-%   Speed slider at 100 percent or at least 50. E-stop in hand.
+%   a typed "yes" before the first move, q in the figure window stops the loop (or Enter
+%   before every step if confirm_each_step is true), a per-step translation clamp, a
+%   keep-out box in base X, Y, Z, rotation deltas ignored unless apply_rotation is true,
+%   every move waits for arrival. Speed slider at 100 percent or at least 50. E-stop in hand.
 %
-%   Needs on the path: capture_realsense.m (Lab 6 folder; added below).
+%   Needs: the USB Webcams support package (the camera is opened once and kept open).
 %   Needs on disk:     the Octo Python environment from the 2026-11-19 session
 %                      (C:\Users\924414657\vla-octo, see HANDOFF-NOTES.md in this folder).
 
@@ -51,27 +51,33 @@ function UR_VLA_Octo_Prototype(opts)
 
     % Start pose: gripper open, pointing straight down, 10 to 15 cm above the table, IN the
     % camera view together with the blocks (the policy must see its own gripper).
-    start_pose = nan(1,6);                        % TODO: joint angles in degrees
+    % 2026-11-19 first run: jogged by Ryan, read over RTDE; flange (341.3, -110.9, 224.8) mm,
+    % tool 0.7 deg from straight down.
+    start_pose = [3.59 -101.4 -98.88 -69.58 89.36 180.9];   % joint angles in degrees
 
     % Keep-out box in base coordinates (metres). Use the Lab 6 calibration XY box plus margin
     % for X and Y; z_min = table touch height from the calibration + 0.005; z_max well below
     % anything the arm could hit. The script STOPS if a target leaves the box.
-    xy_min = [nan nan];                           % TODO: [X Y] min
-    xy_max = [nan nan];                           % TODO: [X Y] max
-    z_min  = nan;                                 % TODO
-    z_max  = nan;                                 % TODO
+    % First-run box, 2026-11-19, from the Lab 4 flange poses measured 2026-11-16 (Pick at
+    % X 452 Y -77 Z 100 mm, Place at X 309 Y -295 Z 106 mm, Ready Z 317 mm): the taped area
+    % in front of the base, down to just above the Lab 4 grasp height, never above Ready.
+    xy_min = [0.25 -0.35];                        % [X Y] min (m)
+    xy_max = [0.50  0.00];                        % [X Y] max (m)
+    z_min  = 0.100;                               % flange Z at the Lab 4 grasp height (m)
+    z_max  = 0.30;                                % below Ready (m)
 
     action_scale      = 1.0;                      % multiply the translation delta
     max_step_m        = 0.02;                     % clamp per-step translation to this length
     action_yaw_deg    = 0;                        % rotate the policy's XY frame into ours (Bridge: +x away from the robot, +y left)
     apply_rotation    = false;                    % true: also apply the axis-angle rotation delta
-    confirm_each_step = true;                     % Enter before every move (q to quit)
+    confirm_each_step = false;                    % true: Enter before every move. false (Ryan, after run 1,
+                                                  % 2026-11-19): runs on its own; press q in the figure
+                                                  % window to stop after the current step, or use the e-stop.
+    primary_camera    = "435i RGB";               % webcamlist entry for the bird's-eye (the wrist unit is "435if")
     moveEndTime       = 1.5;                      % s per step at a 100 percent slider
     gripSettle        = 0.5;
 
     here = fileparts(mfilename('fullpath'));
-    labDir = fullfile(here, '..', '..', '..', '..', 'labs', 'lab6-language-directed-pick');
-    addpath(labDir);
 
     %% ====================================================================
     %  POLICY (Python co-execution, same calls as robotpolicy.m)
@@ -129,13 +135,22 @@ function UR_VLA_Octo_Prototype(opts)
     fprintf(fid, 'step,t_policy_s,dx,dy,dz,rx,ry,rz,gripper,cur_x,cur_y,cur_z,tgt_x,tgt_y,tgt_z,executed\n');
     Ryaw = eul2rotm([deg2rad(action_yaw_deg) 0 0]);          % ZYX, yaw only
     cur = nan(1,6);
-    figure(1); clf;
+    % Camera stays open for the whole run: one snapshot per step (capture_realsense reopens
+    % the camera and waits 30 frames every call, about 3 s; run 1 spent most of each step there).
+    cam = [];
+    if ~(opts.DryRun && strlength(opts.ImageFile) > 0)
+        cam = openCamera(primary_camera);
+    end
+    fig = figure(1); clf;
+    setappdata(fig, 'key', '');
+    set(fig, 'KeyPressFcn', @(~, e) setappdata(fig, 'key', e.Key));
+    fprintf('  Running. Click the figure window and press q to stop after the current step.\n');
     for k = 1:opts.MaxSteps
         % ---- observe ----------------------------------------------------
-        if opts.DryRun && strlength(opts.ImageFile) > 0
+        if isempty(cam)
             img = imread(opts.ImageFile);
         else
-            img = capture_realsense();
+            img = snapshot(cam);
         end
         if ~opts.DryRun
             cur = readCartesianPose(ur);                     % [thetaz thetay thetax x y z], model FK
@@ -154,8 +169,11 @@ function UR_VLA_Octo_Prototype(opts)
         n = norm(dxyz);
         if n > max_step_m, dxyz = dxyz * (max_step_m / n); end
 
-        imshow(img); title(sprintf('step %d  d = [%+.1f %+.1f %+.1f] mm  gripper %+d  (%.2f s)', ...
+        imshow(img); title(sprintf('step %d  d = [%+.1f %+.1f %+.1f] mm  gripper %+d  (%.2f s)   [q stops]', ...
             k, 1000*dxyz, g, tp)); drawnow;
+        if strcmp(getappdata(fig, 'key'), 'q')
+            fprintf('  Stopped by the user (q in the figure window).\n'); break
+        end
         fprintf('  step %2d  policy %.2f s  d = [%+6.1f %+6.1f %+6.1f] mm  rot = [%+.3f %+.3f %+.3f]  gripper %+d\n', ...
             k, tp, 1000*dxyz, rax, g);
 
@@ -175,7 +193,7 @@ function UR_VLA_Octo_Prototype(opts)
                 break
             end
             if confirm_each_step
-                r = input('  Enter to execute this step, q to quit: ', 's');
+                r = input('  Enter to execute this step, q to quit: ', 's'); %#ok<UNRCH>  (settings flag)
                 if strcmpi(strtrim(r), 'q'), fprintf('  Stopped by the user.\n'); break; end
             end
             % ---- act ------------------------------------------------------
@@ -189,6 +207,7 @@ function UR_VLA_Octo_Prototype(opts)
         fprintf(fid, '%d,%.3f,%s,%d,%s,%s,%d\n', k, tp, csv([dxyz rax]), g, csv(cur(4:6)), csv(tgt(4:6)), executed);
     end
     fclose(fid);
+    clear cam                                                  % release the camera
     fprintf('\n  Log: %s\n', logFile);
     if ~opts.DryRun
         fprintf('  Returning to the start pose.\n');
@@ -199,6 +218,22 @@ end
 % -------------------------------------------------------------------------
 function s = csv(v)
     s = strjoin(compose('%.4f', v), ',');
+end
+
+function cam = openCamera(pattern)
+%OPENCAMERA  Open the RealSense RGB stream whose webcamlist name contains pattern, pin
+%   1280x720, let auto-exposure settle (30 frames, see capture_realsense) and keep it open.
+    if isempty(which('webcam'))
+        error('UR_VLA_Octo_Prototype:noPackage', 'The USB Webcams support package is not on the path (Lab 5, Part 1).');
+    end
+    names = webcamlist;
+    k = find(contains(names, pattern, 'IgnoreCase', true) & contains(names, 'RGB', 'IgnoreCase', true), 1);
+    if isempty(k)
+        error('UR_VLA_Octo_Prototype:noCamera', 'No camera matching "%s". webcamlist: %s', pattern, strjoin(names, ', '));
+    end
+    cam = webcam(names{k});
+    if any(strcmp(cam.AvailableResolutions, '1280x720')), cam.Resolution = '1280x720'; end
+    for n = 1:30, snapshot(cam); end
 end
 
 % ---- motion helpers: copied from UR_VLA_Lab.m (2026-11-04 hardware findings) ------------

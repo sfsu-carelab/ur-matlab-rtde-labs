@@ -1,0 +1,5 @@
+step,t_policy_s,dx,dy,dz,rx,ry,rz,gripper,cur_x,cur_y,cur_z,tgt_x,tgt_y,tgt_z,executed
+1,6.575,0.0082,-0.0055,-0.0174,0.0323,-0.0023,0.0551,1,NaN,NaN,NaN,NaN,NaN,NaN,0
+2,6.522,0.0048,-0.0050,-0.0116,0.0230,0.0016,0.0335,1,NaN,NaN,NaN,NaN,NaN,NaN,0
+3,0.220,0.0011,-0.0022,-0.0094,0.0169,0.0091,0.0208,1,NaN,NaN,NaN,NaN,NaN,NaN,0
+4,0.218,0.0008,-0.0005,-0.0119,0.0172,0.0055,0.0287,1,NaN,NaN,NaN,NaN,NaN,NaN,0

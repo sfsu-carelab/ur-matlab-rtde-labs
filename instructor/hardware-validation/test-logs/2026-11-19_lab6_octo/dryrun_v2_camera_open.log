@@ -1,0 +1,12 @@
+﻿checkcode: 1 message(s)
+  L196: This statement (and possibly following ones) cannot be reached.
+  Python 3.10 (OutOfProcess)
+  Octo loaded in 10.0 s.
+  DRY RUN: no robot, actions are printed only.
+  Running. Click the figure window and press q to stop after the current step.
+  step  1  policy 6.58 s  d = [  +8.2   -5.5  -17.4] mm  rot = [+0.032 -0.002 +0.055]  gripper +1
+  step  2  policy 6.52 s  d = [  +4.8   -5.0  -11.6] mm  rot = [+0.023 +0.002 +0.034]  gripper +1
+  step  3  policy 0.22 s  d = [  +1.1   -2.2   -9.4] mm  rot = [+0.017 +0.009 +0.021]  gripper +1
+  step  4  policy 0.22 s  d = [  +0.8   -0.5  -11.9] mm  rot = [+0.017 +0.005 +0.029]  gripper +1
+  Log: C:\Users\924414657\2026 Thesis\ur-matlab-rtde-labs\instructor\hardware-validation\test-logs\2026-11-19_lab6_octo\octo_run_20261119_135840.csv
+live-camera dry run, 4 steps, total 30.7 s

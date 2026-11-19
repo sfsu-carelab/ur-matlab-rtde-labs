@@ -161,6 +161,43 @@ What this implies for the lab design (to settle with Ryan):
       anywhere; the recipe above rebuilds it in about 10 minutes online. The downloaded
       `octoBaseModel.zip` was deleted after extraction.
 
+## 9. FIRST HARDWARE RUN (Ryan at the robot, 13:55, `octo_run_20261119_135503.csv`)
+Setup: bird's-eye 435i only (the new wrist 435if enumerates on a USB 2 link and gives no
+frames, cable on the way); start pose jogged by Ryan and read over RTDE,
+joints [3.59 -101.4 -98.88 -69.58 89.36 180.9], flange (341, -111, 225) mm, tool 0.7 deg
+from straight down; keep-out box X 0.25 to 0.50, Y -0.35 to 0.00, Z 0.100 to 0.30 m; task
+"pick up the red block"; `max_step_m` 0.02, `action_yaw_deg` 0, rotation ignored; Enter
+before every step. Desktop dry run first (Octo loaded in 5.1 s there).
+
+| step | policy s | dx dy dz (mm) | gripper | flange after (mm) |
+|---|---|---|---|---|
+| 1 | 4.74 | +8.7 -6.0 -17.0 | open | 350.0 -116.9 207.8 |
+| 2 | 6.62 | +6.0 -5.7 -11.1 | open | 356.0 -122.6 196.8 |
+| 3 | 0.22 | +2.4 -2.7 -13.2 | open | 358.4 -125.3 183.6 |
+| 4 | 0.21 | +1.8 -0.1 -16.6 | open | 360.2 -125.4 167.0 |
+| 5 | 0.22 | +9.9 +5.7 -6.0 | CLOSE | 370.1 -119.7 161.0 |
+| 6 | 0.22 | +0.4 +2.4 -6.9 | closed | 370.5 -117.4 154.1 |
+| 7 | 0.22 | +1.4 -4.1 -6.1 | closed | 371.9 -121.5 148.0 |
+
+Ryan stopped it after step 7. Every executed target became the next step's current pose
+to the millimetre (the Lab 5/6 motion path holds). Net motion: 77 mm down, 31 mm +X,
+11 mm -Y. The policy never looked for the block: it descended nearly straight and closed
+the gripper at step 5 with the flange 61 mm above the grasp height (the fingers closed on
+air). That is the same "go down, close" prior the static-frame runs showed; the closed loop
+changed nothing. No clamp was hit (largest raw step 21 mm, clamped to 20), no bounds stop.
+Expected for zero-shot Octo on this embodiment and viewpoint (section 5).
+
+Ryan after the run: "i dont like the press enter every time thing." Changed in the
+prototype: `confirm_each_step` now defaults to false, the loop runs to MaxSteps and q in
+the figure window stops it after the current step (e-stop otherwise); the camera is opened
+once and kept open (one `snapshot` per step instead of a 3 s `capture_realsense` call), with
+the bird's-eye selected by the name pattern `435i RGB` so the wrist `435if` is never picked
+by accident. The start pose and box above are in the file.
+
+Still to try today, in order: the Bridge-style wording ("put the red block on the ...",
+"pick up the red block" was used), `action_yaw_deg` once we decide where "away from the
+robot" is in this frame, then the wrist camera as `image_wrist` when the cable arrives.
+
 ## 8. Sync
 `git pull` brought 223cb34 (Mac: the SmolVLA plan) before any work; nothing else was ahead.
 This folder was committed and pushed at the end of the session. Box is not mounted on PC 17;
