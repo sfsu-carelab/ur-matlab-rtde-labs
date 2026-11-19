@@ -122,11 +122,28 @@ flag, poseToJoints on `ur.RigidBodyTree`, waitForGripper), so every hardware fin
   Animation, Unreal). If the department ever has R2025b on one PC, the Simulink model runs
   the same Python environment built today (`installPythonEnv` would recreate it).
 
-## 6. Lab 6 status after today
-Unchanged for the student lab: Lab 6 stays the Gemini Robotics-ER detector-and-planner on
-the Lab 5 calibration and motion path (tabled definition of 2026-11-16, calibration script
-still untested on hardware). The Octo loop is a separate instructor prototype until it has
-done something useful on the robot. No student-facing file was edited today.
+## 6. Lab 6 status after today: DECISION (Ryan, 2026-11-19, in chat)
+**Lab 6 IS the action-output VLA loop**, not Gemini plus calibration. Ryan: "this is what
+lab 6 will be." The 2026-11-16 fallback definition (Gemini Robotics-ER pointing and
+planning on the Lab 5 four-point calibration) is retired as the lab's content. The current
+`labs/lab6-language-directed-pick/` code (UR_VLA_Lab.m, Gemini client, UR_CalibrateCamera_VLM)
+stays in the folder untouched for now; what replaces it grows out of
+`UR_VLA_Octo_Prototype.m` once it has run on the robot. No student-facing file was edited
+today (Ryan's order: code runs first, then docs).
+
+What this implies for the lab design (to settle with Ryan):
+- The pixel-to-base calibration disappears from Lab 6; the policy maps image to action
+  itself. The safety layers stay (keep-out box, per-step clamp, typed yes, Enter per step)
+  and become teaching content: a language model's action is still an unchecked number.
+- Cameras: a fixed third-person camera as the policy's primary view (the bird's-eye, or
+  better an oblique Bridge-like view), plus the FPV camera behind the gripper as the wrist
+  view (Octo takes `image_wrist` at 128x128; the wrapper needs a small change to pass it).
+  See the 2026-11-19 chat assessment: FPV alone as the primary is worse than the bird's-eye;
+  both together match Octo's pretraining and are what a fine-tune wants.
+- Zero-shot Octo is unlikely to finish a pick on the UR3e. Two ways the lab can still work:
+  (a) students run the pretrained policy, log and analyze the action stream, and compare
+  with Lab 5; or (b) the instructor fine-tunes on demonstrations beforehand (SmolVLA plan)
+  so students run a policy that succeeds, then study what breaks it. Ryan to choose.
 
 ## 7. Open items
 - [ ] At the robot (Ryan, desktop): fill `start_pose` and the keep-out box in
