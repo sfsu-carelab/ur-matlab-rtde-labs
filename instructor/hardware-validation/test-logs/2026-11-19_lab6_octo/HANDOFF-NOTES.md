@@ -321,6 +321,13 @@ is skipped (the "Skipping observation tokenizer: obs_wrist" warning in every run
   up at 84.9), so the empty close reaches 11 mm lower than the open tips. Floor stays 0.105,
   9 mm above the closed touch point.
 
+## 14. Wrist camera live (15:40, a USB-C to camera cable Ryan found)
+`webcamlist` shows both units; the 435if opens with the full mode table (1920x1080 down to
+320x180, nine modes), first frame in 0.47 s at 640x480, `wrist_probe.png` saved after the
+30-frame settle: table from behind the gripper, closed fingers at the bottom edge, the teal
+block at the left. So the 2026-11-04 diagnosis holds: the four-mode list and no frames was
+the USB 2 link, not the camera. Two-camera runs are now `UR_VLA_Octo_Prototype(Wrist=true)`.
+
 ## 8. Sync
 `git pull` brought 223cb34 (Mac: the SmolVLA plan) before any work; nothing else was ahead.
 This folder was committed and pushed at the end of the session. Box is not mounted on PC 17;
