@@ -1,0 +1,6 @@
+﻿robot joints (deg): [3.59 -101.4 -98.88 -69.58 89.36 180.9]
+flange (mm): [341.3 -110.9 224.8]
+planWaypoints: 0.65 s, 3 of 4 waypoints kept, times [0.6 1.2 1.8], blend 0.0056 m
+  wp 1: target (349.3 -116.9 207.8) mm, FK of IK (349.3 -116.9 207.8) mm, err 0.00 mm, max joint step 3.88 deg
+  wp 2: target (355.3 -122.9 196.8) mm, FK of IK (355.3 -122.9 196.8) mm, err 0.00 mm, max joint step 2.87 deg
+  wp 3: target (357.8 -122.4 179.8) mm, FK of IK (357.8 -122.4 179.8) mm, err 0.00 mm, max joint step 4.16 deg

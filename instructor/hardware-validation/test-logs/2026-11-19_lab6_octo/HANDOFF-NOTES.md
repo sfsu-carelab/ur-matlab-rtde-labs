@@ -198,6 +198,40 @@ Still to try today, in order: the Bridge-style wording ("put the red block on th
 "pick up the red block" was used), `action_yaw_deg` once we decide where "away from the
 robot" is in this frame, then the wrist camera as `image_wrist` when the cable arrives.
 
+## 10. Option 2: execute the whole chunk as one blended move (Ryan: "do option 2", 14:10)
+Ryan asked whether the policy could "make a whole plan and execute it smoothly". Answer
+given: a VLA does not plan a task; Octo predicts 4 steps per picture and expects to be
+asked again. What can change is execution. Options offered: (1) shorter faster single
+steps, (2) run each 4-step chunk as one blended `followJointWaypoints` call and re-observe,
+(3) `sendServoJCommands` streaming (exists on the client, not before fine-tuning).
+Ryan chose 2. Implemented, verified offline and read-only, NOT yet run on the robot:
+
+- `octoChunk.py` (in `C:\Users\924414657\vla-octo\vlapy\`, copy in this folder):
+  `OctoChunkInference(OctoInference)` with `step_chunk(image, task)` returning the whole
+  denormalized chunk: `world_vector` (4x3 m), `rot_axangle` (4x3 rad), `gripper` (4,
+  +1/-1), `raw` (4x7). No ensembling. `octoModel.py` untouched. 0.19 s per call.
+- `UR_VLA_Octo_Prototype.m`: per picture, the first `chunk_steps` (4) deltas are yaw-rotated
+  and clamped one by one, summed into cumulative flange targets, EVERY target is checked
+  against the keep-out box (the chunk is cut at the first outside waypoint and the loop
+  stops after it), the targets are solved to joint angles chained from the current joints
+  (`planWaypoints`), and sent as one `followJointWaypoints(ur, Q, WaypointTimes, Velocity
+  0.3 rad/s, Acceleration 0.5, BlendRadius)` call; a gripper change inside the chunk splits
+  the motion at that waypoint. Waypoints under 2 mm apart are merged and the blend radius is
+  capped at 40 percent of the shortest segment (a blend larger than its segment is a
+  URScript error that would stop the server program). One-row chunks fall back to the run-1
+  single timed joint move. CSV now has a `chunk` column, one row per step.
+- Verified: `checkcode` 0 messages; offline dry run on the start-pose frame, 3 pictures x 4
+  steps (`dryrun_v3_chunk.log`); `test_plan_waypoints.m` read-only against the live robot
+  at the start pose (`plan_waypoints_readonly.log`): a run-1-like chunk with one 1 mm step
+  gave 3 of 4 waypoints kept, IK-to-FK error 0.00 mm at each, max joint step 4.2 deg, blend
+  capped 10 -> 5.6 mm, 0.65 s to plan.
+- What to watch on the first hardware run: a MATLAB warning "Ignoring waypoint times
+  because blend radius is specified" is expected (seen with the Cartesian cousin on
+  2026-11-04); Velocity and Acceleration then set the pace. If the arm still visibly stops
+  at every waypoint, the server runs the chain without blending (the 2026-11-04 finding for
+  Cartesian waypoints) and option 3 is the remaining route. The arrival check is on the
+  last waypoint only.
+
 ## 8. Sync
 `git pull` brought 223cb34 (Mac: the SmolVLA plan) before any work; nothing else was ahead.
 This folder was committed and pushed at the end of the session. Box is not mounted on PC 17;

@@ -1,0 +1,22 @@
+﻿checkcode: 0 message(s)
+  Task: "pick up the red block"
+  Python 3.10 (OutOfProcess)
+  Octo loaded in 9.9 s.
+  DRY RUN: no robot, actions are printed only.
+  Running. Click the figure window and press q to stop after the current chunk.
+  picture  1  policy 6.91 s
+     step 1  d = [  +8.4   -7.3  -16.6] mm  rot = [+0.034 -0.001 +0.053]  gripper +1
+     step 2  d = [  +8.5   -8.5  -16.0] mm  rot = [+0.052 -0.009 +0.044]  gripper +1
+     step 3  d = [  +4.3   -9.6  -17.0] mm  rot = [+0.040 +0.001 +0.035]  gripper +1
+     step 4  d = [  +2.4   -8.9  -17.8] mm  rot = [+0.035 -0.003 +0.031]  gripper +1
+  picture  2  policy 6.49 s
+     step 1  d = [  +0.1   -1.1   -0.7] mm  rot = [-0.004 +0.009 +0.013]  gripper +1
+     step 2  d = [  +1.4   -0.4   -0.1] mm  rot = [+0.010 +0.028 +0.018]  gripper +1
+     step 3  d = [  -0.1   -1.4  -12.3] mm  rot = [+0.012 +0.031 +0.022]  gripper +1
+     step 4  d = [  +8.6   -0.3  -18.0] mm  rot = [+0.011 +0.022 +0.070]  gripper +1
+  picture  3  policy 0.22 s
+     step 1  d = [  -0.1   +5.4  -15.1] mm  rot = [+0.012 +0.008 +0.000]  gripper +1
+     step 2  d = [  +4.4   +2.2  -16.4] mm  rot = [+0.011 -0.002 -0.014]  gripper +1
+     step 3  d = [  +6.2   +7.4  -17.5] mm  rot = [+0.019 +0.013 +0.035]  gripper +1
+     step 4  d = [  +4.6   -2.3   +7.3] mm  rot = [+0.002 +0.003 +0.001]  gripper +1
+  Log: C:\Users\924414657\2026 Thesis\ur-matlab-rtde-labs\instructor\hardware-validation\test-logs\2026-11-19_lab6_octo\octo_run_20261119_142013.csv

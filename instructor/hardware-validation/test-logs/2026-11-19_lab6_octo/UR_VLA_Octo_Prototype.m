@@ -11,10 +11,13 @@ function UR_VLA_Octo_Prototype(opts)
 %       action = model.step(py.numpy.array(img), task);   % every control step
 %
 %   and gets back a 7-element action: end-effector translation delta (m), rotation
-%   delta (axis-angle, rad) and a gripper command (+1 open, -1 close). MATLAB owns the
-%   camera, the robot and the loop:
+%   delta (axis-angle, rad) and a gripper command (+1 open, -1 close). Octo actually
+%   predicts 4 such steps per picture; since run 1 (2026-11-19) this script takes the whole
+%   chunk (octoChunk.py, step_chunk) and runs it as ONE blended multi-waypoint move before
+%   the next picture. MATLAB owns the camera, the robot and the loop:
 %
-%       capture -> policy.step -> clamp + bounds check -> one joint move -> gripper -> repeat
+%       capture -> policy.step_chunk -> clamp + bounds check on every waypoint
+%               -> followJointWaypoints (blended) -> gripper -> repeat
 %
 %   The model was trained on the Bridge dataset (WidowX arm, over-the-shoulder camera).
 %   Zero-shot on a UR3e with a bird's-eye D435i it is NOT expected to finish a task;
@@ -89,7 +92,18 @@ function UR_VLA_Octo_Prototype(opts)
                                                   % 2026-11-19): runs on its own; press q in the figure
                                                   % window to stop after the current step, or use the e-stop.
     primary_camera    = "435i RGB";               % webcamlist entry for the bird's-eye (the wrist unit is "435if")
-    moveEndTime       = 1.5;                      % s per step at a 100 percent slider
+
+    % Chunk execution (Ryan, 2026-11-19, "option 2"): Octo predicts 4 steps per picture. The
+    % first chunk_steps of them become cumulative targets, each solved to joint angles, and go
+    % out as ONE followJointWaypoints call with a blend radius at the interior points, so the
+    % arm rounds the corners instead of stopping at every step. Then a new picture is taken.
+    % chunk_steps = 1 reproduces run 1 (one timed joint move per picture).
+    chunk_steps       = 4;                        % how many of the 4 predicted steps to execute (1 to 4)
+    chunk_step_time   = 0.6;                      % s per waypoint (WaypointTimes)
+    chunk_velocity    = 0.3;                      % rad/s joint velocity cap for the blended move
+    chunk_accel       = 0.5;                      % rad/s^2
+    blend_radius      = 0.01;                     % m at interior waypoints (capped below to 40 percent of the shortest segment)
+    moveEndTime       = 1.5;                      % s for a single-waypoint move at a 100 percent slider
     gripSettle        = 0.5;
 
     here = fileparts(mfilename('fullpath'));
@@ -113,8 +127,8 @@ function UR_VLA_Octo_Prototype(opts)
         insert(py.sys.path, int64(0), vlapyDir);
     end
     t = tic;
-    py.importlib.import_module("octoModel");
-    policy = py.octoModel.OctoInference();
+    py.importlib.import_module("octoChunk");                 % OctoInference + step_chunk (whole 4-step chunk)
+    policy = py.octoChunk.OctoChunkInference();
     fprintf('  Octo loaded in %.1f s.\n', toc(t));
 
     %% ====================================================================
@@ -127,8 +141,8 @@ function UR_VLA_Octo_Prototype(opts)
         end
         ur = urRTDEClient(robotIP, 'CobotName', 'universalUR3e');
         fprintf('  Connected to %s.\n', robotIP);
-        fprintf('\n  WARNING: the robot will move to positions CHOSEN BY A VLA POLICY, one step at a time.\n');
-        fprintf('  Task: "%s"   max %d steps, %.0f mm per step, box X [%.3f %.3f] Y [%.3f %.3f] Z [%.3f %.3f]\n', ...
+        fprintf('\n  WARNING: the robot will move to positions CHOSEN BY A VLA POLICY, %d blended steps per picture.\n', chunk_steps);
+        fprintf('  Task: "%s"   max %d pictures, %.0f mm per step, box X [%.3f %.3f] Y [%.3f %.3f] Z [%.3f %.3f]\n', ...
             task, opts.MaxSteps, 1000*max_step_m, xy_min(1), xy_max(1), xy_min(2), xy_max(2), z_min, z_max);
         fprintf('  Clear the workspace. Speed slider 100 percent. E-stop in hand.\n');
         if ~strcmpi(input('  Type "yes" to move to the start pose: ', 's'), 'yes')
@@ -147,9 +161,10 @@ function UR_VLA_Octo_Prototype(opts)
     %  ====================================================================
     logFile = fullfile(here, sprintf('octo_run_%s.csv', char(datetime('now', 'Format', 'yyyyMMdd_HHmmss'))));
     fid = fopen(logFile, 'w');
-    fprintf(fid, 'step,t_policy_s,dx,dy,dz,rx,ry,rz,gripper,cur_x,cur_y,cur_z,tgt_x,tgt_y,tgt_z,executed\n');
+    fprintf(fid, 'chunk,step,t_policy_s,dx,dy,dz,rx,ry,rz,gripper,cur_x,cur_y,cur_z,tgt_x,tgt_y,tgt_z,executed\n');
     Ryaw = eul2rotm([deg2rad(action_yaw_deg) 0 0]);          % ZYX, yaw only
     cur = nan(1,6);
+    stopAfterThis = false;
     % Camera stays open for the whole run: one snapshot per step (capture_realsense reopens
     % the camera and waits 30 frames every call, about 3 s; run 1 spent most of each step there).
     cam = [];
@@ -159,8 +174,8 @@ function UR_VLA_Octo_Prototype(opts)
     fig = figure(1); clf;
     setappdata(fig, 'key', '');
     set(fig, 'KeyPressFcn', @(~, e) setappdata(fig, 'key', e.Key));
-    fprintf('  Running. Click the figure window and press q to stop after the current step.\n');
-    for k = 1:opts.MaxSteps
+    fprintf('  Running. Click the figure window and press q to stop after the current chunk.\n');
+    for k = 1:opts.MaxSteps                                  % one picture and one chunk per iteration
         % ---- observe ----------------------------------------------------
         if isempty(cam)
             img = imread(opts.ImageFile);
@@ -171,55 +186,80 @@ function UR_VLA_Octo_Prototype(opts)
             cur = readCartesianPose(ur);                     % [thetaz thetay thetax x y z], model FK
         end
 
-        % ---- policy -----------------------------------------------------
+        % ---- policy: the whole predicted chunk --------------------------
         t = tic;
-        action = policy.step(py.numpy.array(img), task);
+        a = policy.step_chunk(py.numpy.array(img), task);
         tp = toc(t);
-        dxyz = double(action{2}{'world_vector'}) * action_scale;
-        rax  = double(action{2}{'rot_axangle'});
-        g    = round(double(action{2}{'gripper'}));          % +1 open, -1 close
+        D = double(a{'world_vector'}) * action_scale;        % H x 3 translation deltas (m)
+        R = double(a{'rot_axangle'});                        % H x 3 axis-angle deltas (rad)
+        G = round(double(a{'gripper'}));  G = G(:)';         % 1 x H, +1 open / -1 close
+        n = min(chunk_steps, size(D, 1));
+        D = D(1:n, :); R = R(1:n, :); G = G(1:n);
 
-        % ---- clamp and map into the base frame --------------------------
-        dxyz = (Ryaw * dxyz(:))';
-        n = norm(dxyz);
-        if n > max_step_m, dxyz = dxyz * (max_step_m / n); end
+        % ---- map into the base frame and clamp every step ----------------
+        for j = 1:n
+            d = (Ryaw * D(j, :)')';
+            if norm(d) > max_step_m, d = d * (max_step_m / norm(d)); end
+            D(j, :) = d;
+        end
+        % cumulative targets: waypoint j = current pose + sum of the first j deltas
+        T = repmat(cur, n, 1);
+        T(:, 4:6) = cur(4:6) + cumsum(D, 1);
+        if apply_rotation
+            Rcur = eul2rotm(cur(1:3)); %#ok<UNRCH>  (apply_rotation is a settings flag)
+            for j = 1:n
+                if norm(R(j, :)) > 0, Rcur = axang2rotm([R(j, :) / norm(R(j, :)), norm(R(j, :))]) * Rcur; end
+                T(j, 1:3) = rotm2eul(Rcur);
+            end
+        end
 
-        imshow(img); title(sprintf('step %d  d = [%+.1f %+.1f %+.1f] mm  gripper %+d  (%.2f s)   [q stops]', ...
-            k, 1000*dxyz, g, tp)); drawnow;
+        imshow(img); title(sprintf('picture %d  chunk total = [%+.1f %+.1f %+.1f] mm  gripper %+d  (%.2f s)   [q stops]', ...
+            k, 1000*sum(D, 1), G(end), tp)); drawnow;
+        fprintf('  picture %2d  policy %.2f s\n', k, tp);
+        for j = 1:n
+            fprintf('     step %d  d = [%+6.1f %+6.1f %+6.1f] mm  rot = [%+.3f %+.3f %+.3f]  gripper %+d\n', ...
+                j, 1000*D(j, :), R(j, :), G(j));
+        end
         if strcmp(getappdata(fig, 'key'), 'q')
             fprintf('  Stopped by the user (q in the figure window).\n'); break
         end
-        fprintf('  step %2d  policy %.2f s  d = [%+6.1f %+6.1f %+6.1f] mm  rot = [%+.3f %+.3f %+.3f]  gripper %+d\n', ...
-            k, tp, 1000*dxyz, rax, g);
 
-        tgt = cur;
-        executed = 0;
+        executed = zeros(1, n);
         if ~opts.DryRun
-            tgt(4:6) = cur(4:6) + dxyz;
-            if apply_rotation && norm(rax) > 0
-                Rcur = eul2rotm(cur(1:3)); %#ok<UNRCH>  (apply_rotation is a settings flag)
-                tgt(1:3) = rotm2eul(axang2rotm([rax / norm(rax), norm(rax)]) * Rcur);
+            % ---- bounds (never move to an unchecked point): run the chunk up to the last
+            %      waypoint inside the box, then stop the loop if any was outside ----------
+            inBox = all(T(:, 4:5) >= xy_min, 2) & all(T(:, 4:5) <= xy_max, 2) & T(:, 6) >= z_min & T(:, 6) <= z_max;
+            nOK = find(~inBox, 1) - 1;
+            if isempty(nOK), nOK = n; end
+            if nOK < n
+                fprintf('  Waypoint %d (%.3f, %.3f, %.3f) is OUTSIDE the keep-out box: executing %d of %d, then stopping.\n', ...
+                    nOK + 1, T(nOK + 1, 4:6), nOK, n);
+                stopAfterThis = true;
             end
-            % ---- bounds (never move to an unchecked point) ----------------
-            inBox = all(tgt(4:5) >= xy_min) && all(tgt(4:5) <= xy_max) && tgt(6) >= z_min && tgt(6) <= z_max;
-            if ~inBox
-                fprintf('  Target (%.3f, %.3f, %.3f) is OUTSIDE the keep-out box. Stopping.\n', tgt(4:6));
-                fprintf(fid, '%d,%.3f,%s,%d,%s,%s,%d\n', k, tp, csv([dxyz rax]), g, csv(cur(4:6)), csv(tgt(4:6)), 0);
-                break
-            end
-            if confirm_each_step
-                r = input('  Enter to execute this step, q to quit: ', 's'); %#ok<UNRCH>  (settings flag)
+            if confirm_each_step && nOK > 0
+                r = input('  Enter to execute this chunk, q to quit: ', 's'); %#ok<UNRCH>  (settings flag)
                 if strcmpi(strtrim(r), 'q'), fprintf('  Stopped by the user.\n'); break; end
             end
-            % ---- act ------------------------------------------------------
-            moveToC(ur, tgt, moveEndTime);
-            if g ~= gripper_state
-                if g < 0, grip(ur, 'grip', gripSettle); else, grip(ur, 'release', gripSettle); end
-                gripper_state = g;
+            % ---- act: blended waypoints, split where the gripper command changes ---------
+            j0 = 1;
+            while j0 <= nOK
+                jg = find(G(j0:nOK) ~= gripper_state, 1);    % first waypoint with a new gripper command
+                if isempty(jg), j1 = nOK; else, j1 = j0 + jg - 1; end
+                moveThrough(ur, T(j0:j1, :), chunk_step_time, chunk_velocity, chunk_accel, blend_radius, moveEndTime);
+                if ~isempty(jg)
+                    if G(j1) < 0, grip(ur, 'grip', gripSettle); else, grip(ur, 'release', gripSettle); end
+                    gripper_state = G(j1);
+                end
+                j0 = j1 + 1;
             end
-            executed = 1;
+            executed(1:nOK) = 1;
         end
-        fprintf(fid, '%d,%.3f,%s,%d,%s,%s,%d\n', k, tp, csv([dxyz rax]), g, csv(cur(4:6)), csv(tgt(4:6)), executed);
+        prev = cur;
+        for j = 1:n
+            fprintf(fid, '%d,%d,%.3f,%s,%d,%s,%s,%d\n', k, j, tp, csv([D(j, :) R(j, :)]), G(j), csv(prev(4:6)), csv(T(j, 4:6)), executed(j));
+            prev = T(j, :);
+        end
+        if stopAfterThis, break; end
     end
     fclose(fid);
     clear cam                                                  % release the camera
@@ -261,13 +301,51 @@ function moveToJ(ur, q_deg, endTime)
     end
 end
 
-function moveToC(ur, pose, endTime)
+function moveThrough(ur, T, stepTime, vel, acc, blend, singleEndTime)
+%MOVETHROUGH  Run the rows of T (flange poses) as one blended joint-waypoint motion and
+%   wait for arrival at the last one. One row: a single timed joint move, as in run 1.
     q0 = readJointConfiguration(ur);
-    q  = poseToJoints(ur, pose, q0);
-    sendJointConfigurationAndWait(ur, q, EndTime = endTime);
-    ok = waitForArrival(ur, @() readCartesianPose(ur), pose, 4:6, 0.002);
+    [Q, T, times, blend] = planWaypoints(ur, T, q0, stepTime, blend);
+    if size(Q, 1) == 1
+        sendJointConfigurationAndWait(ur, Q, EndTime = singleEndTime);
+    else
+        % 2026-11-04 (Lab 5, Cartesian version): the toolbox warned "Ignoring waypoint
+        % times because blend radius is specified", so Velocity and Acceleration are given
+        % too and are what limits the pace when the times are dropped.
+        followJointWaypoints(ur, Q, WaypointTimes = times, Velocity = vel, Acceleration = acc, BlendRadius = blend);
+    end
+    ok = waitForArrival(ur, @() readCartesianPose(ur), T(end, :), 4:6, 0.002);
     if ~ok
-        error('UR_VLA_Octo_Prototype:moveFailed', 'Cartesian move to (%.3f, %.3f, %.3f) did not complete within 60 s.', pose(4:6));
+        error('UR_VLA_Octo_Prototype:moveFailed', 'Move to (%.3f, %.3f, %.3f) did not complete within 60 s.', T(end, 4:6));
+    end
+end
+
+function [Q, T, times, blend] = planWaypoints(ur, T, q0, stepTime, blend)
+%PLANWAYPOINTS  Joint angles for each flange pose in T, chained from q0 so the arm keeps
+%   its configuration. Waypoints closer than 2 mm to the previous one are merged (a
+%   movej blend needs room), and the blend radius is capped at 40 percent of the shortest
+%   remaining segment so no blend can exceed its segment. Pure function, no motion:
+%   tested read-only against the live robot on 2026-11-19.
+    p0 = tform2trvec(getTransform(ur.RigidBodyTree, q0, ur.RigidBodyTree.BodyNames{end}));
+    keep = true(size(T, 1), 1);
+    prev = p0;
+    for j = 1:size(T, 1)
+        if norm(T(j, 4:6) - prev) < 0.002 && j < size(T, 1), keep(j) = false; else, prev = T(j, 4:6); end
+    end
+    T = T(keep, :);
+    nW = size(T, 1);
+    Q = zeros(nW, 6);
+    qprev = q0;
+    for j = 1:nW
+        Q(j, :) = poseToJoints(ur, T(j, :), qprev);
+        qprev = Q(j, :);
+    end
+    times = stepTime * (1:nW);
+    if nW > 1
+        seg = vecnorm(diff([p0; T(:, 4:6)], 1, 1), 2, 2);
+        blend = min(blend, 0.4 * min(seg));
+    else
+        blend = 0;
     end
 end
 
