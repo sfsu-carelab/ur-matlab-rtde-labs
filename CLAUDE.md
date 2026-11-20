@@ -42,7 +42,7 @@ once by hand and only change if someone edits them. Never force-add them.
 | 3 Forward kinematics (PoE) | `labs/lab3-forward-kinematics` | `UR_FK_Lab.m` + helpers, `run_self_tests.p` (source, key and solutions in `instructor/`, ignored) | manual at Rev3 (2026-11-09, built on Dr. Quintero's Rev2): screw axes now use the ROBOT'S OWN joint directions, lengths named L1 to L6, Part 4 is jog-and-compare. Checked offline only (all 8 models vs UR DH model, and the 2026-11-06 robot measurements reproduce to 1.2 mm); NOT yet re-run on the robot or opened in Word. See test-logs/2026-11-09_lab3_rev3 |
 | 4 Pick and place | `labs/lab4-pick-and-place` | `UR_PickPlace_Lab.m`, `check_waypoints.p` (source and test in `instructor/`, ignored; rebuild with `instructor/build_pfile.m`) | MATLAB half VERIFIED ON HARDWARE 2026-11-16 (PC 17, UR3e): Task 4 readout, eight waypoint checks PASS on real taught poses, full eleven-step run at a 100 percent slider picked and placed the cube, cycle time 30.4 s. Manual at Rev4 (2026-11-16): Ready position is a RULE (joint 5 = 90, joint 6 = 0, joints 2+3+4 = -270, joints 1 to 3 chosen to clear the group's walls), Move Here is in the 3D tab of the left sidebar, Robotiq screen under Application > URCaps, plus eight wording fixes from a three-persona simulated-student review and a check of every pendant name against the PolyScope X 10.12 handbook (all match). Rev3 (Dr. Quintero's feedback: Timer nodes, tic/toc, `moveEndTime` 3 s, Table 4 with X/Y/Z, server script in the lab folder). NOT verified: 25 and 50 percent runs, Part 2 on the pendant (node names, Variable tab, Gripper and Timer nodes). See test-logs/2026-11-16_lab4_hw |
 | 5 Vision-guided pick | `labs/lab5-vision-guided-pick` | `UR_VisionPick_Lab.m` + helpers | camera path switched to USB Webcams package; NO frame captured yet (USB 2 cable); calibration not done |
-| 6 Language-directed pick (VLA) | `labs/lab6-language-directed-pick` | folder still holds the Gemini code (`UR_VLA_Lab.m`, Gemini client, `UR_CalibrateCamera_VLM.m`); the lab's real code is growing from `instructor/hardware-validation/test-logs/2026-11-19_lab6_octo/UR_VLA_Octo_Prototype.m` | REDEFINED 2026-11-19 (Ryan): Lab 6 IS the action-output VLA loop (Octo through pyenv, MATLAB owns camera, robot and loop), NOT Gemini pointing plus the Lab 5 calibration. Octo runs from R2024b on PC 17, CPU, 0.2 s per step; prototype dry run verified, NOT yet run at the robot; cameras to be bird's-eye (primary) plus the FPV camera behind the gripper (wrist). The Gemini work of 2026-11-16 (live API verified, calibration script untested) is kept as history. See test-logs/2026-11-19_lab6_octo, then 2026-11-16_lab6_vla |
+| 6 Language-directed pick (VLA) | `labs/lab6-language-directed-pick` | folder still holds the Gemini code (`UR_VLA_Lab.m`, Gemini client, `UR_CalibrateCamera_VLM.m`); the lab's real code is growing from `instructor/hardware-validation/test-logs/2026-11-19_lab6_octo/UR_VLA_Octo_Prototype.m` | REDEFINED 2026-11-19 (Ryan): Lab 6 IS the action-output VLA loop (Octo through pyenv, MATLAB owns camera, robot and loop), NOT Gemini pointing plus the Lab 5 calibration. Octo runs from R2024b on PC 17, CPU. TEN HARDWARE RUNS 2026-11-19 (PC 17, UR3e): chunked blended execution works; the policy ignored the block from the far-side bird's-eye (proved by an erase test) and tracked it once the camera was REMOUNTED BRIDGE-STYLE at the robot's right shoulder (SimplerEnv pose, section 18 of the notes); it reaches the cube and then drifts off before closing. No grasp yet; fine-tuning on this robot's demos is the identified fix. The camera pose, the measured floor (open tips touch at flange Z 84.9 mm, closed at 96.2 mm) and the box are in the prototype. Wrist camera works on USB 3 but made zero-shot worse; off by default. The Gemini work of 2026-11-16 is kept as history. See test-logs/2026-11-19_lab6_octo (section 23 is the day summary), then 2026-11-16_lab6_vla |
 
 Instructor tooling: `instructor/hardware-validation/UR_HardwareSmokeTest.m` plus the
 `RUNBOOK - End-to-end hardware test, Labs 2-6.md` in the same folder.
@@ -75,10 +75,11 @@ Read, in order:
    tabled; Mac: MATLAB-in-the-loop SmolVLA plan, Ryan's requirement that MATLAB stays in
    the control loop and Python is for training and serving only).
 9. `instructor/hardware-validation/test-logs/2026-11-19_lab6_octo/HANDOFF-NOTES.md`
-   (PC 17, no one at the robot: the MathWorks File Exchange VLA item is Octo/RT-1-X through
-   pyenv; its Python environment was built at `C:\Users\924414657\vla-octo` and Octo runs
-   from R2024b with no Simulink; `UR_VLA_Octo_Prototype.m` closed-loop script, dry run only;
-   what a hardware run needs and why zero-shot success is unlikely).
+   (PC 17: the MathWorks File Exchange VLA item is Octo/RT-1-X through pyenv; its Python
+   environment was built at `C:\Users\924414657\vla-octo` and Octo runs from R2024b with no
+   Simulink; `UR_VLA_Octo_Prototype.m` closed-loop script; ten hardware runs with Ryan in the
+   afternoon, the camera-placement finding, the measured box, the server-script restart
+   trap; section 23 is the day summary and the next-steps list).
 
 Ryan's working order, agreed 2026-11-04: make Lab 5 work end to end on hardware, THEN update
 its manual; make Lab 6 work, THEN update its docs. No manual edits before the code runs.
@@ -180,7 +181,19 @@ Next PC checklist, before anything else:
   `a{2}{'world_vector'}` (m), `a{2}{'rot_axangle'}` (rad), `a{2}{'gripper'}` (+1 open,
   -1 close). Load about 6 s, first two steps 7 s (JAX compile), then 0.2 s. The folder is
   2.9 GB, not in git, not in Box; the notes have the rebuild recipe. Two MATLAB processes
-  can each start their own Python; the camera rule (one owner) still applies.
+  can each start their own Python; the camera rule (one owner) still applies. An
+  OutOfProcess Python keeps the modules it first imported until `terminate(pyenv)`; the
+  prototype starts a fresh one every run. `octoChunk.py` (whole 4-step chunk, optional
+  wrist image, n-sample averaging, raw gripper) lives next to `octoModel.py` with a copy in
+  the 2026-11-19 test-logs folder. The vlapy wrapper seeds JAX with 0 on every new object:
+  pass `init_rng=i` to get different samples.
+- Octo hardware facts (2026-11-19): the policy only tracks the object from a Bridge-style
+  camera (robot's right shoulder, 16 cm to -Y of the base, 34 cm above the table, pitched
+  42 deg down, aimed 34 cm in front of the base; the mount is in place). The square crop in
+  the prototype is tied to that pose; re-pick it on a fresh frame if the camera moves. The
+  server script must see command 0 after a program restart before any waypoint command
+  (a run cut short leaves the register at 6: "'wayPointTimes' is not initialized"); the
+  recovery is in the notes, section 21, and the one-line permanent fix is pending.
 - MATLAB on these PCs: R2024b Update 5 at `C:\Program Files\MATLAB\R2024b\bin`. Batch:
   `matlab -batch "cd('<folder>'); test_vlm_offline"`. Every batch log starts with a harmless
   Quanser QUARC `startup.m` error block. Python: the `python` on PATH is the Microsoft Store

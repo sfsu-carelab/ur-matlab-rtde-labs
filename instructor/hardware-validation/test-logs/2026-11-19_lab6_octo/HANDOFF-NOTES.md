@@ -145,12 +145,9 @@ What this implies for the lab design (to settle with Ryan):
   with Lab 5; or (b) the instructor fine-tunes on demonstrations beforehand (SmolVLA plan)
   so students run a policy that succeeds, then study what breaks it. Ryan to choose.
 
-## 7. Open items
-- [ ] At the robot (Ryan, desktop): fill `start_pose` and the keep-out box in
-      `UR_VLA_Octo_Prototype.m`, run `DryRun=true` with the live camera first, then the real
-      loop with `confirm_each_step = true`, speed slider 100 percent, 10 steps. Record the
-      CSV and a screenshot per step.
-- [ ] Try the Bridge-like camera position (section 5, item 1) and compare.
+## 7. Open items (as written at noon; the afternoon's state is in section 23)
+- [x] At the robot: start pose and box filled and measured, ten runs logged (sections 9 to 22).
+- [x] Bridge-like camera position: done at 17:45, it is what made the policy see the cube.
 - [ ] Decide: Octo demo in Lab 6 Part 5 (students read the action vector, see it drift,
       explain why calibration-free is harder) vs. keep it instructor-only.
 - [ ] If Ryan wants the fine-tuning path: write the MATLAB demo recorder from
@@ -488,10 +485,77 @@ Changes after run 9: `octoChunk.step_chunk(..., n_samples=N)` averages N diffusi
 `n_samples = 4` and logs `gripper_raw` as the last CSV column. Floor change to 0.100
 proposed to Ryan (4 mm above the measured empty-close touch at 96.2 mm), not applied.
 
+## 22. Run 10, last run of the day (18:00, `octo_run_20261119_180023.csv`), floor 0.100, 4 samples
+20 pictures, 80 steps, all executed, policy 0.75 s per picture with four-sample averaging
+(7 s for the first two, JAX compile). Ryan: "it was approaching really nicely but then just
+veered away and danced around." The CSV agrees: chunks 1 to 11 are a clean approach, down
+to the floor and +5 cm in X with lateral corrections of 1 to 2 cm, and frame 11 shows the
+fingers on the cube. Chunk 12 then jumped +51 mm in Y (away from the cube, frame 13 shows the
+gripper clear of it) and the rest was wandering at Y -30 to -70 on the floor. The raw gripper
+value, logged for the first time, stayed at 1.0 (fully open) through the approach, dipped to
+0.75 in chunks 13 to 15 and to 0.51 to 0.61 in chunks 17 to 19, never crossing 0.5: it was
+close to closing twice, both times with the cube no longer between the fingers. Averaging did
+calm the per-step jitter (no 19 mm flip-flops this time) but not the chunk-to-chunk veer.
+No grasp. Session wrapped here at Ryan's request.
+
+## 23. Day summary: what was done, what was learned, what is next
+Done today (all in this folder unless stated; 25 commits, 1af0fe7 to the end of day):
+- Octo (octo-base) running from MATLAB R2024b on PC 17 through pyenv, CPU, env at
+  `C:\Users\924414657\vla-octo` with a rebuild recipe (sections 1 to 3).
+- `UR_VLA_Octo_Prototype.m`: closed loop with the labs' safety scaffolding; task typed at a
+  bare prompt; q in the figure stops; each 4-step Octo chunk executed as one blended
+  `followJointWaypoints` move (6 x N matrix, no WaypointTimes with a blend radius); Z clamped
+  to a measured box, X/Y outside stops; one or two cameras (`Wrist=true`); square crop of the
+  primary frame; `View=mirror|rot180`; `action_xy_map`; every policy frame saved as PNG; raw
+  policy deltas and raw gripper logged; `n_samples` averaging; fresh Python every run.
+- `octoChunk.py` (in `vla-octo\vlapy`, copy here): whole-chunk output, optional wrist image,
+  n-sample averaging, `gripper_raw`.
+- Ten hardware runs (CSV per run, frames from run 7 on). Camera remounted Bridge-style.
+- Measured: open fingertips touch at flange Z 84.9 mm, closed at 96.2 mm; ceiling 530 mm;
+  PolyScope X planes at X +105 and X -225 mm; start pose 45 mm lower than run 1.
+
+Learned (the order matters):
+1. The MathWorks VLA item is a real action-output policy and runs on the lab PCs today.
+2. The UR toolbox `followJointWaypoints` takes a 6 x N matrix and ignores WaypointTimes when
+   BlendRadius is set (section 10); blended chunk execution works well on hardware.
+3. A 2F-85 empty close reaches 11 mm lower than its open fingertips: measure the floor with
+   the gripper closed (section 13).
+4. The policy is sensitive to the CAMERA PLACEMENT above everything else. From the far-side
+   bird's-eye it ignored the block entirely: identical per-seed outputs with the block erased
+   (section 19). Mirroring or rotating that view in software did not help (sections 17, 19).
+   From a Bridge-style shoulder camera (section 18 numbers) it tracked the cube within one
+   run (sections 20 to 22). Any Lab 6 setup must fix this camera pose and keep it.
+5. The wrist camera made zero-shot Octo more hesitant (run 6) and Bridge data has no wrist
+   view in Octo's config; keep it off for the pick demo until fine-tuning.
+6. The vlapy wrapper seeds JAX with 0 on every object: "resampling" needs `init_rng=i`
+   (section 17). The diffusion head's spread is about equal to its mean on this bench;
+   4-sample averaging removes step jitter but not chunk-to-chunk veering (run 10).
+7. The remaining gap is a commit to the grasp: the policy gets the fingers to the cube and
+   then drifts off before the gripper value crosses 0.5. That is the embodiment gap (UR3e
+   plus Robotiq versus WidowX) that fine-tuning on this robot's own demonstrations fixes.
+8. Operational: the server script needs command 0 before any waypoint command after a
+   restart (section 21); a stale OutOfProcess Python keeps old modules (fresh process per
+   run); both cameras need USB 3; the crop is tied to the camera pose.
+
+Next, in order (for Ryan to confirm):
+- [ ] Permanent server-script fix: `resetTrajectoryParameters()` once before the main loop,
+      re-copy to the pendant, then the Lab 4 run as a regression check.
+- [ ] Two or three more runs at the remounted camera with different cube positions and a
+      lower start pose, to see whether run 10's approach repeats; try `n_samples = 8`.
+- [ ] A gripper commit rule for the demo (close when gripper_raw < 0.6 for two consecutive
+      steps with the fingers at the floor), as an instructor option, clearly labelled.
+- [ ] Start the fine-tuning path (`vla_matlab_in_loop_plan.md`): the MATLAB demo recorder
+      first, using this camera pose, the floor and the box from this file.
+- [ ] Lab 6 design decision (section 6): zero-shot analysis lab vs. fine-tuned policy lab.
+- [ ] Docs only after the above: CLAUDE.md row updated today; manuals untouched.
+
 ## 8. Sync
 `git pull` brought 223cb34 (Mac: the SmolVLA plan) before any work; nothing else was ahead.
-This folder was committed and pushed at the end of the session. Box is not mounted on PC 17;
-Ryan pulls on the Mac and rsyncs into Box as agreed on 2026-11-06.
+Everything in this folder plus CLAUDE.md was committed and pushed through the day and at the
+end (last commit at 18:10). Box is not mounted on PC 17; Ryan pulls on the Mac and rsyncs
+into Box as agreed on 2026-11-06. Physical state left behind: the bird's-eye camera is on
+its new Bridge-style mount at the robot's right shoulder, the wrist camera on the USB-C
+cable, the white sheet on the bench, the floor in the script at 0.100.
 
 ## Sources
 - https://www.mathworks.com/matlabcentral/fileexchange/184183-vision-language-action-vla-models-in-simulink (v1.0.5, R2026b+)
