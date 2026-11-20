@@ -131,26 +131,22 @@ function UR_VLA_Octo_Prototype(opts)
     if ~isfile(pyExe)
         error('UR_VLA_Octo_Prototype:noPython', 'Python not found at %s. See HANDOFF-NOTES.md.', pyExe);
     end
+    % A fresh Python every run. The OutOfProcess interpreter otherwise lives on between runs
+    % of this script and keeps the octoChunk module it first imported: after octoChunk.py
+    % was edited on 2026-11-19 the desktop MATLAB kept calling the old step_chunk ("takes
+    % from 2 to 3 positional arguments but 4 were given"), and py.importlib.reload did not
+    % fix it. terminate(pyenv) is the MathWorks-documented way; it costs about a second.
     pe = pyenv;
-    if pe.Status == "Loaded" && ~strcmp(pe.Executable, pyExe)
+    if pe.Status == "Loaded"
         terminate(pyenv);
-        pe = pyenv;
     end
-    if pe.Status ~= "Loaded"
-        pe = pyenv(Version=pyExe, ExecutionMode="OutOfProcess");
-    end
-    fprintf('  Python %s (%s)\n', pe.Version, pe.ExecutionMode);
-    if count(py.sys.path, vlapyDir) == 0
-        insert(py.sys.path, int64(0), vlapyDir);
-    end
+    pe = pyenv(Version=pyExe, ExecutionMode="OutOfProcess");
+    fprintf('  Python %s (%s, fresh process)\n', pe.Version, pe.ExecutionMode);
+    insert(py.sys.path, int64(0), vlapyDir);
     t = tic;
-    % Reload the wrapper every run: the OutOfProcess Python lives on between runs of this
-    % script, so an edited octoChunk.py was otherwise invisible until pyenv was terminated
-    % (found 2026-11-19: "step_chunk() takes from 2 to 3 positional arguments").
-    mod = py.importlib.import_module("octoChunk");           % OctoInference + step_chunk (whole 4-step chunk)
-    py.importlib.reload(mod);
+    py.importlib.import_module("octoChunk");                 % OctoInference + step_chunk (whole 4-step chunk)
     policy = py.octoChunk.OctoChunkInference();
-    fprintf('  Octo loaded in %.1f s.\n', toc(t));
+    fprintf('  Octo loaded in %.1f s, %s.\n', toc(t), char(py.octoChunk.__file__));
 
     %% ====================================================================
     %  ROBOT
