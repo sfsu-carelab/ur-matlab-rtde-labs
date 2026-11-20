@@ -94,7 +94,14 @@ function UR_VLA_Octo_Prototype(opts)
 
     action_scale      = 1.0;                      % multiply the translation delta
     max_step_m        = 0.02;                     % clamp per-step translation to this length
-    action_yaw_deg    = 0;                        % rotate the policy's XY frame into ours (Bridge: +x away from the robot, +y left)
+    % Map the policy's XY (WidowX base frame as seen by the Bridge camera) into our base
+    % frame: [dX; dY] = action_xy_map * [dx; dy]. eye(2) = identity (runs 1 to 7).
+    % A rotation is [c -s; s c]; a mirror is [1 0; 0 -1] (flip Y) or [-1 0; 0 1] (flip X).
+    % Calibrate with two one-chunk runs: block image-right of the gripper (which sign of
+    % dy?), block farther from the base (which sign of dx?); the run's saved frames show
+    % where the block was. Run 7 (2026-11-19 16:35, white sheet): 9 cm in -Y, "away from
+    % the block" (Ryan), so a mirror or a rotation is suspected, not yet measured.
+    action_xy_map     = eye(2);
     apply_rotation    = false;                    % true: also apply the axis-angle rotation delta
     confirm_each_step = false;                    % true: Enter before every move. false (Ryan, after run 1,
                                                   % 2026-11-19): runs on its own; press q in the figure
@@ -185,8 +192,10 @@ function UR_VLA_Octo_Prototype(opts)
     %  ====================================================================
     logFile = fullfile(here, sprintf('octo_run_%s.csv', char(datetime('now', 'Format', 'yyyyMMdd_HHmmss'))));
     fid = fopen(logFile, 'w');
-    fprintf(fid, 'chunk,step,t_policy_s,dx,dy,dz,rx,ry,rz,gripper,cur_x,cur_y,cur_z,tgt_x,tgt_y,tgt_z,executed\n');
-    Ryaw = eul2rotm([deg2rad(action_yaw_deg) 0 0]);          % ZYX, yaw only
+    % dx,dy,dz are after the XY map and the clamp (what the robot was asked to do);
+    % pol_dx,pol_dy,pol_dz are the policy's own output in metres, before either.
+    fprintf(fid, 'chunk,step,t_policy_s,dx,dy,dz,rx,ry,rz,gripper,cur_x,cur_y,cur_z,tgt_x,tgt_y,tgt_z,executed,pol_dx,pol_dy,pol_dz\n');
+    frameBase = logFile(1:end-4);                             % frames saved as <log>_p01.png, _p01_wrist.png
     cur = nan(1,6);
     stopAfterThis = false;
     % Camera stays open for the whole run: one snapshot per step (capture_realsense reopens
@@ -234,10 +243,11 @@ function UR_VLA_Octo_Prototype(opts)
         G = round(double(a{'gripper'}));  G = G(:)';         % 1 x H, +1 open / -1 close
         n = min(chunk_steps, size(D, 1));
         D = D(1:n, :); R = R(1:n, :); G = G(1:n);
+        Dpol = D;                                            % policy output, for the log
 
         % ---- map into the base frame and clamp every step ----------------
         for j = 1:n
-            d = (Ryaw * D(j, :)')';
+            d = [(action_xy_map * D(j, 1:2)')', D(j, 3)];
             if norm(d) > max_step_m, d = d * (max_step_m / norm(d)); end
             D(j, :) = d;
         end
@@ -256,6 +266,8 @@ function UR_VLA_Octo_Prototype(opts)
         if use_wrist, shown = [img, imresize(wimg, [size(img, 1) NaN])]; end   % bird's-eye | wrist
         imshow(shown); title(sprintf('picture %d  chunk total = [%+.1f %+.1f %+.1f] mm  gripper %+d  (%.2f s)   [q stops]', ...
             k, 1000*sum(D, 1), G(end), tp)); drawnow;
+        imwrite(img, sprintf('%s_p%02d.png', frameBase, k));         % what the policy saw (cropped)
+        if use_wrist, imwrite(wimg, sprintf('%s_p%02d_wrist.png', frameBase, k)); end
         fprintf('  picture %2d  policy %.2f s\n', k, tp);
         for j = 1:n
             fprintf('     step %d  d = [%+6.1f %+6.1f %+6.1f] mm  rot = [%+.3f %+.3f %+.3f]  gripper %+d\n', ...
@@ -307,7 +319,7 @@ function UR_VLA_Octo_Prototype(opts)
         end
         prev = cur;
         for j = 1:n
-            fprintf(fid, '%d,%d,%.3f,%s,%d,%s,%s,%d\n', k, j, tp, csv([D(j, :) R(j, :)]), G(j), csv(prev(4:6)), csv(T(j, 4:6)), executed(j));
+            fprintf(fid, '%d,%d,%.3f,%s,%d,%s,%s,%d,%s\n', k, j, tp, csv([D(j, :) R(j, :)]), G(j), csv(prev(4:6)), csv(T(j, 4:6)), executed(j), csv(Dpol(j, :)));
             prev = T(j, :);
         end
         if stopAfterThis, break; end
