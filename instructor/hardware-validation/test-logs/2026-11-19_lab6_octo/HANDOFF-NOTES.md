@@ -440,6 +440,29 @@ robot's right shoulder, 16 cm to -Y of the base centre, 34 cm above the table, p
 frame from the bottom-left). After the remount: capture a frame, re-pick `primary_crop`,
 repeat the erase test offline (`scratchpad\octo_erase_test.py`), and only then run.
 
+## 20. Camera remounted Bridge-style (17:45 to 18:00)
+Ryan moved the bird's-eye to the robot's right shoulder. First frame (`primary_bridge1.png`)
+was too low and too flat (bench edge and wall across the top); after raising to about 34 cm
+and tilting down, `primary_bridge2.png`: white sheet to nearly every edge, the base bracket
+out of frame bottom-left, the gripper entering top-left, the cube mid-frame about 120 px
+wide. One thing a UR3e cannot match: the WidowX's links enter low from the left, ours comes
+down from the top (elbow above any shoulder camera). `primary_crop = [101 1 720 720]`.
+Action map stays eye(2): this camera looks forward along +X from the robot's right, so
+Bridge's +x (forward) and +y (robot's left) are our +X and +Y.
+
+Erase test on this view (eight seeds, chunk sums, mm):
+
+| | dx | dy | dy signs |
+|---|---|---|---|
+| block present, red | -13.5 +- 35 | -9 +- 27 | -+----+- |
+| block ERASED, red | +8.3 +- 17 | -7 +- 25 | -+---++- |
+| block present, teal | -8.2 +- 19 | +4 +- 22 | -+---+++ |
+
+Weak but, for the first time, in the right direction: the cube sits image-below the
+fingertips, which from this camera is toward the robot (-X), and dx goes from +8 without the
+block to -13.5 with it. The spread (std 35 on a 13 mm mean) says single samples are noisy;
+averaging several seeds per chunk is the next knob if the hardware run jitters.
+
 ## 8. Sync
 `git pull` brought 223cb34 (Mac: the SmolVLA plan) before any work; nothing else was ahead.
 This folder was committed and pushed at the end of the session. Box is not mounted on PC 17;

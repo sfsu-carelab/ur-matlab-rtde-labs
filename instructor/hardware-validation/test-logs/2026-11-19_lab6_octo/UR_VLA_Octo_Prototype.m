@@ -114,9 +114,11 @@ function UR_VLA_Octo_Prototype(opts)
     % middle third, so a block is about 10 pixels wide after the resize. 640x640 around the
     % start-pose gripper and the blocks (chosen on primary_now.png, 2026-11-19 16:30) makes
     % everything 2.5 times bigger. The figure shows the crop, i.e. what the policy sees.
-    % The crop is tied to the camera position: when the camera moves (it did twice while the
-    % white sheet went down, 16:45), re-pick it on a fresh frame (now primary_sheet.png).
-    primary_crop      = [161 81 640 640];
+    % The crop is tied to the camera position: when the camera moves, re-pick it on a fresh
+    % frame. 2026-11-19 17:50: camera REMOUNTED Bridge-style (robot's right shoulder, about
+    % 34 cm up, pitched down; notes section 18 to 20); crop chosen on primary_bridge2.png:
+    % gripper top-left, block mid-frame, sheet to every edge.
+    primary_crop      = [101 1 720 720];
     % Second camera behind the gripper, FPV (Ryan, 2026-11-19) -> Octo's image_wrist input
     % (128x128), which octo-base was pretrained with. use_wrist = false runs the bird's-eye
     % only (runs 1 and 2). The wrist unit needs a USB 3 cable: on USB 2 it enumerates, lists
