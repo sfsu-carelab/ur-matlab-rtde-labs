@@ -359,6 +359,32 @@ was trained on other robots' data. Options in the order to try, none of them fin
 5. Average a few diffusion samples per chunk to take the sampling jitter out of the drift.
 The real fix for consistency stays fine-tuning (vla_matlab_in_loop_plan.md).
 
+## 17. Run 7 (white sheet, crop) and the sideways-tracking test (16:35 to 17:10)
+Run 7 (`octo_run_20261119_163506.csv`, one camera, crop, white sheet, block image-right of
+the gripper per Ryan): 9 cm in -Y over two chunks, almost no X; Ryan stopped it: "it
+correctly decided to move laterally to adjust, but it moved laterally in the wrong
+direction, away from the block." Image axes of this camera (from the frame geometry and a
++Y jog read over RTDE): +X = image-down, +Y = image-right. So the arm went image-left.
+
+Offline test, no robot: two frames through the same crop, `primary_sheet.png` (block
+image-LEFT of the gripper, arm at the start pose) and `primary_jogY.png` (block image-RIGHT,
+arm 4 cm lower). First attempt gave eight identical samples: the vlapy wrapper seeds JAX
+with `init_rng=0` on every new object, so "resampling" needs `OctoChunkInference(init_rng=i)`.
+With eight seeds per frame, chunk sums in mm (mean +- std):
+
+| frame | as is: dy | mirrored left-right: dy |
+|---|---|---|
+| block LEFT | -30 +- 37 (6 of 8 negative) | -20 +- 18 (7 of 8) |
+| block RIGHT | -60 +- 54 (7 of 8) | -76 +- 54 (7 of 8) |
+
+The sideways sign does not depend on which side the block is on, and does not flip when the
+image is mirrored. So the policy is NOT reading the block's lateral position from this view;
+-y is a viewpoint-driven bias. A mirror or rotation in `action_xy_map` cannot fix that (it
+would only redirect the bias), so the map stays eye(2). Diffusion-head spread is large
+(std about equal to the mean), another reason to average seeds per chunk (section 16, item 5).
+Next: match the Bridge camera placement (web lookup in progress), then a clean placement
+test (block left / right / far with the arm fixed, three frames, eight seeds each).
+
 ## 8. Sync
 `git pull` brought 223cb34 (Mac: the SmolVLA plan) before any work; nothing else was ahead.
 This folder was committed and pushed at the end of the session. Box is not mounted on PC 17;
