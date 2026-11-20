@@ -385,6 +385,42 @@ would only redirect the bias), so the map stays eye(2). Diffusion-head spread is
 Next: match the Bridge camera placement (web lookup in progress), then a clean placement
 test (block left / right / far with the arm fixed, three frames, eight seeds each).
 
+## 18. The Bridge camera, from SimplerEnv (web lookup, 17:15)
+BridgeData V2 pages and paper say only "an RGBD camera that is fixed in an over-the-shoulder
+view" (RealSense D435, 640x480, 5 Hz; a wide-angle wrist camera exists but the paper's
+policies used "only the over-the-shoulder camera view"). The numbers are in SimplerEnv:
+`ManiSkill2_real2sim/mani_skill2_real2sim/agents/configs/widowx/defaults.py`, robot
+`widowx_bridge_dataset_camera_setup`, "the camera used in the Bridge dataset":
+`p = [0.00, -0.16, 0.336]`, `q = [0.909182, -0.0819809, 0.347277, 0.214629]` (w x y z), in
+the WidowX base_link frame, 640x480, intrinsics fx = fy = 623.6 (about 55 deg horizontal).
+Worked out from q (SAPIEN camera: x forward, y left, z up):
+- camera forward = (0.667, 0.333, -0.667): looks along the arm (+x), 27 deg toward the
+  robot's left (+y), pitched 42 deg down; the optical axis meets the table about 34 cm in
+  front of the base on the centre line (the WidowX base sits on the table);
+- the base is 36 deg below the optical axis and to the left: OUT of frame at the bottom
+  left, so the ARM ENTERS FROM THE BOTTOM-LEFT and reaches up the image into the scene;
+- image-up is away from the robot (+x), image-left is the robot's left (+y).
+Our bird's-eye is on the far side of the bench looking back at the robot: the arm enters
+from the TOP, +X is image-down, +Y is image-right. That is the Bridge view rotated by
+about 180 deg, and is the likeliest reason the policy does not localise the block from it
+(section 17). Two ways to match Bridge: (a) rotate our frame 180 deg in software before the
+policy (then the policy's x/y land on our X/Y with the identity map, see the derivation
+above), tested offline below; (b) remount the camera Bridge-style: at the robot's right
+shoulder, 16 cm to -Y of the base centre, 34 cm above the table, pitched 42 deg down and
+yawed 27 deg toward +Y, aimed at a point 34 cm in front of the base. The UR3e work area
+(X 0.25 to 0.50) sits where the WidowX's does, so (b) is mostly a bracket.
+
+Offline result for (a), same two frames, eight seeds, chunk sums in mm:
+
+| frame | as is: dy | rotated 180: dy |
+|---|---|---|
+| block LEFT | -30 +- 37 | -15 +- 26 (5 of 8 negative) |
+| block RIGHT | -60 +- 54 | -33 +- 40 (7 of 8) |
+
+Still -y on both sides, so a software rotation of this view is not enough: the perspective
+(looking back at the robot, a UR3e with a Robotiq instead of a WidowX) is still foreign.
+Option (b), the physical remount, is the remaining zero-shot lever on the view.
+
 ## 8. Sync
 `git pull` brought 223cb34 (Mac: the SmolVLA plan) before any work; nothing else was ahead.
 This folder was committed and pushed at the end of the session. Box is not mounted on PC 17;
