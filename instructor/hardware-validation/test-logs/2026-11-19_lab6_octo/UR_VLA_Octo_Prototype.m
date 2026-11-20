@@ -85,12 +85,14 @@ function UR_VLA_Octo_Prototype(opts)
     % in front of the base, down to just above the Lab 4 grasp height, never above Ready.
     xy_min = [0.25 -0.35];                        % [X Y] min (m)
     xy_max = [0.50  0.00];                        % [X Y] max (m)
-    z_min  = 0.105;                               % MEASURED 2026-11-19 (flange Z over RTDE): OPEN fingertips 2 to 3 mm
+    z_min  = 0.100;                               % MEASURED 2026-11-19 (flange Z over RTDE): OPEN fingertips 2 to 3 mm
                                                   % above the table at 84.9 mm; CLOSED fingertips resting on the table
                                                   % at 96.2 mm (the 2F-85 pads swing outward as the fingers close, so
                                                   % an empty close reaches 11 mm lower). Runs 4 and 5 at 0.085 and
-                                                  % 0.095 dragged the closed tips. 0.105 is 9 mm above the closed
-                                                  % touch point and 5 mm above the Lab 4 grasp line (100.4 mm).
+                                                  % 0.095 dragged the closed tips. 0.105 (runs 6 to 9) held; in run 9
+                                                  % the policy sat on the floor asking for lower for half the run, so
+                                                  % Ryan lowered it to 0.100 (the Lab 4 grasp line, 4 mm above the
+                                                  % empty-close touch point).
     z_max  = 0.53;                                % MEASURED 2026-11-19: Ryan jogged to the highest pose he wants
                                                   % allowed (nothing above the robot in reach); flange Z read 530.5 mm.
 
