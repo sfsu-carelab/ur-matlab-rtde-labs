@@ -328,6 +328,19 @@ is skipped (the "Skipping observation tokenizer: obs_wrist" warning in every run
 block at the left. So the 2026-11-04 diagnosis holds: the four-mode list and no frames was
 the USB 2 link, not the camera. Two-camera runs are now `UR_VLA_Octo_Prototype(Wrist=true)`.
 
+## 15. Run 6, first two-camera run (16:19, `octo_run_20261119_161954.csv`)
+`UR_VLA_Octo_Prototype(Wrist=true)`, floor 0.105, same start pose. All 20 pictures, 80
+steps executed, no stop. Policy time 7.5 and 8.4 s for the first two pictures (two JAX
+compiles), then 0.27 s. Behaviour: a close-open flicker in chunks 1 and 2 while still 18 cm
+up (noise), then the gripper stayed OPEN for the remaining 18 chunks. The arm descended in
+small steps to the floor at 105 mm (chunks 14 and 18 to 20), wandered 7 cm in +Y along the
+way, lifted and came back twice, and never committed to a grasp. Ryan: "it seems like its a
+little better at picking up the block and making small adjustments but its inconsistent and
+still cannot grab the block if its not placed basically directly under it." Compared with the
+one-camera runs 2 to 5, which closed every time (too early or at the floor), the wrist view
+made the policy more hesitant. One run, so not a conclusion. Ryan's question "what can we do
+besides fine-tuning" is answered in section 16.
+
 ## 8. Sync
 `git pull` brought 223cb34 (Mac: the SmolVLA plan) before any work; nothing else was ahead.
 This folder was committed and pushed at the end of the session. Box is not mounted on PC 17;
