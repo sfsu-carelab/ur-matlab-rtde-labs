@@ -94,6 +94,11 @@ function UR_VLA_Octo_Prototype(opts)
     z_max  = 0.53;                                % MEASURED 2026-11-19: Ryan jogged to the highest pose he wants
                                                   % allowed (nothing above the robot in reach); flange Z read 530.5 mm.
 
+    % Samples drawn from the diffusion head per picture and averaged (octoChunk n_samples).
+    % Run 9 (2026-11-19, Bridge-style camera) tracked the cube but jittered up to 19 mm
+    % between steps and never committed a close; offline the head's spread was about equal
+    % to its mean. 4 samples cost about 1 s per picture on this CPU.
+    n_samples         = 4;
     action_scale      = 1.0;                      % multiply the translation delta
     max_step_m        = 0.02;                     % clamp per-step translation to this length
     % Map the policy's XY (WidowX base frame as seen by the Bridge camera) into our base
@@ -198,7 +203,7 @@ function UR_VLA_Octo_Prototype(opts)
     fid = fopen(logFile, 'w');
     % dx,dy,dz are after the XY map and the clamp (what the robot was asked to do);
     % pol_dx,pol_dy,pol_dz are the policy's own output in metres, before either.
-    fprintf(fid, 'chunk,step,t_policy_s,dx,dy,dz,rx,ry,rz,gripper,cur_x,cur_y,cur_z,tgt_x,tgt_y,tgt_z,executed,pol_dx,pol_dy,pol_dz\n');
+    fprintf(fid, 'chunk,step,t_policy_s,dx,dy,dz,rx,ry,rz,gripper,cur_x,cur_y,cur_z,tgt_x,tgt_y,tgt_z,executed,pol_dx,pol_dy,pol_dz,gripper_raw\n');
     frameBase = logFile(1:end-4);                             % frames saved as <log>_p01.png, _p01_wrist.png
     cur = nan(1,6);
     stopAfterThis = false;
@@ -245,16 +250,17 @@ function UR_VLA_Octo_Prototype(opts)
         % ---- policy: the whole predicted chunk --------------------------
         t = tic;
         if use_wrist
-            a = policy.step_chunk(py.numpy.array(img), task, py.numpy.array(wimg));
+            a = policy.step_chunk(py.numpy.array(img), task, pyargs('wrist_image', py.numpy.array(wimg), 'n_samples', int32(n_samples)));
         else
-            a = policy.step_chunk(py.numpy.array(img), task);
+            a = policy.step_chunk(py.numpy.array(img), task, pyargs('n_samples', int32(n_samples)));
         end
         tp = toc(t);
         D = double(a{'world_vector'}) * action_scale;        % H x 3 translation deltas (m)
         R = double(a{'rot_axangle'});                        % H x 3 axis-angle deltas (rad)
         G = round(double(a{'gripper'}));  G = G(:)';         % 1 x H, +1 open / -1 close
+        Graw = double(a{'gripper_raw'});  Graw = Graw(:)';   % 1 x H, 0 close ... 1 open (0.5 = threshold)
         n = min(chunk_steps, size(D, 1));
-        D = D(1:n, :); R = R(1:n, :); G = G(1:n);
+        D = D(1:n, :); R = R(1:n, :); G = G(1:n); Graw = Graw(1:n);
         Dpol = D;                                            % policy output, for the log
 
         % ---- map into the base frame and clamp every step ----------------
@@ -282,8 +288,8 @@ function UR_VLA_Octo_Prototype(opts)
         if use_wrist, imwrite(wimg, sprintf('%s_p%02d_wrist.png', frameBase, k)); end
         fprintf('  picture %2d  policy %.2f s\n', k, tp);
         for j = 1:n
-            fprintf('     step %d  d = [%+6.1f %+6.1f %+6.1f] mm  rot = [%+.3f %+.3f %+.3f]  gripper %+d\n', ...
-                j, 1000*D(j, :), R(j, :), G(j));
+            fprintf('     step %d  d = [%+6.1f %+6.1f %+6.1f] mm  rot = [%+.3f %+.3f %+.3f]  gripper %+d (%.2f)\n', ...
+                j, 1000*D(j, :), R(j, :), G(j), Graw(j));
         end
         if strcmp(getappdata(fig, 'key'), 'q')
             fprintf('  Stopped by the user (q in the figure window).\n'); break
@@ -331,7 +337,7 @@ function UR_VLA_Octo_Prototype(opts)
         end
         prev = cur;
         for j = 1:n
-            fprintf(fid, '%d,%d,%.3f,%s,%d,%s,%s,%d,%s\n', k, j, tp, csv([D(j, :) R(j, :)]), G(j), csv(prev(4:6)), csv(T(j, 4:6)), executed(j), csv(Dpol(j, :)));
+            fprintf(fid, '%d,%d,%.3f,%s,%d,%s,%s,%d,%s,%.3f\n', k, j, tp, csv([D(j, :) R(j, :)]), G(j), csv(prev(4:6)), csv(T(j, 4:6)), executed(j), csv(Dpol(j, :)), Graw(j));
             prev = T(j, :);
         end
         if stopAfterThis, break; end

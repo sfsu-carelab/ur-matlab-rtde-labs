@@ -32,7 +32,7 @@ class OctoChunkInference(OctoInference):
         image = tf.image.resize(image, size=(WRIST_IMAGE_SIZE, WRIST_IMAGE_SIZE), method="lanczos3", antialias=True)
         return tf.cast(tf.clip_by_value(tf.round(image), 0, 255), tf.uint8).numpy()
 
-    def step_chunk(self, image: np.ndarray, task_description=None, wrist_image=None) -> dict:
+    def step_chunk(self, image: np.ndarray, task_description=None, wrist_image=None, n_samples=1) -> dict:
         """Same observation handling as step(); returns every step of the predicted chunk.
 
         image        uint8 (H, W, 3), the fixed third-person camera -> image_primary (256x256)
@@ -40,12 +40,17 @@ class OctoChunkInference(OctoInference):
                      (128x128). octo-base was pretrained with both tokenizers; without a
                      wrist image the wrist tokenizer is skipped (the "Skipping observation
                      tokenizer: obs_wrist" warning). Give it on every step or on none.
+        n_samples    draw this many chunks from the diffusion head (different RNG keys) for
+                     the same observation and return their mean. The head's spread on the
+                     UR3e bench was about as large as its mean (2026-11-19 offline tests),
+                     so 1 sample jitters; 4 to 8 smooth it at 0.25 s each on this CPU.
 
         Returns a dict of numpy arrays, H = pred_action_horizon:
             'world_vector' (H, 3)  xyz translation delta per step [m]
             'rot_axangle'  (H, 3)  axis-angle rotation delta per step [rad]
-            'gripper'      (H,)    +1 open, -1 close (binarized at 0.5 like widowx_bridge)
-            'raw'          (H, 7)  denormalized raw actions
+            'gripper'      (H,)    +1 open, -1 close (mean raw gripper binarized at 0.5)
+            'gripper_raw'  (H,)    mean raw gripper value, 0 = close ... 1 = open
+            'raw'          (H, 7)  denormalized raw actions (mean over samples)
         The action ensembler is not used (and not updated), so alternating step() and
         step_chunk() on one object is not meaningful; use one or the other.
         """
@@ -68,7 +73,13 @@ class OctoChunkInference(OctoInference):
             obs["image_wrist"] = np.stack(self.wrist_history, axis=0)[None]
         elif len(self.wrist_history) > 0:
             raise ValueError("this episode started with a wrist image; give one on every step")
-        norm = np.asarray(self.model.sample_actions(obs, self.task, rng=key))[0]   # (H, 7)
+        n_samples = max(1, int(n_samples))
+        norms = []
+        for i in range(n_samples):
+            if i > 0:
+                self.rng, key = jax.random.split(self.rng)
+            norms.append(np.asarray(self.model.sample_actions(obs, self.task, rng=key))[0])   # (H, 7)
+        norm = np.mean(np.stack(norms, axis=0), axis=0)
         assert norm.shape == (self.pred_action_horizon, 7)
         raw = norm * self.action_std[None] + self.action_mean[None]
         H = raw.shape[0]
@@ -79,4 +90,5 @@ class OctoChunkInference(OctoInference):
             ax, ang = euler2axangle(roll, pitch, yaw)
             rot[i] = ax * ang * self.action_scale
         gripper = 2.0 * (raw[:, 6] > 0.5) - 1.0
-        return {"world_vector": world, "rot_axangle": rot, "gripper": gripper, "raw": raw}
+        return {"world_vector": world, "rot_axangle": rot, "gripper": gripper,
+                "gripper_raw": raw[:, 6].copy(), "raw": raw}

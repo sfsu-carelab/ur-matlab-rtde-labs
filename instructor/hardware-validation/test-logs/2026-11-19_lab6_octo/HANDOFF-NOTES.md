@@ -463,6 +463,31 @@ fingertips, which from this camera is toward the robot (-X), and dx goes from +8
 block to -13.5 with it. The spread (std 35 on a 13 mm mean) says single samples are noisy;
 averaging several seeds per chunk is the next knob if the hardware run jitters.
 
+## 21. Run 9, first run with the Bridge-style camera (17:52, `octo_run_20261119_175249.csv`)
+20 pictures, 80 steps, all executed, frames saved (`..._p01.png` to `_p20.png`). For the
+first time the policy tracked the cube: +7 cm in X to reach it, lateral corrections that
+brought the fingers onto the cube three times (frames 5, 13, 20 show the cube against the
+fingers). What stopped the grasp: (1) the Z floor, clamped at 105 mm for 40 of the 80 steps
+while the policy kept asking for 10 to 16 mm more down; (2) one close in chunk 5, reopened
+at the next waypoint, then 60 steps of hovering and nudging the cube; (3) lateral jitter up
+to 19 mm between consecutive steps (chunks 19 and 20). Ryan: "kinda worked.? kinda didnt. is
+the crop too small now?" Crop judged right from the frames (gripper and cube large, sheet to
+the edges; the UR upper arm fills the top-left, which a WidowX would not).
+
+Before the server-script run: PolyScope X error "'wayPointTimes' is not initialized to a
+value" at line 1398 (fillWaypointBuffers). Cause: the script initialises its arrays only in
+resetTrajectoryParameters(), which runs on command 0; a run cut short mid-chunk leaves the
+command register at 6, and a program restart then reads 6 first. Recovery used: program
+stopped, from the desktop `sendJointConfigurationAndWait(ur, readJointConfiguration(ur),
+EndTime=1)` inside try/catch (writes 1 then 0 before it waits), then play. Permanent fix
+(not applied, needs the script re-copied to the pendant): call resetTrajectoryParameters()
+once before the main `while executingCurrentTask:` loop.
+
+Changes after run 9: `octoChunk.step_chunk(..., n_samples=N)` averages N diffusion samples
+(different RNG keys, same observation) and returns `gripper_raw`; the prototype uses
+`n_samples = 4` and logs `gripper_raw` as the last CSV column. Floor change to 0.100
+proposed to Ryan (4 mm above the measured empty-close touch at 96.2 mm), not applied.
+
 ## 8. Sync
 `git pull` brought 223cb34 (Mac: the SmolVLA plan) before any work; nothing else was ahead.
 This folder was committed and pushed at the end of the session. Box is not mounted on PC 17;
