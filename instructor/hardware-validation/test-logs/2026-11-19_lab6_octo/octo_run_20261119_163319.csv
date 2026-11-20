@@ -1,0 +1,5 @@
+chunk,step,t_policy_s,dx,dy,dz,rx,ry,rz,gripper,cur_x,cur_y,cur_z,tgt_x,tgt_y,tgt_z,executed
+1,1,6.736,0.0068,-0.0156,-0.0105,0.0169,-0.0045,0.0427,1,NaN,NaN,NaN,NaN,NaN,NaN,0
+1,2,6.736,0.0061,-0.0177,-0.0071,0.0410,-0.0175,0.0213,1,NaN,NaN,NaN,NaN,NaN,NaN,0
+1,3,6.736,0.0013,-0.0184,-0.0078,0.0294,0.0006,0.0187,1,NaN,NaN,NaN,NaN,NaN,NaN,0
+1,4,6.736,-0.0001,-0.0170,-0.0105,0.0315,-0.0077,0.0229,1,NaN,NaN,NaN,NaN,NaN,NaN,0
