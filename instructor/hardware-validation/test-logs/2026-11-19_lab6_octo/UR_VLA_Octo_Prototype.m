@@ -100,6 +100,12 @@ function UR_VLA_Octo_Prototype(opts)
                                                   % 2026-11-19): runs on its own; press q in the figure
                                                   % window to stop after the current step, or use the e-stop.
     primary_camera    = "435i RGB";               % webcamlist entry for the bird's-eye -> image_primary (256x256)
+    % Crop of the 1280x720 frame [x0 y0 w h] in pixels, [] for none. In Bridge the gripper
+    % and the objects fill the 256x256 input; in the full frame here the work area is the
+    % middle third, so a block is about 10 pixels wide after the resize. 640x640 around the
+    % start-pose gripper and the blocks (chosen on primary_now.png, 2026-11-19 16:30) makes
+    % everything 2.5 times bigger. The figure shows the crop, i.e. what the policy sees.
+    primary_crop      = [220 80 640 640];
     % Second camera behind the gripper, FPV (Ryan, 2026-11-19) -> Octo's image_wrist input
     % (128x128), which octo-base was pretrained with. use_wrist = false runs the bird's-eye
     % only (runs 1 and 2). The wrist unit needs a USB 3 cable: on USB 2 it enumerates, lists
@@ -204,6 +210,10 @@ function UR_VLA_Octo_Prototype(opts)
         else
             img = snapshot(cam);
             if use_wrist, wimg = snapshot(camW); end
+        end
+        if ~isempty(primary_crop)
+            r = primary_crop;
+            img = img(r(2):r(2)+r(4)-1, r(1):r(1)+r(3)-1, :);
         end
         if ~opts.DryRun
             cur = readCartesianPose(ur);                     % [thetaz thetay thetax x y z], model FK

@@ -341,6 +341,24 @@ one-camera runs 2 to 5, which closed every time (too early or at the floor), the
 made the policy more hesitant. One run, so not a conclusion. Ryan's question "what can we do
 besides fine-tuning" is answered in section 16.
 
+## 16. What zero-shot has left (assessment for Ryan, 16:30) and the crop
+Ryan's bird's-eye is an oblique view, not top-down. That is fine: Bridge's camera is also an
+over-the-shoulder oblique view with the arm entering from the top of the frame. What differs
+is scale: in `primary_now.png` the gripper and the blocks occupy the middle third of a
+1280x720 frame, so a block is about 10 pixels wide after the 256x256 resize, where Bridge
+objects fill the frame. On the wrist: Octo's dataset table
+(`octo/data/oxe/oxe_dataset_configs.py`, `bridge_dataset`) has `"wrist": None`, so the
+Bridge pick behaviour was learned from the fixed camera only; octo-base's wrist tokenizer
+was trained on other robots' data. Options in the order to try, none of them fine-tuning:
+1. Crop the primary frame to the work area (DONE: `primary_crop = [220 80 640 640]`, the
+   figure shows the crop). Expected to be the biggest single change.
+2. Calibrate the action frame yaw (`action_yaw_deg`, still 0): two short runs with the
+   block offset only in +X, then only in +Y, and read which way the policy moves.
+3. Wrist on vs off, A/B over a few runs each, before keeping it.
+4. A lighter sheet on the black bench and toy-like objects (Ryan is getting a sheet).
+5. Average a few diffusion samples per chunk to take the sampling jitter out of the drift.
+The real fix for consistency stays fine-tuning (vla_matlab_in_loop_plan.md).
+
 ## 8. Sync
 `git pull` brought 223cb34 (Mac: the SmolVLA plan) before any work; nothing else was ahead.
 This folder was committed and pushed at the end of the session. Box is not mounted on PC 17;
