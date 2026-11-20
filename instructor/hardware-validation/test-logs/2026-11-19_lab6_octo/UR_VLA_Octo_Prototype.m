@@ -136,17 +136,16 @@ function UR_VLA_Octo_Prototype(opts)
     % was edited on 2026-11-19 the desktop MATLAB kept calling the old step_chunk ("takes
     % from 2 to 3 positional arguments but 4 were given"), and py.importlib.reload did not
     % fix it. terminate(pyenv) is the MathWorks-documented way; it costs about a second.
-    pe = pyenv;
-    if pe.Status == "Loaded"
+    if pyenv().Status == "Loaded"
         terminate(pyenv);
     end
     pe = pyenv(Version=pyExe, ExecutionMode="OutOfProcess");
     fprintf('  Python %s (%s, fresh process)\n', pe.Version, pe.ExecutionMode);
     insert(py.sys.path, int64(0), vlapyDir);
     t = tic;
-    py.importlib.import_module("octoChunk");                 % OctoInference + step_chunk (whole 4-step chunk)
+    mod = py.importlib.import_module("octoChunk");           % OctoInference + step_chunk (whole 4-step chunk)
     policy = py.octoChunk.OctoChunkInference();
-    fprintf('  Octo loaded in %.1f s, %s.\n', toc(t), char(py.octoChunk.__file__));
+    fprintf('  Octo loaded in %.1f s from %s\n', toc(t), char(py.getattr(mod, '__file__')));
 
     %% ====================================================================
     %  ROBOT
