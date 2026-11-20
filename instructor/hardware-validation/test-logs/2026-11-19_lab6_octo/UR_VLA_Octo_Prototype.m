@@ -48,6 +48,8 @@ function UR_VLA_Octo_Prototype(opts)
         opts.Task      (1,1) string  = ""     % skips the task prompt (needed in batch)
         opts.WristImageFile (1,1) string = "" % with DryRun + ImageFile and use_wrist: the wrist frame file
         opts.Wrist     logical {mustBeScalarOrEmpty} = []   % true/false overrides use_wrist for this run
+        opts.View      (1,1) string {mustBeMember(opts.View, ["asis", "mirror", "rot180"])} = "asis"
+                                              % transform of the primary frame before the policy (and in the figure)
     end
 
     %% ====================================================================
@@ -123,7 +125,7 @@ function UR_VLA_Octo_Prototype(opts)
     wrist_camera      = "435if RGB";              % webcamlist entry for the wrist unit
     wrist_resolution  = "640x480";                % plenty for 128x128; in both the USB 2 and USB 3 mode lists
     if ~isempty(opts.Wrist), use_wrist = opts.Wrist; end
-    fprintf('  Cameras: %s\n', ternary(use_wrist, "bird's-eye + wrist", "bird's-eye only"));
+    fprintf('  Cameras: %s   View: %s\n', ternary(use_wrist, "bird's-eye + wrist", "bird's-eye only"), opts.View);
 
     % Chunk execution (Ryan, 2026-11-19, "option 2"): Octo predicts 4 steps per picture. The
     % first chunk_steps of them become cumulative targets, each solved to joint angles, and go
@@ -225,6 +227,14 @@ function UR_VLA_Octo_Prototype(opts)
         if ~isempty(primary_crop)
             r = primary_crop;
             img = img(r(2):r(2)+r(4)-1, r(1):r(1)+r(3)-1, :);
+        end
+        % View=mirror flips left-right (Ryan's test, 2026-11-19 17:25: is the sideways sign a
+        % handedness problem?); View=rot180 turns the frame so the arm enters from the bottom
+        % like a Bridge frame (section 18 of the notes). Offline neither changed the sideways
+        % sign; this is the hardware check. The action map is NOT changed by View.
+        switch opts.View
+            case "mirror", img = fliplr(img);
+            case "rot180", img = rot90(img, 2);
         end
         if ~opts.DryRun
             cur = readCartesianPose(ur);                     % [thetaz thetay thetax x y z], model FK
