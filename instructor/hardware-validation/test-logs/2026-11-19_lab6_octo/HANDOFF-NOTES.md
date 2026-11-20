@@ -421,6 +421,25 @@ Still -y on both sides, so a software rotation of this view is not enough: the p
 (looking back at the robot, a UR3e with a Robotiq instead of a WidowX) is still foreign.
 Option (b), the physical remount, is the remaining zero-shot lever on the view.
 
+## 19. The decisive offline test, run 8 (mirror), and the remount decision (17:20 to 17:30)
+Erase test on `primary_sheet.png` (crop, eight seeds each, chunk sums): block present and
+"pick up the red block" gives dy -30 +- 37 with per-seed signs `-+----+-`; the block ERASED
+(a patch of sheet pasted over it, `primary_sheet_noblock.png`) gives dy -31 +- 38 with the
+SAME per-seed signs; "pick up the teal block" (none in view) dy -21, same signs; "move the
+gripper to the left" dy -8. So from this camera placement the policy's output does not
+depend on the block and barely on the words: it is a motion prior for the view. That is why
+runs 2 to 7 only came close when the block happened to sit under the prior's descent.
+
+Run 8 (`octo_run_20261119_171834.csv`, `View="mirror"`, Ryan's request): 8 chunks, 32 steps,
+wandered -Y then -X (back toward the base, 10 cm), one close in the air at Z 172 to 218 mm,
+no grasp. Ryan: "that run didnt work either." Consistent with the erase test.
+
+Decision (Ryan, 17:30): remount the bird's-eye camera Bridge-style (section 18 numbers:
+robot's right shoulder, 16 cm to -Y of the base centre, 34 cm above the table, pitched
+42 deg down, yawed 27 deg toward +Y, aimed 34 cm in front of the base; arm enters the
+frame from the bottom-left). After the remount: capture a frame, re-pick `primary_crop`,
+repeat the erase test offline (`scratchpad\octo_erase_test.py`), and only then run.
+
 ## 8. Sync
 `git pull` brought 223cb34 (Mac: the SmolVLA plan) before any work; nothing else was ahead.
 This folder was committed and pushed at the end of the session. Box is not mounted on PC 17;
