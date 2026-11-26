@@ -112,13 +112,22 @@ finished from the manual, in about 2.5 to 3 hours, with recoveries. Applied from
 - Repeats removed: Tool I/O fix and power-down now refer to Lab 4.
 - Q1 (block on a 20 mm spacer, with a sketch), Q4 and Q5 reworded.
 Not applied, for Ryan to decide:
-- A fifth calibration point (centre of the pick area) would make the residuals informative.
-  The script already accepts `nPlacements = 5`; the manual keeps four.
-- A small helper file for the colour click instead of three typed lines.
 - An independent check of the map before the first pick (predict, then touch and compare).
 - Objective 5 (diagnosis) is supported by the troubleshooting list only; no deliberate-fault
   exercise.
 - The student scripts still carry dated hardware notes in their comments.
+
+## Later the same day: five calibration points and a colour helper (Ryan: "go for it on both")
+- Calibration now uses FIVE placements: the four corners of the pick area plus its centre
+  (tape mark 5). `UR_CalibrateCamera.m` default `nPlacements = 5`; `UR_VisionPick_Lab.m`
+  TASK 4 placeholders have five rows; manual text, Table 4 and Figure 5 updated; the paste
+  step is now ten lines over ten lines. Earlier bullets in this file that say "four" describe
+  the first Rev3 build.
+- New student file `measure_color.m`: takes a picture, asks for a click on the block and one
+  on the table, prints h, s, v of each (5 x 5 patch averaged in RGB, then converted). It
+  replaces the three typed lines of Task 3 step 2. Camera only, no robot. NOT RUN (no MATLAB
+  on the Mac): run it once on a lab PC before handing out.
+- Rev3 on Box was replaced in place (it had been there for under an hour and was unchanged).
 
 ## Survey
 Lab 5 learning-objective items cut from six to five, worded as the five objectives, in both
@@ -129,8 +138,7 @@ Qualtrics needs a re-import.
 - No MATLAB on the Mac: the edited `.m` files were not linted or run. Before handing out, on
   a lab PC: `checkcode` on the four edited files, `test_vision_offline`, and one run of
   `UR_VisionPick_Lab` and `UR_CalibrateCamera` from the desktop.
-- The three typed lines of Task 3 step 2 (`ginput`, then
-  `rgb2hsv(reshape(double(img(round(y), round(x), :)) / 255, 1, 3))`) were not run.
+- `measure_color.m` is new and was not run.
 - The docx passed the container checks (zip order, XML parse, python-docx, 5 tables, 6
   figures, 0 em dashes) and was looked at through Quick Look only, which does not render
   equations or list restarts. Open it once in Word.

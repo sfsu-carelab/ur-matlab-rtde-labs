@@ -22,7 +22,7 @@ function UR_VisionPick_Lab()
 %   starts, without asking. Only the pick (Stage 4) waits for a typed yes.
 %
 %   Required files (same folder): capture_realsense.m, detect_block.m,
-%   fit_pixel_to_base.m, pixel_to_base.m
+%   fit_pixel_to_base.m, pixel_to_base.m (measure_color.m helps with TASK 3)
 %
 %   API reference:
 %     https://www.mathworks.com/help/robotics/urseries/ref/urrtdeclient.html
@@ -61,11 +61,13 @@ function UR_VisionPick_Lab()
     UV = [ nan nan ;               % TODO: [u v] placement 1
            nan nan ;               % TODO: placement 2
            nan nan ;               % TODO: placement 3
-           nan nan ];              % TODO: placement 4
+           nan nan ;               % TODO: placement 4
+           nan nan ];              % TODO: placement 5
     XY = [ nan nan ;               % TODO: [X Y] in METERS, placement 1
            nan nan ;               % TODO: placement 2
            nan nan ;               % TODO: placement 3
-           nan nan ];              % TODO: placement 4
+           nan nan ;               % TODO: placement 4
+           nan nan ];              % TODO: placement 5
 
     %% ====================================================================
     %  TASK 5 - PICK REFERENCE (from Part 4) AND PLACE WAYPOINT (from Part 5)

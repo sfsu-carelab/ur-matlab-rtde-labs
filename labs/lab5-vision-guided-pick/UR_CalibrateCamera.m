@@ -3,7 +3,8 @@ function UR_CalibrateCamera()
 %
 %   Run this from the MATLAB desktop once the camera is mounted, the robot is
 %   connected and the thresholds below find your block. It walks you through
-%   four block placements. For each one it:
+%   five block placements (the four corners of the pick area and its
+%   centre). For each one it:
 %     1. waits for you to put the block down with the arm OUT OF THE CAMERA
 %        VIEW and press Enter, then takes a picture and finds the block;
 %     2. waits for you to jog the open gripper onto the block (centred, at
@@ -14,7 +15,7 @@ function UR_CalibrateCamera()
 %   into UR_VisionPick_Lab.m (TASK 4 and TASK 5) and into Table 4.
 %
 %   Tips (from the 2026-11-04 hardware run):
-%     - Spread the four spots over the whole area you will pick from. Points
+%     - Spread the spots over the whole area you will pick from. Points
 %       that sit in one half of the picture give a map that is 10 mm off in
 %       the other half.
 %     - Keep every spot within comfortable reach: a spot that needs the arm
@@ -33,7 +34,7 @@ function UR_CalibrateCamera()
     hsvLow    = [0.25 0.35 0.25];      % TODO: same thresholds as TASK 3
     hsvHigh   = [0.45 1.00 1.00];
     minAreaPx = 200;
-    nPlacements = 4;                   % the manual asks for four; more is fine
+    nPlacements = 5;                   % four corners of the pick area plus its centre
 
     %% ====================================================================
     %  CONNECT (read-only use of the robot)
@@ -105,8 +106,7 @@ function UR_CalibrateCamera()
     if rms_mm >= 5
         fprintf('  The fit is poor. Usual causes: the block moved between the picture and the\n');
         fprintf('  touch, the gripper was tilted or not centred, or the arm was in the picture.\n');
-        fprintf('  With four placements the residuals cannot single out one spot:\n');
-        fprintf('  run the script again and repeat all the placements.\n\n');
+        fprintf('  Run the script again and repeat all the placements.\n\n');
     end
 
     % --- lines to paste into UR_VisionPick_Lab.m ---

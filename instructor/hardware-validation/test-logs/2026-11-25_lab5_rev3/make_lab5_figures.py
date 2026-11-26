@@ -212,8 +212,8 @@ def fig5():
         ax.set_xlim(-10, 1290); ax.set_ylim(730, -10)
         ax.set_title(title, fontsize=13, pad=5, color=(0.0, 0.45, 0.15) if good else (0.75, 0.1, 0.1), fontweight='bold')
         ax.text(640, 750, note, fontsize=11.5, ha='center', va='top')
-    view([0.0, 0.56, 0.36, 0.36], [(300, 215), (980, 215), (980, 555), (300, 555)], '(a) Spread out: good', 'the four spots frame the pick area', True)
-    view([0.0, 0.06, 0.36, 0.36], [(700, 300), (860, 300), (860, 440), (700, 440)], '(b) Clustered: poor', 'the map drifts away from the cluster', False)
+    view([0.0, 0.56, 0.36, 0.36], [(300, 215), (980, 215), (980, 555), (300, 555), (640, 385)], '(a) Spread out: good', 'four corners and the center', True)
+    view([0.0, 0.06, 0.36, 0.36], [(700, 300), (860, 300), (860, 440), (700, 440), (780, 370)], '(b) Clustered: poor', 'the map drifts away from the cluster', False)
     # (c) the touch, side view
     ax = fig.add_axes([0.40, 0.0, 0.60, 1.0]); ax.set_aspect('equal'); ax.axis('off')
     table(ax, -0.20, 0.36)
