@@ -14,7 +14,7 @@ function img = capture_realsense()
 %
 %   2026-11-04: changed from the RealSense SDK MATLAB wrapper to the USB
 %   Webcams package because the lab PCs have no admin rights for the SDK
-%   installer (Ryan's decision, see the hardware-validation notes).
+%   installer.
 
     if isempty(which('webcam'))
         error('capture_realsense:noPackage', ...

@@ -50,7 +50,7 @@ As a result of this lab, rate your agreement with each statement. (scale: 1 - St
 
 [[Question:MC:SingleAnswer:Horizontal]]
 [[ID:LO_1]]
-I can bring up the RealSense camera in MATLAB and capture an image from code.
+I can capture an image from the camera in MATLAB and locate a colored block in it by tuning HSV thresholds.
 [[Choices]]
 1 - Strongly disagree
 2 - Disagree
@@ -60,7 +60,7 @@ I can bring up the RealSense camera in MATLAB and capture an image from code.
 
 [[Question:MC:SingleAnswer:Horizontal]]
 [[ID:LO_2]]
-I can tune HSV thresholds to segment a colored block and explain what each channel controls.
+I can calibrate the mapping from image pixels to robot base coordinates with points touched by the robot, and judge from the residuals whether it is good enough to use.
 [[Choices]]
 1 - Strongly disagree
 2 - Disagree
@@ -70,7 +70,7 @@ I can tune HSV thresholds to segment a colored block and explain what each chann
 
 [[Question:MC:SingleAnswer:Horizontal]]
 [[ID:LO_3]]
-I can perform the pixel-to-base calibration and judge from the residuals whether it is good enough to use.
+I can explain why the calibration is valid only for a camera that has not moved and for objects on the table plane.
 [[Choices]]
 1 - Strongly disagree
 2 - Disagree
@@ -80,7 +80,7 @@ I can perform the pixel-to-base calibration and judge from the residuals whether
 
 [[Question:MC:SingleAnswer:Horizontal]]
 [[ID:LO_4]]
-I can explain why the calibration is valid only from the fixed imaging pose and for objects on the table plane.
+I can run a vision-guided pick safely, in which the robot moves to a position computed from a camera image.
 [[Choices]]
 1 - Strongly disagree
 2 - Disagree
@@ -90,17 +90,7 @@ I can explain why the calibration is valid only from the fixed imaging pose and 
 
 [[Question:MC:SingleAnswer:Horizontal]]
 [[ID:LO_5]]
-I can command the robot to a computed Cartesian target and run a full vision-guided pick safely.
-[[Choices]]
-1 - Strongly disagree
-2 - Disagree
-3 - Neutral
-4 - Agree
-5 - Strongly agree
-
-[[Question:MC:SingleAnswer:Horizontal]]
-[[ID:LO_6]]
-Given a detection failure or a bad pick, I can tell whether the problem is the thresholds, the calibration, or the reference pose.
+Given a failed detection or a missed pick, I can decide whether the cause is the thresholds, the calibration, or the reference pick pose.
 [[Choices]]
 1 - Strongly disagree
 2 - Disagree

@@ -8,10 +8,10 @@ function UR_CalibrateCamera()
 %        VIEW and press Enter, then takes a picture and finds the block;
 %     2. waits for you to jog the open gripper onto the block (centred, at
 %        grasp height, pointing straight down) and press Enter, then reads
-%        the TCP pose over RTDE.
+%        the pose of the tool flange over RTDE (readCartesianPose).
 %   The script never moves the robot. At the end it fits the map, prints the
 %   residuals and prints the UV, XY and ref_pick_pose lines ready to paste
-%   into UR_VisionPick_Lab.m (TASK 4 and TASK 5) and into Table 3.
+%   into UR_VisionPick_Lab.m (TASK 4 and TASK 5) and into Table 4.
 %
 %   Tips (from the 2026-11-04 hardware run):
 %     - Spread the four spots over the whole area you will pick from. Points
@@ -22,11 +22,12 @@ function UR_CalibrateCamera()
 %     - Make the placement 1 touch a real "ready to grasp" pose: it is reused
 %       as ref_pick_pose, which sets the pick height and gripper orientation.
 %
-%   Prerequisites: the same as UR_VisionPick_Lab (support packages, server
-%   script playing on the pendant, camera on USB 3).
+%   Prerequisites: the support packages and the camera on USB 3, as for
+%   UR_VisionPick_Lab. This script only reads the robot, so the server program
+%   does not have to be playing: stop it on the pendant so that you can jog.
 
     %% ====================================================================
-    %  SETTINGS - copy these from UR_VisionPick_Lab.m (TASK 1 and TASK 3)
+    %  SETTINGS - copy these from UR_VisionPick_Lab.m (CONNECTION and TASK 3)
     %  ====================================================================
     robotIP   = "192.168.1.10";        % TODO: your robot's IP address
     hsvLow    = [0.25 0.35 0.25];      % TODO: same thresholds as TASK 3
@@ -77,11 +78,11 @@ function UR_CalibrateCamera()
             continue
         end
 
-        % --- 2. touch with the TCP ---
+        % --- 2. touch with the gripper ---
         input(['  Now jog the OPEN gripper onto the block: centred, at grasp height,\n' ...
                '  pointing straight down. Do not move the block. Press Enter when it is there: '], 's');
         p = readCartesianPose(ur);
-        fprintf('  TCP at X = %.4f m, Y = %.4f m, Z = %.4f m (base frame).\n\n', p(4), p(5), p(6));
+        fprintf('  Flange at X = %.4f m, Y = %.4f m, Z = %.4f m (base frame).\n\n', p(4), p(5), p(6));
 
         UV(k, :) = uv;
         XY(k, :) = p(4:5);
@@ -102,14 +103,14 @@ function UR_CalibrateCamera()
     end
     fprintf('  RMS %.2f mm  %s\n\n', rms_mm, pass_word(rms_mm));
     if rms_mm >= 5
-        [~, worst] = max(res_mm);
-        fprintf('  Placement %d has the largest residual. Usual causes: the block moved between\n', worst);
-        fprintf('  the picture and the touch, the TCP was not centred, or the arm was in the picture.\n');
-        fprintf('  Run the script again and redo that spot.\n\n');
+        fprintf('  The fit is poor. Usual causes: the block moved between the picture and the\n');
+        fprintf('  touch, the gripper was tilted or not centred, or the arm was in the picture.\n');
+        fprintf('  With four placements the residuals cannot single out one spot:\n');
+        fprintf('  run the script again and repeat all the placements.\n\n');
     end
 
     % --- lines to paste into UR_VisionPick_Lab.m ---
-    fprintf('  Paste these into UR_VisionPick_Lab.m (TASK 4 and TASK 5) and copy them to Table 3:\n\n');
+    fprintf('  Paste these into UR_VisionPick_Lab.m (TASK 4 and TASK 5) and copy them to Table 4:\n\n');
     fprintf('    UV = [ ');
     for k = 1:nPlacements
         fprintf('%7.1f %7.1f', UV(k, 1), UV(k, 2));
@@ -139,6 +140,6 @@ end
 function w = pass_word(rms_mm)
     if rms_mm < 3,      w = '(excellent)';
     elseif rms_mm < 5,  w = '(acceptable)';
-    else,               w = '(POOR - redo the worst placement)';
+    else,               w = '(POOR - repeat the calibration)';
     end
 end

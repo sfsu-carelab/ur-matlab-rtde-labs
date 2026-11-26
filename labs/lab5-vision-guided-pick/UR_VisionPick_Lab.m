@@ -1,8 +1,8 @@
 function UR_VisionPick_Lab()
 %UR_VISIONPICK_LAB  Vision-guided pick-and-place with colored blocks.
 %
-%   The robot moves to a fixed IMAGING POSE, the wrist camera takes a
-%   picture, the block is found by color, its pixel position is converted
+%   The robot moves to a fixed IMAGING POSE, the camera fixed above the table
+%   takes a picture, the block is found by color, its pixel position is converted
 %   to robot base coordinates with your calibration from Part 4, and the
 %   robot picks it up and places it at your place waypoint.
 %
@@ -15,9 +15,11 @@ function UR_VisionPick_Lab()
 %     Stage 3 (Part 4 done):  also prints the predicted base X,Y, then stops.
 %     Stage 4 (Part 5 done):  asks for confirmation, then runs the pick.
 %
-%   Works on any UR e-series cobot. Requires Labs 1-4 completed, the
-%   camera mounted with payload updated (Lab 1, Section 3.2), and the
-%   RealSense wrapper working (Part 1).
+%   Works on any UR e-series cobot. Requires Labs 1-4 completed and the
+%   camera check of Part 1 (capture_realsense returns a picture).
+%
+%   NOTE: Stage 1 moves the robot to the imaging pose as soon as the script
+%   starts, without asking. Only the pick (Stage 4) waits for a typed yes.
 %
 %   Required files (same folder): capture_realsense.m, detect_block.m,
 %   fit_pixel_to_base.m, pixel_to_base.m
@@ -54,7 +56,7 @@ function UR_VisionPick_Lab()
     %  TASK 4 - PIXEL-TO-BASE CALIBRATION (from Part 4, Table 4)
     %  ====================================================================
     %  One row per calibration placement: pixel centroid and the base-frame
-    %  X,Y of the TCP touching the same spot. UR_CalibrateCamera walks you
+    %  X,Y of the tool flange with the gripper on the same spot. UR_CalibrateCamera walks you
     %  through the placements and prints these two lines ready to paste.
     UV = [ nan nan ;               % TODO: [u v] placement 1
            nan nan ;               % TODO: placement 2
@@ -66,7 +68,7 @@ function UR_VisionPick_Lab()
            nan nan ];              % TODO: placement 4
 
     %% ====================================================================
-    %  TASK 5 - PICK REFERENCE AND PLACE WAYPOINT (from Part 5)
+    %  TASK 5 - PICK REFERENCE (from Part 4) AND PLACE WAYPOINT (from Part 5)
     %  ====================================================================
     %  ref_pick_pose: UR_CalibrateCamera prints it from your placement 1 touch
     %  (or touch down on a block ready to grasp and run readCartesianPose(ur)).
@@ -130,13 +132,17 @@ function UR_VisionPick_Lab()
     pre_pose  = pick_pose;      pre_pose(6)   = pre_pose(6) + approach_dz;
 
     fprintf('\n  WARNING: the robot will move to the DETECTED position.\n');
-    fprintf('  Set the pendant speed slider to 10%% for the first run.\n');
+    fprintf('  Set the pendant speed slider to 25%% for the first run and leave it alone.\n');
     fprintf('  Clear the workspace and keep the e-stop within reach.\n\n');
     if ~strcmpi(input('  Type "yes" to run the vision-guided pick: ', 's'), 'yes')
         fprintf('  Aborted. Robot will not move.\n');
         return
     end
 
+    % 2026-11-25 review: nothing opened the gripper before the descent, so a gripper left
+    % closed by an earlier aborted run would be driven onto the block. Open it first, as
+    % UR_PickPlace_Lab does at Ready. (Added on the Mac; not yet run on the robot.)
+    fprintf('  Opening gripper...\n');                grip(ur, 'release', gripSettle);
     t0 = tic;
     fprintf('  [1/7] Approach above the block...\n'); moveToC(ur, pre_pose,  moveEndTime);
     fprintf('  [2/7] Down to the pick pose...\n');    moveToC(ur, pick_pose, moveEndTime);
@@ -224,7 +230,8 @@ function ok = waitForArrival(ur, readFcn, target, idx, tol)
 %WAITFORARRIVAL  Poll readFcn until elements idx are within tol of target, no longer
 %   changing between reads, AND the server script reports its last motion command
 %   finished; then pause briefly so the server is ready for the next command. Gives up
-%   after 60 s (a 5 s EndTime move at a 10 percent slider takes 50 s).
+%   after 60 s (a 5 s EndTime move at a 10 percent slider takes 50 s; below 10 percent
+%   the wait can run out while the robot is still moving).
 %
 %   2026-11-04 hardware: the server script runs a Cartesian move as a chain of movej
 %   segments and cannot read a new command until the last segment has returned. Being
@@ -258,7 +265,7 @@ end
 
 % -------------------------------------------------------------------------
 function grip(ur, action, settleTime)
-%GRIP  Robotiq gripper via the URCap; see Lab 4 for the digital-output note.
+%GRIP  Robotiq gripper through the server script, as in Lab 4.
     actuateGripper(ur, action);
     waitForGripper(ur);
     pause(settleTime);
@@ -288,6 +295,6 @@ end
 function w = pass_word(rms_mm)
     if rms_mm < 3,      w = '(excellent)';
     elseif rms_mm < 5,  w = '(acceptable)';
-    else,               w = '(POOR - redo the worst calibration point)';
+    else,               w = '(POOR - repeat the calibration, Task 4)';
     end
 end

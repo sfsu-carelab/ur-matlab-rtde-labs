@@ -3,19 +3,20 @@ function [A, residuals_mm, rms_mm] = fit_pixel_to_base(UV, XY)
 %
 %   [A, residuals_mm, rms_mm] = fit_pixel_to_base(UV, XY)
 %
-%   UV - N x 2 pixel centroids [u v], captured FROM THE IMAGING POSE
+%   UV - N x 2 pixel centroids [u v], captured with the arm out of the picture
 %   XY - N x 2 robot base-frame positions [X Y] in meters, from touching
-%        the same block positions with the TCP
+%        the same block positions with the gripper pointing straight down
+%        (flange position from readCartesianPose)
 %   N  - at least 3; use 4 or more so the residuals mean something
 %
 %   A  - 2 x 3 affine matrix:  [X; Y] = A * [u; v; 1]
 %   residuals_mm - per-point fit error (mm); a bad outlier here usually
 %        means one row of UV and XY do not describe the same placement
 %   rms_mm       - overall fit quality (mm). Under ~3 mm is excellent;
-%        above ~5 mm, redo the worst point before trusting picks.
+%        above ~5 mm, repeat the calibration before trusting picks.
 %
-%   The map is only valid for blocks on the SAME table plane, seen from
-%   the SAME imaging pose used during calibration.
+%   The map is only valid for blocks on the SAME table plane, seen by the
+%   camera in the SAME position as during calibration.
 
     arguments
         UV (:,2) double
